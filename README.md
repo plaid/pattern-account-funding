@@ -1,4 +1,4 @@
-# Plaid Pattern
+# Plaid Pattern Account Funding
 
 ![Plaid Pattern client][client-img]
 
