@@ -10,7 +10,6 @@ The full Plaid Pattern collection of sample apps includes:
 
 [Plaid Pattern Account Funding App](https://github.com/plaid/pattern-account-funding) (you are here) - Demonstrates the Plaid Auth, Balance, and Identity APIs
 
-
 Plaid Pattern apps are provided for illustrative purposes and are not meant to be run as production applications.
 
 ## Requirements
@@ -31,7 +30,7 @@ Note: We recommend running these commands in a unix terminal. Windows users can 
     ```shell
     cp .env.template .env
     ```
-1. Update the `.env` file with your [Plaid API keys][plaid-keys] and OAuth redirect uri (in sandbox this is 'http<span>://localhost:3001/oauth-link'</span>).
+1. Update the `.env` file with your [Plaid API keys][plaid-keys] and OAuth redirect uri (in sandbox this is 'http<span>://localhost:3002/oauth-link'</span>).
 
 1. You will also need to configure an allowed redirect URI for your client ID through the [Plaid developer dashboard](https://dashboard.plaid.com/team/api).
 
@@ -39,7 +38,7 @@ Note: We recommend running these commands in a unix terminal. Windows users can 
     ```shell
     make start
     ```
-1. Open http://localhost:3001 in a web browser.
+1. Open http://localhost:3002 in a web browser.
 1. View the logs
     ```shell
     make logs
@@ -68,7 +67,7 @@ More information about the individual services is given below.
 
 # Plaid Pattern - Client
 
-The Pattern web client is written in JavaScript using [React]. It presents a basic [Link][plaid-link] workflow to the user, including an implementation of [OAuth][plaid-oauth] as well as a demonstration of [Link update mode][plaid-link-update-mode]. The sample app allows you to choose to use identification mode, where an enduser must input the name and email associated with their financial institution. The app runs on port 3001 by default, although you can modify this in [docker-compose.yml](../docker-compose.yml).
+The Pattern web client is written in JavaScript using [React]. It presents a basic [Link][plaid-link] workflow to the user, including an implementation of [OAuth][plaid-oauth] as well as a demonstration of [Link update mode][plaid-link-update-mode]. The sample app allows you to choose to use identification mode, where an enduser must input the name and email associated with their financial institution. The app runs on port 3002 by default, although you can modify this in [docker-compose.yml](../docker-compose.yml).
 
 ## Key concepts
 
@@ -84,7 +83,7 @@ Both PENDING_EXPIRATION and ITEM_LOGIN_REQUIRED are item webhooks demonstrated i
 
 ### Admin
 
-A view of all users is provided to developers on `http://localhost:3001/admin`. Developers have the ability to remove a user here.
+A view of all users is provided to developers on `http://localhost:3002/admin`. Developers have the ability to remove a user here.
 
 # Plaid Pattern - Server
 
@@ -104,9 +103,9 @@ For webhooks to work, the server must be publicly accessible on the internet. Fo
 
 ### Testing OAuth
 
-A redirect_uri parameter is included in the linkTokenCreate call and set in this sample app to the PLAID_SANDBOX_REDIRECT_URI you have set in the .env file (`http://localhost:3001/oauth-link`). This is the page that the user will be redirected to upon completion of the OAuth flow at their OAuth institution. When running in Production or Development, you will need to use an `https://` redirect URI, but a localhost http URI will work for Sandbox.
+A redirect_uri parameter is included in the linkTokenCreate call and set in this sample app to the PLAID_SANDBOX_REDIRECT_URI you have set in the .env file (`http://localhost:2/oauth-link`). This is the page that the user will be redirected to upon completion of the OAuth flow at their OAuth institution. When running in Production or Development, you will need to use an `https://` redirect URI, but a localhost http URI will work for Sandbox.
 
-You will also need to configure `http://localhost:3001/oauth-link` as an allowed redirect URI for your client ID through the [Plaid developer dashboard](https://dashboard.plaid.com/team/api).
+You will also need to configure `http://localhost:3002/oauth-link` as an allowed redirect URI for your client ID through the [Plaid developer dashboard](https://dashboard.plaid.com/team/api).
 
 To test the OAuth flow, choose 'Playtypus OAuth Bank' from the list of financial instutions in Plaid Link.
 
