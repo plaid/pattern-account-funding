@@ -18,9 +18,7 @@ const Banner: React.FC<Props> = (props: Props) => {
     <div id="banner" className="bottom-border-content">
       {!props.initialSubheading && <h4>username: {props.username} </h4>}
       <div className="header">
-        <h1 className="everpresent-content__heading">
-          Plaid Pattern Account Funding
-        </h1>
+        <h1 className="everpresent-content__heading">Plaid Pattern</h1>
         <Button
           href="https://docs.google.com/forms/d/e/1FAIpQLSfF4Xev5w9RPGr7fNkSHjmtE_dj0ELuHRbDexQ7Tg2xoo6tQg/viewform"
           target="_blank"
