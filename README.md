@@ -135,7 +135,7 @@ This will create a certificate file localhost.pem and a key file localhost-key.p
 Then in the package.json file in the client folder, replace this line on line 26
 
 ```bash
-  "start": "PORT=3002 react-scripts start",
+"start": "PORT=3002 react-scripts start",
 ```
 
 with this line instead:
@@ -163,7 +163,7 @@ After starting up the Pattern sample app, you can now view it at https://localho
 If you are on a Windows machine, in the package.json file in the client folder, replace this line on line 26
 
 ```bash
-  "start": "PORT=3002 react-scripts start",
+"start": "PORT=3002 react-scripts start",
 ```
 
 with this line instead:
