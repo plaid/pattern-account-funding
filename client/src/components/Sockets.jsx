@@ -11,7 +11,7 @@ const Sockets = () => {
   const { getItemById } = useItems();
 
   useEffect(() => {
-    socket.current = io(`localhost:${REACT_APP_SERVER_PORT}`);
+    socket.current = io(`http://localhost:${REACT_APP_SERVER_PORT}`);
 
     socket.current.on('ERROR', ({ itemId, errorCode } = {}) => {
       const msg = `Item ${itemId}: Item Error ${errorCode}`;
