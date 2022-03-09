@@ -3,6 +3,7 @@
  */
 
 const express = require('express');
+const axios = require('axios');
 const Boom = require('@hapi/boom');
 const {
   retrieveItemById,
