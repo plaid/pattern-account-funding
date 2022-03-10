@@ -221,9 +221,8 @@ router.post(
 router.post(
   '/makeTransfer',
   asyncWrapper(async (req, res) => {
-    let transUrl;
-    let status;
     const { fundingSourceUrl, amount, itemId } = req.body;
+    let transURl = null;
     await axios
       .post(
         'https://api-sandbox.dwolla.com/transfers',
