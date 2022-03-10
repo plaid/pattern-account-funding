@@ -222,7 +222,8 @@ router.post(
   '/makeTransfer',
   asyncWrapper(async (req, res) => {
     const { fundingSourceUrl, amount, itemId } = req.body;
-    let transURl = null;
+    let transUrl = null;
+    let confirmedAmount;
     await axios
       .post(
         'https://api-sandbox.dwolla.com/transfers',
@@ -253,7 +254,21 @@ router.post(
       })
       .catch(error => console.log('error:', error));
 
-    const transfer = await createTransfer(itemId, amount, transUrl);
+    // confirm the amount in the transferUrl
+    await axios
+      .get(transUrl, {
+        headers: {
+          'content-type': 'application/json',
+          Authorization: `Bearer ${DWOLLA_ACCESS_TOKEN}`,
+          Accept: 'application/vnd.dwolla.v1.hal+json',
+        },
+      })
+      .then(res => {
+        confirmedAmount = res.data.amount.value;
+      })
+      .catch(error => console.log('error:', error));
+
+    const transfer = await createTransfer(itemId, confirmedAmount, transUrl);
     res.json({ transfer: transfer });
   })
 );
