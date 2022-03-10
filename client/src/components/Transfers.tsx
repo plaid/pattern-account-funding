@@ -5,7 +5,7 @@ import { Button } from 'plaid-threads/Button';
 import { AccountType, AppFundType } from './types';
 import { currencyFilter } from '../util';
 import { TransferForm } from '.';
-import { updateAppFundsBalance } from '../services/api';
+import { updateAppFundsBalance, makeTransfer } from '../services/api';
 
 const IS_PROCESSOR = process.env.REACT_APP_IS_PROCESSOR;
 
@@ -51,13 +51,20 @@ const Transfers: React.FC<Props> = (props: Props) => {
         )} in your bank account.`
     : `Oops! Something went wrong with the transfer. Try again later.`;
 
-  const sendRequestToProcessor = (amount: number, processorToken: string) => {
-    // placeholder code to simulate request to Dwolla/Processor:
+  const sendRequestToProcessor = async (
+    amount: number,
+    funding_source_url: string,
+    itemId: number
+  ) => {
     // api route to send processor_token and amount to transfer to
     // Dwolla or other processor initiate transfer endpoint
-    console.log('sending' + amount + 'and' + processorToken + 'to processor');
-    // return confirmation from Dwolla/Processor
-    return amount;
+    try {
+      await makeTransfer(funding_source_url, amount, itemId);
+      // return confirmation from Dwolla
+      return amount;
+    } catch (e) {
+      console.log('error', e);
+    }
   };
 
   const completeAchTransfer = (amount: number, accountId: string) => {
@@ -69,7 +76,7 @@ const Transfers: React.FC<Props> = (props: Props) => {
     // return confirmation of ach transfer
     return amount;
   };
-
+  console.log(account);
   const checkAmountAndInitiate = async (amount: number) => {
     setIsAmountOkay(balance != null && amount <= balance && amount > 0);
     setTransferAmount(amount);
@@ -78,7 +85,11 @@ const Transfers: React.FC<Props> = (props: Props) => {
     if (amount <= balance && amount > 0) {
       const confirmedAmount =
         IS_PROCESSOR === 'true'
-          ? sendRequestToProcessor(amount, account.processor_token)
+          ? await sendRequestToProcessor(
+              amount,
+              account.funding_source_url,
+              account.item_id
+            )
           : completeAchTransfer(amount, account.plaid_account_id);
       if (confirmedAmount == null) {
         setShowTransferConfirmationError(true);

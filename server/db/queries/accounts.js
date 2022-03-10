@@ -23,7 +23,9 @@ const createAccount = async (
   numbers,
   ownerNames,
   emails,
-  processorToken
+  processorToken,
+  custUrl,
+  fundingSourceUrl
 ) => {
   const { id: itemId } = await retrieveItemByPlaidItemId(plaidItemId);
   const {
@@ -60,6 +62,8 @@ const createAccount = async (
             owner_names,
             emails,
             processor_token,
+            cust_url,
+            funding_source_url,
             number_of_transfers,
             type,
             subtype,
@@ -67,7 +71,7 @@ const createAccount = async (
             plaid_item_id
           )
         VALUES
-          ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18, $19, $20)
+          ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18, $19, $20, $21, $22)
         ON CONFLICT
           (plaid_account_id)
         DO UPDATE SET
@@ -92,6 +96,8 @@ const createAccount = async (
       ownerNames,
       emails,
       processorToken,
+      custUrl,
+      fundingSourceUrl,
       0,
       type,
       subtype,

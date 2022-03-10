@@ -14,6 +14,7 @@ const {
   updateItemStatus,
   createAccount,
   updateBalances,
+  createTransfer,
 } = require('../db/queries');
 const { asyncWrapper } = require('../middleware');
 const plaid = require('../plaid');
@@ -25,6 +26,9 @@ const {
 } = require('../util');
 
 const router = express.Router();
+
+const DWOLLA_ACCESS_TOKEN = process.env.DWOLLA_ACCESS_TOKEN;
+const DWOLLA_MASTER_ACCOUNT_ID = process.env.DWOLLA_MASTER_ACCOUNT_ID;
 
 /**
  * First exchanges a public token for a private token via the Plaid API and
@@ -88,6 +92,8 @@ router.post(
     // identity info will remain null if not identity
     let emails = null;
     let ownerNames = null;
+    let firstName = 'firstName';
+    let lastName = 'lastName';
 
     // auth numbers will remain null if not auth
     let authNumbers = {
@@ -111,6 +117,10 @@ router.post(
       });
 
       ownerNames = identityResponse.data.accounts[0].owners[0].names;
+      const fullName = ownerNames[0].split(' ');
+      firstName = fullName[0];
+      lastName = fullName[fullName.length - 1];
+
       if (!isAuth) {
         balances = identityResponse.data.accounts[0].balances;
       }
@@ -118,6 +128,8 @@ router.post(
     // processorToken is only set if IS_PROCESSOR is true in .env file and
     // therefore isAuth is false
     let processorToken = null;
+    let custUrl = null;
+    let fundingSourceUrl = null;
 
     if (isAuth) {
       authResponse = await plaid.authGet(authAndIdRequest);
@@ -133,8 +145,55 @@ router.post(
         processorRequest
       );
       processorToken = processorTokenResponse.data.processor_token;
-    }
 
+      // create Dwolla Customer and obtain customer url
+      await axios
+        .post(
+          'https://api-sandbox.dwolla.com/customers',
+          {
+            firstName: firstName,
+            lastName: lastName,
+            email: `${Math.random() // because Dwolla does not allow identical emails, and sandbox data is always the same.
+              .toString(36)
+              .slice(2)}@sampleApp.com`,
+            ipAddress: '99.99.99.99', // dummy data: a unique identifier for Dwolla
+          },
+          {
+            headers: {
+              'content-type': 'application/json',
+              Authorization: `Bearer ${DWOLLA_ACCESS_TOKEN}`,
+              Accept: 'application/vnd.dwolla.v1.hal+json',
+            },
+          }
+        )
+        .then(res => (custUrl = res.headers.location))
+        .catch(error => {
+          console.error('error:', error);
+        });
+
+      // send processor token to Dwolla customer url to create customer Funding source and obtain customer funding source url
+      await axios
+        .post(
+          `${custUrl}/funding-sources`,
+          {
+            plaidToken: processorToken,
+            name: account.subtype,
+          },
+          {
+            headers: {
+              'content-type': 'application/json',
+              Authorization: `Bearer ${DWOLLA_ACCESS_TOKEN}`,
+              Accept: 'application/vnd.dwolla.v1.hal+json',
+            },
+          }
+        )
+        .then(res => (fundingSourceUrl = res.headers.location))
+        .catch(error => {
+          console.error('error:', error);
+        });
+    }
+    console.log('outside:', custUrl, fundingSourceUrl);
+    // if not isProcessor, processorToken, custUrl and fundingSouceUrl will all be null
     const newAccount = await createAccount(
       itemId,
       userId,
@@ -143,9 +202,11 @@ router.post(
       authNumbers,
       ownerNames,
       emails,
-      processorToken
+      processorToken,
+      custUrl,
+      fundingSourceUrl
     );
-
+    console.log('newAccount', newAccount);
     res.json({
       items: sanitizeItems(newItem),
       accounts: sanitizeAccounts(newAccount),
@@ -153,6 +214,51 @@ router.post(
   })
 );
 
+// Make Dwolla transfer from customer funding source to app's master account.  Obtain Dwolla transfer url
+// and save to transfers table.
+// TODO:  make transfers provider and obtain transfers by item to disply on UI.
+
+router.post(
+  '/makeTransfer',
+  asyncWrapper(async (req, res) => {
+    let transUrl;
+    let status;
+    const { fundingSourceUrl, amount, itemId } = req.body;
+    await axios
+      .post(
+        'https://api-sandbox.dwolla.com/transfers',
+        {
+          _links: {
+            source: {
+              href: fundingSourceUrl,
+            },
+            destination: {
+              href: `https://api-sandbox.dwolla.com/funding-sources/${DWOLLA_MASTER_ACCOUNT_ID}`,
+            },
+          },
+          amount: {
+            currency: 'USD',
+            value: `${amount}`,
+          },
+        },
+        {
+          headers: {
+            'content-type': 'application/json',
+            Authorization: `Bearer ${DWOLLA_ACCESS_TOKEN}`,
+            Accept: 'application/vnd.dwolla.v1.hal+json',
+          },
+        }
+      )
+      .then(res => {
+        transUrl = res.headers.location;
+        status = res.status;
+      })
+      .catch(error => console.log('error:', error));
+
+    const transfer = await createTransfer(itemId, amount, transUrl);
+    res.json({ status: status });
+  })
+);
 /**
  * Retrieves a single item.
  *
