@@ -65,12 +65,14 @@ const Transfers: React.FC<Props> = (props: Props) => {
       );
       return createTransfer.data.transfer.amount;
     } catch (e) {
-      console.log('error', e);
+      if (e instanceof Error) {
+        console.error('error', e.message);
+      }
     }
   };
 
   const completeAchTransfer = (amount: number, accountId: string) => {
-    // placeholder code to simulate ach bank transfer:
+    // placeholder code to simulate ach bank transfer using bank routing and bank account data from the get auth call.
     // api route to complete ach bank transfer
     console.log(
       'completing transfer of' + amount + ' from account # ' + accountId
