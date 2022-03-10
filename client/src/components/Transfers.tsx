@@ -56,12 +56,14 @@ const Transfers: React.FC<Props> = (props: Props) => {
     funding_source_url: string,
     itemId: number
   ) => {
-    // api route to send processor_token and amount to transfer to
-    // Dwolla or other processor initiate transfer endpoint
+    // endpoint to make Dwolla transfer call
     try {
-      await makeTransfer(funding_source_url, amount, itemId);
-      // return confirmation from Dwolla
-      return amount;
+      const createTransfer = await makeTransfer(
+        funding_source_url,
+        amount,
+        itemId
+      );
+      return createTransfer.data.transfer.amount;
     } catch (e) {
       console.log('error', e);
     }
@@ -76,7 +78,7 @@ const Transfers: React.FC<Props> = (props: Props) => {
     // return confirmation of ach transfer
     return amount;
   };
-  console.log(account);
+
   const checkAmountAndInitiate = async (amount: number) => {
     setIsAmountOkay(balance != null && amount <= balance && amount > 0);
     setTransferAmount(amount);
