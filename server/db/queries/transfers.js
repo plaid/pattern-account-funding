@@ -7,8 +7,7 @@ const db = require('../');
 /**
  * Creates a single item.
  *
- * @param {string} destination_transactions_id the processor destination transactions id.
- * @param {string} source_transactions_id the processor source transactions id.
+ * @param {string} transfer_url the Dwolla transfer url.
  * @param {string} itemId the item Id.
  * @param {number} amount the amount being transferred.
  * @returns {Object} the new transfer.

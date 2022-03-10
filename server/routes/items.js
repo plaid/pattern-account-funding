@@ -192,7 +192,7 @@ router.post(
           console.error('error:', error);
         });
     }
-    console.log('outside:', custUrl, fundingSourceUrl);
+
     // if not isProcessor, processorToken, custUrl and fundingSouceUrl will all be null
     const newAccount = await createAccount(
       itemId,
@@ -206,7 +206,7 @@ router.post(
       custUrl,
       fundingSourceUrl
     );
-    console.log('newAccount', newAccount);
+
     res.json({
       items: sanitizeItems(newItem),
       accounts: sanitizeAccounts(newAccount),
@@ -223,7 +223,7 @@ router.post(
   asyncWrapper(async (req, res) => {
     const { fundingSourceUrl, amount, itemId } = req.body;
     let transUrl = null;
-    let confirmedAmount;
+    let confirmedAmount = null;
     await axios
       .post(
         'https://api-sandbox.dwolla.com/transfers',
@@ -254,7 +254,7 @@ router.post(
       })
       .catch(error => console.log('error:', error));
 
-    // confirm the amount in the transferUrl
+    // get the confirmed amount from the transfer url
     await axios
       .get(transUrl, {
         headers: {
