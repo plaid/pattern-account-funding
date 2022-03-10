@@ -121,7 +121,7 @@ CREATE TABLE transfers_table
   id SERIAL PRIMARY KEY,
   item_id integer REFERENCES items_table(id) ON DELETE CASCADE,
   amount numeric NOT NULL,
-  transfer_url text,
+  transfer_url text NOT NULL,
   created_at timestamptz default now(),
   updated_at timestamptz default now()
 );
