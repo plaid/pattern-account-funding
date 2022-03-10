@@ -251,12 +251,11 @@ router.post(
       )
       .then(res => {
         transUrl = res.headers.location;
-        status = res.status;
       })
       .catch(error => console.log('error:', error));
 
     const transfer = await createTransfer(itemId, amount, transUrl);
-    res.json({ status: status });
+    res.json({ transfer: transfer });
   })
 );
 /**
