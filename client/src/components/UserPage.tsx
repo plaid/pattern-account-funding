@@ -194,6 +194,7 @@ const UserPage = ({ match }: RouteComponentProps<RouteInfo>) => {
   }, [account, checkUserEmail, checkFullName, userId, isIdentityChecked, user]);
 
   const accountName = account != null ? `${account.name}` : '';
+  console.log('account', account);
   document.getElementsByTagName('body')[0].style.overflow = 'auto'; // to override overflow:hidden from link pane
 
   return (

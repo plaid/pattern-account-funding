@@ -9,6 +9,7 @@
   },
   "dependencies": {
     "@hapi/boom": "^7.4.2",
+    "axios": "^0.26.1",
     "cookie-parser": "~1.4.3",
     "debug": "~2.6.9",
     "express": "~4.16.0",
