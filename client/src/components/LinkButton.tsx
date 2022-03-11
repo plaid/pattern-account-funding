@@ -20,7 +20,7 @@ interface Props {
   userId: number;
   itemId?: number | null;
   children?: React.ReactNode;
-  isAuth: boolean;
+  isProcessor: boolean;
   isIdentity: boolean;
 }
 
@@ -53,7 +53,7 @@ const LinkButton: React.FC<Props> = (props: Props) => {
           metadata.institution,
           metadata.accounts,
           props.userId,
-          props.isAuth,
+          props.isProcessor,
           props.isIdentity
         );
         getItemsByUser(props.userId, true);
@@ -121,7 +121,7 @@ const LinkButton: React.FC<Props> = (props: Props) => {
           userId: props.userId,
           itemId: props.itemId,
           token: props.token,
-          isAuth: props.isAuth,
+          isProcessor: props.isProcessor,
           isIdentity: props.isIdentity,
         })
       );
@@ -134,7 +134,7 @@ const LinkButton: React.FC<Props> = (props: Props) => {
     props.userId,
     props.itemId,
     props.token,
-    props.isAuth,
+    props.isProcessor,
     props.isIdentity,
   ]);
 
