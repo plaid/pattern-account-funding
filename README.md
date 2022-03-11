@@ -107,21 +107,21 @@ To test the OAuth flow, choose 'Playtypus OAuth Bank' from the list of financial
 
 This sample app can also demonstrate the creation of a processor token for use with Plaid partners. While still initializing Link with the Auth product, instead of of using Plaid Auth endpoints, an example of the creation of a processor token and integration with a plaid partner is included in the [root items route][items-routes].
 
-#### Using Dwolla as a test case
+#### Using Dwolla sandbox as a test case
 
-To test transferring of funds with a Plaid Partner, this sample app uses Dwolla as a test case. Please follow these steps:
+To test transferring of funds with a Plaid Partner, this sample app uses Dwolla sandbox. Please follow these steps:
 
-1. Go to your [Plaid developer dashboard](https://dashboard.plaid.com/team/integrations) and under Team Settings, click on Integrations. On the Integrations page, scroll down to Dwolla and click on the "enable" button.
+1. Go to your [Plaid developer dashboard team settings/integrations page](https://dashboard.plaid.com/team/integrations). Scroll down to Dwolla and click on the "enable" button.
 
-2. Head to the [Dwolla site](https://developers.dwolla.com/guides/sandbox) and create a sandbox account.
+2. Head to the [Dwolla site](https://developers.dwolla.com/guides/sandbox) and create a sandbox account by clicking the `Get API Keys` button and following the sign up instructions.
 
-3. Create a temporary Access Token by clicking on the "Create Token" button on Dwolla's dashboard [Applications Page](https://dashboard-sandbox.dwolla.com/applications-legacy). Copy this token and add it to the .env file as `DWOLLA_ACCESS_TOKEN`. This is a temporary access token issued by Dwolla which is good for one hour.
+3. After logging in, create a temporary access token by clicking on the "Create Token" button on Dwolla's dashboard [Applications Page](https://dashboard-sandbox.dwolla.com/applications-legacy). Copy this token and add it to the .env file as `DWOLLA_ACCESS_TOKEN`. This is a temporary access token issued by Dwolla which is good for one hour.
 4. Go to your Dwolla [Master Account Funding Source](https://dashboard-sandbox.dwolla.com/account/funding-sources) on the dashboard and obtain your id from your Superhero Savings Bank. This is the very last number in the smaller white box on the bottom left corner of the page. Enter this id in the .env file as the `DWOLLA_MASTER_ACCOUNT_ID`.
 5. Finally, make sure that `IS_PROCESSOR` is set to `true` in the .env file.
 
 ### Verifying and transferring funds
 
-This sample app demonstrates how to get the available balance in order to verify funds. It does not actually conduct a transfer of funds. Therefore, the balance in the linked account (whether in sandbox or development) will not decrement when a transfer is made in this app.
+This sample app demonstrates how to get the available balance in order to verify and transfer funds. However, it does not actually conduct a transfer of funds because it uses Dwolla sandbox. Therefore, the balance in the linked account (whether in sandbox or development) will not decrement when a transfer is made in this app.
 
 ## Debugging
 
