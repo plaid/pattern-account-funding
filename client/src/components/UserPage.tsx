@@ -69,7 +69,7 @@ const UserPage = ({ match }: RouteComponentProps<RouteInfo>) => {
       timeSinceCreation =
         new Date().getTime() - new Date(account.created_at).getTime();
     }
-
+    console.log('time', timeSinceCreation);
     if (
       account != null &&
       item != null &&
