@@ -35,7 +35,7 @@ const Item: React.FC<Props> = (props: Props) => {
   const status = props.item != null ? props.item.status : 'good';
   const isSandbox = PLAID_ENV === 'sandbox';
   const isGoodState = status === 'good';
-  const isAuth = IS_PROCESSOR === 'true' ? false : true;
+  const isProcessor = IS_PROCESSOR === 'true' ? true : false;
   const isIdentity = props.user.should_verify_identity;
   const id = props.item != null ? props.item.id : 0;
   const plaid_institution_id =
@@ -177,7 +177,7 @@ const Item: React.FC<Props> = (props: Props) => {
                 userId={props.userId}
                 token={token}
                 itemId={null}
-                isAuth={isAuth}
+                isProcessor={isProcessor}
                 isIdentity={isIdentity}
               />
             )}

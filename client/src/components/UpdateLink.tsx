@@ -19,7 +19,7 @@ const UpdateLink: React.FC<Props> = (props: Props) => {
   const { generateLinkToken, linkTokens } = useLink();
 
   const initiateLinkUpdate = async () => {
-    generateLinkToken(props.userId, props.itemId, false); // itemId is set because link is in update mode; isAuth and isIdentity are false in update mode;
+    generateLinkToken(props.userId, props.itemId, false); // itemId is set because link is in update mode; isProcessor is true and isIdentity is false in update mode;
     setShowLink(true);
   };
 
@@ -46,7 +46,7 @@ const UpdateLink: React.FC<Props> = (props: Props) => {
           userId={props.userId}
           itemId={props.itemId}
           token={token}
-          isAuth={false}
+          isProcessor={true}
           isIdentity={false}
         />
       )}
