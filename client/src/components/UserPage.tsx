@@ -60,14 +60,26 @@ const UserPage = ({ match }: RouteComponentProps<RouteInfo>) => {
 
   const getBalance = useCallback(async () => {
     // This is triggered when user clicks "transfer funds."
-    // Only call balance/get if this is not the initial transfer (because the balance data already exists
+    // Only call balance/get if this is not the initial transfer and it's been less than an hour since the item was linked (because the balance data already exists
     // from the auth/get or identity/get make upon creating the item).
     // However, if neither auth nor identity have not been called on item creation (i.e. account.available_balance=null),
     // make the balance/get call
+
+    const oneHour = 60 * 60 * 1000;
+    let created = 0;
+    let now = 0;
+    if (account != null) {
+      created = new Date(account.created_at).getTime();
+      now = new Date().getTime();
+    }
+    const timeSinceCreation = now - created;
+
     if (
       account != null &&
       item != null &&
-      (account.number_of_transfers !== 0 || account.available_balance == null)
+      (account.number_of_transfers !== 0 ||
+        timeSinceCreation > oneHour ||
+        account.available_balance == null)
     ) {
       const { data: newAccount } = await getBalanceByItem(
         item.id,
