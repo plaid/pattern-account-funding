@@ -64,21 +64,17 @@ const UserPage = ({ match }: RouteComponentProps<RouteInfo>) => {
     // from the auth/get or identity/get make upon creating the item).
     // However, if neither auth nor identity have not been called on item creation (i.e. account.available_balance=null),
     // make the balance/get call
-
-    const oneHour = 60 * 60 * 1000;
-    let created = 0;
-    let now = 0;
+    let timeSinceCreation = 0; // time in milliseconds
     if (account != null) {
-      created = new Date(account.created_at).getTime();
-      now = new Date().getTime();
+      timeSinceCreation =
+        new Date().getTime() - new Date(account.created_at).getTime();
     }
-    const timeSinceCreation = now - created;
 
     if (
       account != null &&
       item != null &&
       (account.number_of_transfers !== 0 ||
-        timeSinceCreation > oneHour ||
+      timeSinceCreation > 60 * 60 * 1000 || // if it's been more than one hour
         account.available_balance == null)
     ) {
       const { data: newAccount } = await getBalanceByItem(
