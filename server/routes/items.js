@@ -34,7 +34,7 @@ const router = express.Router();
  * @param {string} institutionId the Plaid institution ID of the new item.
  * @param {string} userId the Plaid user ID of the active user.
  * @param {object} accounts the accounts chosen by the user from the onSuccess metadata.
- * @param {boolean} isAuth false if developer is using a Plaid partner (processor)
+ * @param {boolean} isProcessor false if developer is using a Plaid partner (processor)
  * @param {boolean} isIdentity true if in identity mode.
  */
 router.post(
@@ -45,7 +45,7 @@ router.post(
       institutionId,
       userId,
       accounts,
-      isAuth,
+      isProcessor,
       isIdentity,
     } = req.body;
 
@@ -110,15 +110,15 @@ router.post(
       });
 
       ownerNames = identityResponse.data.accounts[0].owners[0].names;
-      if (!isAuth) {
+      if (isProcessor) {
+        // in this case, authGet will not be called, so we'll need the balance from the identity call.
         balances = identityResponse.data.accounts[0].balances;
       }
     }
     // processorToken is only set if IS_PROCESSOR is true in .env file and
-    // therefore isAuth is false
+    // therefore iisProcessor is true;
     let processorToken = null;
-
-    if (isAuth) {
+    if (!isProcessor) {
       authResponse = await plaid.authGet(authAndIdRequest);
       authNumbers = authResponse.data.numbers.ach[0];
       balances = authResponse.data.accounts[0].balances;
