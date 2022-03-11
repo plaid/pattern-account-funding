@@ -105,13 +105,13 @@ To test the OAuth flow, choose 'Playtypus OAuth Bank' from the list of financial
 
 ### Working with Plaid Partners
 
-This sample app can also demonstrate the creation of a processor token for use with Plaid partners. While still initializing Link with the Auth product, instead of of using Plaid Auth endpoints, an example of the creation of a processor token is included in the [root items route][items-routes].
+This sample app can also demonstrate the creation of a processor token for use with Plaid partners. While still initializing Link with the Auth product, instead of of using Plaid Auth endpoints, an example of the creation of a processor token and integration with a plaid partner is included in the [root items route][items-routes].
 
 #### Using Dwolla as a test case
 
 To test transferring of funds with a Plaid Partner, this sample app uses Dwolla as a test case. Please follow these steps:
 
-1. Go to your [Plaid developer dashboard] (https://dashboard.plaid.com/team/integrations) and under Team Settings, click on Integrations. On the Integrations page, scroll down to Dwolla and click on the "enable" button.
+1. Go to your [Plaid developer dashboard](https://dashboard.plaid.com/team/integrations) and under Team Settings, click on Integrations. On the Integrations page, scroll down to Dwolla and click on the "enable" button.
 
 2. Head to the [Dwolla site](https://developers.dwolla.com/guides/sandbox) and create a sandbox account.
 
