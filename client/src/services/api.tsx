@@ -97,7 +97,7 @@ export const exchangeToken = async (
   institution: any,
   accounts: PlaidLinkOnSuccessMetadata['accounts'],
   userId: number,
-  isAuth: boolean,
+  isProcessor: boolean,
   isIdentity: boolean
 ) => {
   try {
@@ -106,7 +106,7 @@ export const exchangeToken = async (
       institutionId: institution.institution_id,
       userId,
       accounts,
-      isAuth,
+      isProcessor,
       isIdentity,
     });
     return data;
