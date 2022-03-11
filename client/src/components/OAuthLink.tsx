@@ -9,7 +9,7 @@ const OAuthLink: React.FC = () => {
   const [token, setToken] = useState<string>();
   const [userId, setUserId] = useState<number>(-100); // set for typescript
   const [itemId, setItemId] = useState<number>();
-  const [isAuth, setIsAuth] = useState<boolean>(false);
+  const [isProcessor, setisProcessor] = useState<boolean>(false);
   const [isIdentity, setIsIdentity] = useState<boolean>(false);
 
   const oauthObject = localStorage.getItem('oauthConfig');
@@ -19,7 +19,7 @@ const OAuthLink: React.FC = () => {
       setUserId(JSON.parse(oauthObject).userId);
       setItemId(JSON.parse(oauthObject).itemId);
       setToken(JSON.parse(oauthObject).token);
-      setIsAuth(JSON.parse(oauthObject).isAuth);
+      setisProcessor(JSON.parse(oauthObject).isProcessor);
       setIsIdentity(JSON.parse(oauthObject).isIdentity);
     }
   }, [oauthObject]);
@@ -32,7 +32,7 @@ const OAuthLink: React.FC = () => {
           userId={userId}
           itemId={itemId}
           token={token}
-          isAuth={isAuth}
+          isProcessor={isProcessor}
           isIdentity={isIdentity}
         />
       )}
