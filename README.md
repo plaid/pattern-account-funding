@@ -111,7 +111,7 @@ This sample app can also demonstrate the creation of a processor token for use w
 
 This sample app uses Dwolla sandbox to demonstrate the transferring of funds with a Plaid partner. To test out the Dwolla sandbox flow, follow these steps:
 
-1. Go to your [Plaid developer dashboard team settings/integrations page](https://dashboard.plaid.com/team/integrations). Scroll down to Dwolla and click on the "enable" button.
+1. Go to your [Plaid developer dashboard Integrations page](https://dashboard.plaid.com/team/integrations). Scroll down to Dwolla and click on the "enable" button.
 
 2. Head to the [Dwolla site](https://developers.dwolla.com/guides/sandbox) and create a sandbox account by clicking the `Get API Keys` button and following the sign up instructions.
 
