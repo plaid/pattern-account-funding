@@ -112,6 +112,37 @@ AS
   FROM
     app_funds_table;
 
+    -- TRANSFERS
+-- This table is used to store the transfers associated with each item. The view returns the same data
+-- as the table, we're just using both to maintain consistency with our other tables.
+
+CREATE TABLE transfers_table
+(
+  id SERIAL PRIMARY KEY,
+  item_id integer REFERENCES items_table(id) ON DELETE CASCADE,
+  amount numeric NOT NULL,
+  transfer_url text NOT NULL,
+  created_at timestamptz default now(),
+  updated_at timestamptz default now()
+);
+
+CREATE TRIGGER transfers_updated_at_timestamp
+BEFORE UPDATE ON transfers_table
+FOR EACH ROW
+EXECUTE PROCEDURE trigger_set_timestamp();
+
+CREATE VIEW transfers
+AS
+  SELECT
+    id,
+    item_id,
+    amount,
+    transfer_url,
+    created_at,
+    updated_at
+  FROM
+    transfers_table;
+
 
 
 -- ACCOUNTS
@@ -139,6 +170,8 @@ CREATE TABLE accounts_table
   owner_names text[],
   emails text[],
   processor_token text,
+  cust_url text,
+  funding_source_url text,
   number_of_transfers integer,
   type text NOT NULL,
   subtype text NOT NULL,
@@ -172,6 +205,8 @@ AS
     owner_names,
     emails,
     processor_token,
+    cust_url,
+    funding_source_url,
     number_of_transfers,
     type,
     subtype,

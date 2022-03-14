@@ -47,15 +47,21 @@ const LinkButton: React.FC<Props> = (props: Props) => {
       // regular link mode: exchange public token for access token
     } else {
       // call to Plaid api endpoint: /item/public_token/exchange in order to obtain access_token which is then stored with the created item
-      const data = await exchangeToken(
-        publicToken,
-        metadata.institution,
-        metadata.accounts,
-        props.userId,
-        props.isProcessor,
-        props.isIdentity
-      );
-      getItemsByUser(props.userId, true);
+      try {
+        const data = await exchangeToken(
+          publicToken,
+          metadata.institution,
+          metadata.accounts,
+          props.userId,
+          props.isProcessor,
+          props.isIdentity
+        );
+        getItemsByUser(props.userId, true);
+      } catch (e) {
+        if (e instanceof Error) {
+          console.error('error', e.message);
+        }
+      }
     }
     resetError();
     history.push(`/user/${props.userId}`);

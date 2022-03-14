@@ -4,13 +4,7 @@
 
 This is a sample Account Funding application demonstrating an end-to-end [Plaid][plaid] integration, focused on using the auth (or working with a Plaid partner using processor tokens), identity and balance endpoints to safely transfer funds.
 
-The full Plaid Pattern collection of sample apps includes:
-
-[Plaid Pattern Personal Finance Manager](https://github.com/plaid/pattern/) - Demonstrates the Plaid Transactions API
-
-[Plaid Pattern Account Funding App](https://github.com/plaid/pattern-account-funding) (you are here) - Demonstrates the Plaid Auth, Balance, and Identity APIs
-
-Plaid Pattern apps are provided for illustrative purposes and are not meant to be run as production applications.
+**This is not meant to be run as a production application.**
 
 ## Requirements
 
@@ -103,96 +97,31 @@ For webhooks to work, the server must be publicly accessible on the internet. Fo
 
 ### Testing OAuth
 
-A redirect_uri parameter is included in the linkTokenCreate call and set in this sample app to the PLAID_SANDBOX_REDIRECT_URI you have set in the .env file (`http://localhost:3002/oauth-link`). This is the page that the user will be redirected to upon completion of the OAuth flow at their OAuth institution. You will also need to configure `http://localhost:3002/oauth-link` as an allowed redirect URI for your client ID through the [Plaid developer dashboard](https://dashboard.plaid.com/team/api).
+The `linkTokenCreate` call includes a `redirect_uri` parameter, which the server applications reads from the `PLAID_SANDBOX_REDIRECT_URI` entry in the .env file (This value should be `http://localhost:3002/oauth-link`). This is the page that the user will be redirected to upon completion of the OAuth flow at their OAuth institution. When running in Production or Development, you will need to use an `https://` redirect URI, but a `http://` URI will work for Sandbox.
 
-To test the OAuth flow in sandbox, choose 'Playtypus OAuth Bank' from the list of financial institutions in Plaid Link.
+You will also need to add `http://localhost:3002/oauth-link` as an allowed redirect URI for your client ID in API section of the [Plaid developer dashboard](https://dashboard.plaid.com/team/api).
 
-If you want to test OAuth in development, you need to use https and set `PLAID_REDIRECT_URI=https://localhost:3002/oauth-link` in `.env`. In order to run your localhost on https, you will need to create a self-signed certificate and add it to the client root folder. MacOS users can use the following instructions to do this. Note that self-signed certificates should be used for testing purposes only, never for actual deployments. Windows users can use [these instructions below](#windows-instructions-for-using-https-with-localhost).
-
-#### MacOS instructions for using https with localhost
-
-If you are using MacOS, in your terminal, change to the client folder:
-
-```bash
-cd client
-```
-
-Use homebrew to install mkcert:
-
-```bash
-brew install mkcert
-```
-
-Then create your certificate for localhost:
-
-```bash
-mkcert -install
-mkcert localhost
-```
-
-This will create a certificate file localhost.pem and a key file localhost-key.pem inside your client folder.
-
-Then in the package.json file in the client folder, replace this line on line 26
-
-```bash
-"start": "PORT=3002 react-scripts start",
-```
-
-with this line instead:
-
-```bash
-"start": "PORT=3002 HTTPS=true SSL_CRT_FILE=localhost.pem SSL_KEY_FILE=localhost-key.pem react-scripts start",
-```
-
-Finally, in the wait-for-client.sh file in the server folder, replace this line on line 6
-
-```bash
-while [ "$(curl -s -o /dev/null -w "%{http_code}" -m 1 localhost:3002)" != "200" ]
-```
-
-with this line instead:
-
-```bash
-while [ "$(curl -s -o /dev/null -w "%{http_code}" -m 1 https://localhost:3002)" != "200" ]
-```
-
-After starting up the Pattern sample app, you can now view it at https://localhost:3002.
-
-#### Windows instructions for using https with localhost
-
-If you are on a Windows machine, in the package.json file in the client folder, replace this line on line 26
-
-```bash
-"start": "PORT=3002 react-scripts start",
-```
-
-with this line instead:
-
-```bash
-"start": "PORT=3002 HTTPS=true react-scripts start",
-```
-
-Then, in the wait-for-client.sh file in the server folder, replace this line on line 6
-
-```bash
-while [ "$(curl -s -o /dev/null -w "%{http_code}" -m 1 localhost:3002)" != "200" ]
-```
-
-with this line instead:
-
-```bash
-while [ "$(curl -s -o /dev/null -w "%{http_code}" -m 1 https://localhost:3002)" != "200" ]
-```
-
-After starting up the Pattern sample app, you can now view it at https://localhost:3002. Your browser will alert you with an invalid certificate warning; click on "advanced" and proceed.
+To test the OAuth flow, choose 'Playtypus OAuth Bank' from the list of financial instutions in Plaid Link.
 
 ### Working with Plaid Partners
 
-This sample app can also demonstrate the creation of a processor token for use with Plaid partners. While still initializing Link with the Auth product, instead of of using Plaid Auth endpoints, an example of the creation of a processor token is included in the [root items route][items-routes].
+This sample app can also demonstrate the creation of a processor token for use with Plaid partners. While still initializing Link with the Auth product, instead of of using Plaid Auth endpoints, an example of the creation of a processor token and integration with a plaid partner is included in the [root items route][items-routes].
+
+#### Using Dwolla sandbox as a test case
+
+This sample app uses Dwolla sandbox to demonstrate the transferring of funds with a Plaid partner. To test out the Dwolla sandbox flow, follow these steps:
+
+1. Go to your [Plaid developer dashboard Integrations page](https://dashboard.plaid.com/team/integrations). Scroll down to Dwolla and click on the "enable" button.
+
+2. Head to the [Dwolla site](https://developers.dwolla.com/guides/sandbox) and create a sandbox account by clicking the `Get API Keys` button and following the sign up instructions.
+
+3. After logging in, create a temporary access token by clicking on the "Create Token" button on Dwolla's dashboard [Applications Page](https://dashboard-sandbox.dwolla.com/applications-legacy). Copy this token and add it to the .env file as `DWOLLA_ACCESS_TOKEN`. This is a temporary access token issued by Dwolla which is good for one hour.
+4. Go to your Dwolla [Master Account Funding Source](https://dashboard-sandbox.dwolla.com/account/funding-sources) on the dashboard and obtain your id from your Superhero Savings Bank. This is the very last number in the smaller white box on the bottom left corner of the page. Enter this id in the .env file as the `DWOLLA_MASTER_ACCOUNT_ID`.
+5. Finally, make sure that `IS_PROCESSOR` is set to `true` in the .env file.
 
 ### Verifying and transferring funds
 
-This sample app demonstrates how to get the available balance in order to verify funds. It does not actually conduct a transfer of funds. Therefore, the balance in the linked account (whether in sandbox or development) will not decrement when a transfer is made in this app.
+This sample app demonstrates how to get the available balance in order to verify and transfer funds. However, it does not actually conduct a transfer of funds because it uses Dwolla sandbox. The balance in the linked account (whether in sandbox or development) will not decrement when a transfer is made in this app.
 
 ## Debugging
 
