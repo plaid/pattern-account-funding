@@ -28,9 +28,10 @@ const AddUserForm: React.FC<Props> = (props: Props) => {
 
   const messages = {
     sandbox: {
-      message: 'Enter sandbox name and email address in the input fields.',
-      namePlaceholder: "sandbox: 'Alberta Charleson'",
-      emailPlaceholder: "sandbox: 'accountholder0@example.com'",
+      message:
+        'Copy and paste sandbox name ("Alberta Charleson") and email address ("accountholder0@example.com") into the input fields.',
+      namePlaceholder: 'Alberta Charleson',
+      emailPlaceholder: 'accountholder0@example.com',
     },
     development: {
       message: 'Enter name and email address in the input fields.',
