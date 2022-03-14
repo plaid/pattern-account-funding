@@ -71,6 +71,11 @@ export const getLinkToken = (
     itemId,
     isIdentity,
   });
+export const makeTransfer = (
+  fundingSourceUrl: string,
+  amount: number,
+  itemId: number
+) => api.post(`/items/makeTransfer`, { fundingSourceUrl, amount, itemId });
 
 // accounts
 export const getBalanceByItem = (itemId: number, accountId: string) =>

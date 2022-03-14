@@ -34,6 +34,8 @@ export interface AccountType {
   owner_names: string[];
   emails: string[];
   processor_token: string;
+  cust_url: string;
+  funding_source_url: string;
   number_of_transfers: number;
   type: 'depository' | 'investment' | 'loan' | 'credit';
   subtype:

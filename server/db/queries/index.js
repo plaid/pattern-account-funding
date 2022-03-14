@@ -38,6 +38,7 @@ const {
   retrieveAppFundsByUser,
 } = require('./appFunds');
 const { createLinkEvent } = require('./linkEvents');
+const { createTransfer } = require('./transfers');
 
 module.exports = {
   // accounts
@@ -72,4 +73,6 @@ module.exports = {
   retrieveAppFundsByUser,
   // link events
   createLinkEvent,
+  // transfers
+  createTransfer,
 };
