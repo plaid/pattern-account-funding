@@ -121,7 +121,7 @@ This sample app uses Dwolla sandbox to demonstrate the transferring of funds wit
 
 ### Verifying and transferring funds
 
-This sample app demonstrates how to get the available balance in order to verify and transfer funds. However, it does not actually conduct a transfer of funds because it uses Dwolla sandbox. Therefore, the balance in the linked account (whether in sandbox or development) will not decrement when a transfer is made in this app.
+This sample app demonstrates how to get the available balance in order to verify and transfer funds. However, it does not actually conduct a transfer of funds because it uses Dwolla sandbox. The balance in the linked account (whether in sandbox or development) will not decrement when a transfer is made in this app.
 
 ## Debugging
 
