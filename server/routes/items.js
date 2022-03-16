@@ -184,6 +184,13 @@ router.post(
         balances = identityResponse.data.accounts[0].balances;
       }
     }
+
+    if (isIdentity && emails != null && ownerNames != null) {
+      console.log('Checkpoint #2 done!');
+      console.log('onwer:', firstName, lastName);
+      console.log('email:', emails[0]);
+      console.log('balances:', balances);
+    }
     // processorToken is only set if IS_PROCESSOR is true in .env file
     let processorToken = null;
     let customerUrl = null;
@@ -213,6 +220,13 @@ router.post(
         customerUrl,
         processorToken
       );
+    }
+
+    if (isProcessor && processorToken != null) {
+      console.log('Checkpoint #3 done!');
+      console.log('processorToken:', processorToken);
+      console.log('Dwolla customer url:', customerUrl);
+      console.log('Dwolla customer funding source  url:', fundingSourceUrl);
     }
 
     // if not isProcessor, processorToken, customerUrl and fundingSouceUrl will all be null
@@ -373,6 +387,8 @@ router.put(
       account.balances.current,
       account.balances.available
     );
+    console.log('checkpoints 4 and 8 done!');
+    console.log('balance:', account.balances.available);
     res.json(updatedAccount[0]);
   })
 );

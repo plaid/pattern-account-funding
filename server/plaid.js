@@ -50,7 +50,6 @@ const defaultLogger = async (clientMethod, clientMethodArgs, response) => {
     clientMethodArgs,
     response
   );
-  prettyPrintResponse(response);
 };
 
 /**
@@ -79,7 +78,6 @@ const noAccessTokenLogger = async (
     clientMethod != 'institutionsGet' &&
     clientMethod != 'institutionsGetById'
   ) {
-    prettyPrintResponse(response);
   }
 };
 

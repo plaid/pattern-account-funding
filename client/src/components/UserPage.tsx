@@ -59,30 +59,7 @@ const UserPage = ({ match }: RouteComponentProps<RouteInfo>) => {
   }, []);
 
   const getBalance = useCallback(async () => {
-    // This is triggered when user clicks "transfer funds."
-    // Only call balance/get if this is not the initial transfer and it's been less than an hour since the item was linked (because the balance data already exists
-    // from the auth/get or identity/get make upon creating the item).
-    // However, if neither auth nor identity have not been called on item creation (i.e. account.available_balance=null),
-    // make the balance/get call
-    let timeSinceCreation = 0; // time in milliseconds
-    if (account != null) {
-      timeSinceCreation =
-        new Date().getTime() - new Date(account.created_at).getTime();
-    }
-
-    if (
-      account != null &&
-      item != null &&
-      (account.number_of_transfers !== 0 ||
-      timeSinceCreation > 60 * 60 * 1000 || // if it's been more than one hour
-        account.available_balance == null)
-    ) {
-      const { data: newAccount } = await getBalanceByItem(
-        item.id,
-        account.plaid_account_id
-      );
-      setAccount(newAccount || {});
-    }
+    // ADD CODE FOR CHECKPOINT 6 ON THIS LINE
   }, [account, item]);
 
   const userTransfer = () => {
@@ -94,27 +71,16 @@ const UserPage = ({ match }: RouteComponentProps<RouteInfo>) => {
   const checkFullName = useCallback(
     // ownerNames is the ownernames array returned from identity/get
     (ownerNames: string[], fullname: string | null) => {
-      // in case user enters "Last name, First name"
-      if (fullname != null) {
-        fullname = fullname.replace(',', ' ');
-        const fullnameArray = fullname.split(' ');
+      // ADD CODE FOR CHECKPOINT 5a ON THIS LINE
 
-        // if both the first name and last name of the username in this app are included somewhere in the
-        // financial institution's onwerNames array, return true (anything entered by the user (except a comma)
-        // must be included in the FI's ownerNames array).
-        return fullnameArray.every(name => {
-          return ownerNames.some(identName => {
-            return identName.toUpperCase().indexOf(name.toUpperCase()) > -1;
-          });
-        });
-      }
       return false;
     },
     []
   );
 
   const checkUserEmail = useCallback((emails: string[], user_email: string) => {
-    return emails.includes(user_email);
+    // ADD CODE FOR CHECKPOINT 5b ON THIS LINE AND DELETE THE RETURN FALSE LINE BELOW;
+    return false;
   }, []);
   // update data store with user
   useEffect(() => {

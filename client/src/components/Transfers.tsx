@@ -29,7 +29,7 @@ interface Props {
 // a transfer is made in this app.
 
 const Transfers: React.FC<Props> = (props: Props) => {
-  const [isAmountOkay, setIsAmountOkay] = useState(true);
+  const [isAmountOkay, setIsAmountOkay] = useState(false);
   const [transferAmount, setTransferAmount] = useState(0);
   const [isTransferConfirmed, setIsTransferconfirmed] = useState(false);
   const [showInput, setShowInput] = useState(true);
@@ -56,19 +56,7 @@ const Transfers: React.FC<Props> = (props: Props) => {
     funding_source_url: string,
     itemId: number
   ) => {
-    // endpoint to make Dwolla transfer call
-    try {
-      const createTransfer = await makeTransfer(
-        funding_source_url,
-        amount,
-        itemId
-      );
-      return createTransfer.data.transfer.amount;
-    } catch (e) {
-      if (e instanceof Error) {
-        console.error('error', e.message);
-      }
-    }
+    // ADD CODE FOR CHECKPOINT 9 ON THIS LINE
   };
 
   const completeAchTransfer = (amount: number, accountId: string) => {
@@ -82,34 +70,7 @@ const Transfers: React.FC<Props> = (props: Props) => {
   };
 
   const checkAmountAndInitiate = async (amount: number) => {
-    setIsAmountOkay(balance != null && amount <= balance && amount > 0);
-    setTransferAmount(amount);
-    setShowTransferConfirmationError(false);
-
-    if (amount <= balance && amount > 0) {
-      const confirmedAmount =
-        IS_PROCESSOR === 'true'
-          ? await sendRequestToProcessor(
-              amount,
-              account.funding_source_url,
-              account.item_id
-            )
-          : completeAchTransfer(amount, account.plaid_account_id);
-      if (confirmedAmount == null) {
-        setShowTransferConfirmationError(true);
-      } else {
-        const response: TransferResponse | any = await updateAppFundsBalance(
-          // this route updates the appFunds with the new balance and also
-          // increments the number of transfers for this account by 1
-          props.userId,
-          confirmedAmount,
-          account.plaid_account_id
-        );
-        props.setAppFund(response.data.newAppFunds);
-        props.setAccount(response.data.newAccount);
-        setIsTransferconfirmed(true);
-      }
-    }
+    // ADD CODE FOR CHECKPOINT 8 ON THIS LINE
   };
 
   return (
