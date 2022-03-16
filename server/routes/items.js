@@ -43,6 +43,63 @@ const DWOLLA_BASE_URL = 'https://api-sandbox.dwolla.com';
  * @param {boolean} isProcessor false if developer is using a Plaid partner (processor)
  * @param {boolean} isIdentity true if in identity mode.
  */
+
+// create Dwolla Customer and obtain customer url
+const createDwollaCustomer = async (firstName, lastName) => {
+  try {
+    const response = await axios.post(
+      `${DWOLLA_BASE_URL}/customers`,
+      {
+        firstName: firstName,
+        lastName: lastName,
+        email: `${Math.random() // because Dwolla does not allow identical emails, and sandbox data is always the same.
+          .toString(36)
+          .slice(2)}@sampleApp.com`,
+        ipAddress: '99.99.99.99', // dummy data: a unique identifier for Dwolla
+      },
+      {
+        headers: {
+          'content-type': 'application/json',
+          Authorization: `Bearer ${DWOLLA_ACCESS_TOKEN}`,
+          Accept: 'application/vnd.dwolla.v1.hal+json',
+        },
+      }
+    );
+    return response.headers.location;
+  } catch (error) {
+    console.log('error:', error);
+    res.status(500);
+  }
+};
+
+// send processor token to Dwolla customer url to create customer Funding source and obtain customer funding source url
+const createDwollaCustomerFundingSource = async (
+  account,
+  customerUrl,
+  processorToken
+) => {
+  try {
+    const response = await axios.post(
+      `${customerUrl}/funding-sources`,
+      {
+        plaidToken: processorToken,
+        name: account.subtype,
+      },
+      {
+        headers: {
+          'content-type': 'application/json',
+          Authorization: `Bearer ${DWOLLA_ACCESS_TOKEN}`,
+          Accept: 'application/vnd.dwolla.v1.hal+json',
+        },
+      }
+    );
+    return response.headers.location;
+  } catch (error) {
+    console.log('error:', error);
+    res.status(500);
+  }
+};
+
 router.post(
   '/',
   asyncWrapper(async (req, res) => {
@@ -127,8 +184,7 @@ router.post(
         balances = identityResponse.data.accounts[0].balances;
       }
     }
-    // processorToken is only set if IS_PROCESSOR is true in .env file and
-    // therefore iisProcessor is true;
+    // processorToken is only set if IS_PROCESSOR is true in .env file
     let processorToken = null;
     let customerUrl = null;
     let fundingSourceUrl = null;
@@ -149,52 +205,14 @@ router.post(
       processorToken = processorTokenResponse.data.processor_token;
 
       // create Dwolla Customer and obtain customer url
-      try {
-        const response = await axios.post(
-          `${DWOLLA_BASE_URL}/customers`,
-          {
-            firstName: firstName,
-            lastName: lastName,
-            email: `${Math.random() // because Dwolla does not allow identical emails, and sandbox data is always the same.
-              .toString(36)
-              .slice(2)}@sampleApp.com`,
-            ipAddress: '99.99.99.99', // dummy data: a unique identifier for Dwolla
-          },
-          {
-            headers: {
-              'content-type': 'application/json',
-              Authorization: `Bearer ${DWOLLA_ACCESS_TOKEN}`,
-              Accept: 'application/vnd.dwolla.v1.hal+json',
-            },
-          }
-        );
-        customerUrl = response.headers.location;
-      } catch (error) {
-        console.log('error:', error);
-        res.status(500);
-      }
+      customerUrl = await createDwollaCustomer(firstName, lastName);
 
       // send processor token to Dwolla customer url to create customer Funding source and obtain customer funding source url
-      try {
-        const response = await axios.post(
-          `${customerUrl}/funding-sources`,
-          {
-            plaidToken: processorToken,
-            name: account.subtype,
-          },
-          {
-            headers: {
-              'content-type': 'application/json',
-              Authorization: `Bearer ${DWOLLA_ACCESS_TOKEN}`,
-              Accept: 'application/vnd.dwolla.v1.hal+json',
-            },
-          }
-        );
-        fundingSourceUrl = response.headers.location;
-      } catch (error) {
-        console.log('error:', error);
-        res.status(500);
-      }
+      fundingSourceUrl = await createDwollaCustomerFundingSource(
+        account,
+        customerUrl,
+        processorToken
+      );
     }
 
     // if not isProcessor, processorToken, customerUrl and fundingSouceUrl will all be null
