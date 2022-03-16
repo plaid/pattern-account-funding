@@ -113,7 +113,7 @@ const UserPage = ({ match }: RouteComponentProps<RouteInfo>) => {
     []
   );
 
-  const checkUserEmail = useCallback((emails: string[], user_email) => {
+  const checkUserEmail = useCallback((emails: string[], user_email: string) => {
     return emails.includes(user_email);
   }, []);
   // update data store with user
