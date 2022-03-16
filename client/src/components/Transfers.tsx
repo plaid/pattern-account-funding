@@ -29,7 +29,7 @@ interface Props {
 // a transfer is made in this app.
 
 const Transfers: React.FC<Props> = (props: Props) => {
-  const [isAmountOkay, setIsAmountOkay] = useState(false);
+  const [isAmountOkay, setIsAmountOkay] = useState(true);
   const [transferAmount, setTransferAmount] = useState(0);
   const [isTransferConfirmed, setIsTransferconfirmed] = useState(false);
   const [showInput, setShowInput] = useState(true);

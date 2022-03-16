@@ -168,22 +168,8 @@ router.post(
       iso_currency_code: null,
       unofficial_currency_code: null,
     };
-    if (isIdentity) {
-      const identityResponse = await plaid.identityGet(authAndIdRequest);
-      emails = identityResponse.data.accounts[0].owners[0].emails.map(email => {
-        return email.data;
-      });
 
-      ownerNames = identityResponse.data.accounts[0].owners[0].names;
-      const fullName = ownerNames[0].split(' ');
-      firstName = fullName[0];
-      lastName = fullName[fullName.length - 1];
-
-      if (isProcessor) {
-        // in this case, authGet will not be called, so we'll need the balance from the identity call.
-        balances = identityResponse.data.accounts[0].balances;
-      }
-    }
+    // ADD CODE FOR CHECKPOINT 2 ON THIS LINE
 
     if (isIdentity && emails != null && ownerNames != null) {
       console.log('Checkpoint #2 done!');
@@ -196,31 +182,7 @@ router.post(
     let customerUrl = null;
     let fundingSourceUrl = null;
 
-    if (!isProcessor) {
-      authResponse = await plaid.authGet(authAndIdRequest);
-      authNumbers = authResponse.data.numbers.ach[0];
-      balances = authResponse.data.accounts[0].balances;
-    } else {
-      const processorRequest = {
-        access_token: accessToken,
-        account_id: account.id,
-        processor: 'dwolla',
-      };
-      const processorTokenResponse = await plaid.processorTokenCreate(
-        processorRequest
-      );
-      processorToken = processorTokenResponse.data.processor_token;
-
-      // create Dwolla Customer and obtain customer url
-      customerUrl = await createDwollaCustomer(firstName, lastName);
-
-      // send processor token to Dwolla customer url to create customer Funding source and obtain customer funding source url
-      fundingSourceUrl = await createDwollaCustomerFundingSource(
-        account,
-        customerUrl,
-        processorToken
-      );
-    }
+    // ADD CODE FOR CHECKPOINT 3 ON THIS LINE
 
     if (isProcessor && processorToken != null) {
       console.log('Checkpoint #3 done!');
@@ -359,39 +321,7 @@ router.put(
   })
 );
 
-/**
- * Updates balances on account
- *
- * @param {number} itemId the ID of the item.
- * @param {string} accountId the account id.
- * @returns {Object[]} an array containing a single account.
- */
-router.put(
-  '/:itemId/balance',
-  asyncWrapper(async (req, res) => {
-    const { itemId } = req.params;
-    const { accountId } = req.body;
-    const { plaid_access_token: accessToken } = await retrieveItemById(itemId);
-    const balanceRequest = {
-      access_token: accessToken,
-      options: {
-        account_ids: [accountId],
-      },
-    };
-
-    const balanceResponse = await plaid.accountsBalanceGet(balanceRequest);
-
-    const account = balanceResponse.data.accounts[0];
-    const updatedAccount = await updateBalances(
-      accountId,
-      account.balances.current,
-      account.balances.available
-    );
-    console.log('checkpoints 4 and 8 done!');
-    console.log('balance:', account.balances.available);
-    res.json(updatedAccount[0]);
-  })
-);
+// ADD CODE FOR CHECKPOINT 4 ON THIS LINE
 
 /**
  * Deletes a single item and related accounts and transactions.
