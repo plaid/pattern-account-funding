@@ -195,7 +195,7 @@ const UserPage = ({ match }: RouteComponentProps<RouteInfo>) => {
       user.should_verify_identity
     ) {
       const fullnameCheck = checkFullName(account.owner_names, user.fullname);
-      const emailCheck = checkUserEmail(account!.emails, user.email);
+      const emailCheck = checkUserEmail(account!.emails, user.email!);
       updateIdentityCheckById(userId, fullnameCheck && emailCheck); // update user_table in db
       setIsIdentityChecked(fullnameCheck && emailCheck); // set state
     }
