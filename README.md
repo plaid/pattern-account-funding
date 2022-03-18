@@ -109,7 +109,7 @@ This sample app can also demonstrate the creation of a processor token for use w
 
 #### Using Dwolla sandbox as a test case
 
-This sample app uses Dwolla sandbox to demonstrate the transferring of funds with a Plaid partner. To test out the Dwolla sandbox flow, follow these steps:
+This sample app uses Dwolla sandbox to demonstrate the transferring of funds with a Plaid partner. Dwolla is just one of the many payment providers who have partnered with Plaid. You can view the full list of [payment partners](https://plaid.com/docs/auth/partnerships/). To test out the Dwolla sandbox flow, follow these steps:
 
 1. Go to your [Plaid developer dashboard Integrations page](https://dashboard.plaid.com/team/integrations). Scroll down to Dwolla and click on the "enable" button.
 
