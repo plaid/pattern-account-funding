@@ -4,6 +4,8 @@
 
 This is a sample Account Funding application demonstrating an end-to-end [Plaid][plaid] integration, focused on using the auth (or working with a Plaid partner using processor tokens), identity and balance endpoints to safely transfer funds.
 
+For an interactive tutorial showing how to make this app, see [Plaid Account Funding tutorial](https://github.com/plaid/account-funding-tutorial).
+
 **This is not meant to be run as a production application.**
 
 ## Requirements
