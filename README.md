@@ -6,6 +6,16 @@ This is a sample Account Funding application demonstrating an end-to-end [Plaid]
 
 For an interactive tutorial showing how to make this app, see [Plaid Account Funding tutorial](https://github.com/plaid/account-funding-tutorial).
 
+The full Plaid Pattern collection of sample apps includes:
+
+[Plaid Pattern Account Funding App](https://github.com/plaid/pattern-account-funding) - (you are here) Demonstrates the Plaid Auth, Balance, and Identity APIs
+
+[Plaid Pattern Personal Finance Manager](https://github.com/plaid/pattern/) - Demonstrates the Plaid Transactions API
+
+[Plaid Pattern Transfer App](https://github.com/plaid/pattern-transfers) - Demonstrates the Transfer API
+
+Plaid Pattern apps are provided for illustrative purposes and are not meant to be run as production applications.
+
 **This is not meant to be run as a production application.**
 
 ## Requirements
