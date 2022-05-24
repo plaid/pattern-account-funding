@@ -16,8 +16,6 @@ The full Plaid Pattern collection of sample apps includes:
 
 Plaid Pattern apps are provided for illustrative purposes and are not meant to be run as production applications.
 
-**This is not meant to be run as a production application.**
-
 ## Requirements
 
 -   [Docker][docker] Version 2.0.0.3 (31259) or higher, installed, running, and signed in. If you're on **Windows**, check out [this link][wsl] to get set up in WSL.
