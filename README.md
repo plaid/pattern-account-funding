@@ -28,7 +28,7 @@ Note: We recommend running these commands in a unix terminal. Windows users can 
 1. Clone the repo.
     ```shell
     git clone https://github.com/plaid/pattern-account-funding.git
-    cd pattern
+    cd pattern-account-funding
     ```
 1. Create the `.env` file.
     ```shell
