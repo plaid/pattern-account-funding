@@ -24,7 +24,7 @@ const AddUserForm: React.FC<Props> = (props: Props) => {
     setNewUser(username);
     props.hideForm();
   };
-  const environment = PLAID_ENV === 'sandbox' ? 'sandbox' : 'development';
+  const environment = PLAID_ENV === 'sandbox' ? 'sandbox' : 'production';
 
   const messages = {
     sandbox: {
@@ -38,7 +38,7 @@ const AddUserForm: React.FC<Props> = (props: Props) => {
       namePlaceholder: 'Alberta Charleson',
       emailPlaceholder: 'accountholder0@example.com',
     },
-    development: {
+    production: {
       message: 'Enter name and email address in the input fields.',
       namePlaceholder: 'First and last name',
       emailPlaceholder: 'email address',
