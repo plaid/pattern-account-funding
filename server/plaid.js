@@ -16,14 +16,14 @@ const {
 const {
   PLAID_CLIENT_ID,
   PLAID_ENV,
-  PLAID_SECRET_DEVELOPMENT,
+  PLAID_SECRET_PRODUCTION,
   PLAID_SECRET_SANDBOX,
 } = process.env;
 
 // The Plaid secret is unique per environment. Note that there is also a separate production key,
 // though we do not account for that here.
 const PLAID_SECRET =
-  PLAID_ENV === 'development' ? PLAID_SECRET_DEVELOPMENT : PLAID_SECRET_SANDBOX;
+  PLAID_ENV === 'production' ? PLAID_SECRET_PRODUCTION : PLAID_SECRET_SANDBOX;
 
 const OPTIONS = { clientApp: 'Plaid-Pattern' };
 
