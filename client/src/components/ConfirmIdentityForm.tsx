@@ -25,7 +25,7 @@ const ConfirmIdentityForm: React.FC<Props> = (props: Props) => {
     setEmail('');
   };
 
-  const environment = PLAID_ENV === 'sandbox' ? 'sandbox' : 'development';
+  const environment = PLAID_ENV === 'sandbox' ? 'sandbox' : 'production';
 
   const messages = {
     sandbox: {
@@ -33,7 +33,7 @@ const ConfirmIdentityForm: React.FC<Props> = (props: Props) => {
       namePlaceholder: "sandbox: 'Alberta Charleson'",
       emailPlaceholder: "sandbox: 'accountholder0@example.com'",
     },
-    development: {
+    production: {
       message:
         'Re-enter your full name and email as they are listed at your financial institution.',
       namePlaceholder: 'full name used at financial institution',
