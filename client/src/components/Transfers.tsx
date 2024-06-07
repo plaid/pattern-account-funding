@@ -25,7 +25,7 @@ interface Props {
 // This component checks to make sure the amount of transfer does not
 // exceed the balance in the account and then initiates the ach transfer or processor request.
 // Note that no transfers are actually made in this sample app; therefore balances in
-// linked accounts (either in sandbox or development) will not actually be decremented when
+// linked accounts will not actually be decremented when
 // a transfer is made in this app.
 
 const Transfers: React.FC<Props> = (props: Props) => {
