@@ -110,7 +110,7 @@ For webhooks to work, the server must be publicly accessible on the internet. Fo
 
 ### Testing OAuth
 
-The `linkTokenCreate` call includes a `redirect_uri` parameter, which the server applications reads from the `PLAID_SANDBOX_REDIRECT_URI` entry in the .env file (This value should be `http://localhost:3002/oauth-link`). This is the page that the user will be redirected to upon completion of the OAuth flow at their OAuth institution. When running in Production or Development, you will need to use an `https://` redirect URI, but a `http://` URI will work for Sandbox.
+The `linkTokenCreate` call includes a `redirect_uri` parameter, which the server applications reads from the `PLAID_SANDBOX_REDIRECT_URI` entry in the .env file (This value should be `http://localhost:3002/oauth-link`). This is the page that the user will be redirected to upon completion of the OAuth flow at their OAuth institution. When running in Production, you will need to use an `https://` redirect URI, but a `http://` URI will work for Sandbox.
 
 You will also need to add `http://localhost:3002/oauth-link` as an allowed redirect URI for your client ID in API section of the [Plaid developer dashboard](https://dashboard.plaid.com/team/api).
 
@@ -134,7 +134,7 @@ This sample app uses Dwolla sandbox to demonstrate the transferring of funds wit
 
 ### Verifying and transferring funds
 
-This sample app demonstrates how to get the available balance in order to verify and transfer funds. However, it does not actually conduct a transfer of funds because it uses Dwolla sandbox. The balance in the linked account (whether in sandbox or development) will not decrement when a transfer is made in this app.
+This sample app demonstrates how to get the available balance in order to verify and transfer funds. However, it does not actually conduct a transfer of funds because it uses Dwolla sandbox. The balance in the linked account (whether in sandbox or production) will not decrement when a transfer is made in this app.
 
 ## Debugging
 
@@ -209,7 +209,7 @@ Browse to [localhost:4040](http://localhost:4040/inspect/http) to see the ngrok 
 
 Don’t want to use ngrok? As long as you serve the app with an endpoint that is publicly exposed, all the Plaid webhooks will work.
 
-ngrok's free account has a session limit of 8 hours. To fully test out some of the transaction webhook workflows, you will need to get a more persistent endpoint as noted above when using the development environment.
+ngrok's free account has a session limit of 8 hours. To fully test out some of the transaction webhook workflows, you will need to get a more persistent endpoint as noted above when using the production environment.
 
 ## Source
 
