@@ -1,4 +1,4 @@
 web_addr: 0.0.0.0:4040
 # Fill this in with your authtoken from https://dashboard.ngrok.com/get-started/your-authtoken
-authtoken: 2cmSndECCQxD35wC0yBBOoM565q_7WA2A4YCWDSKqfBqhmih8
+authtoken: 
 version: 2
