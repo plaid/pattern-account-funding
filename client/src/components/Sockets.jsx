@@ -27,6 +27,13 @@ const Sockets = () => {
       getItemById(itemId, true);
     });
 
+    socket.current.on('PENDING_EXPIRATION', ({ itemId } = {}) => {
+      const msg = `Item ${itemId}: will be disconnected in 7 days. To prevent this, user should re-enter login credentials via update mode.`;
+      console.log(msg);
+      toast(msg);
+      getItemById(itemId, true);
+    });
+
     return () => {
       socket.current.removeAllListeners();
       socket.current.close();
