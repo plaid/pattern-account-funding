@@ -6,15 +6,17 @@ This is a sample Account Funding application demonstrating an end-to-end [Plaid]
 
 For an interactive tutorial showing how to make this app, see [Plaid Account Funding tutorial](https://github.com/plaid/account-funding-tutorial).
 
-The full Plaid Pattern collection of sample apps includes:
+The full Plaid collection of sample apps includes:
 
 [Plaid Pattern Account Funding App](https://github.com/plaid/pattern-account-funding) - (you are here) Demonstrates the Plaid Auth, Balance, and Identity APIs
 
 [Plaid Pattern Personal Finance Manager](https://github.com/plaid/pattern/) - Demonstrates the Plaid Transactions API
 
-[Plaid Pattern Transfer App](https://github.com/plaid/pattern-transfers) - Demonstrates the Transfer API
+[Plaid Transfer Quickstart app](https://github.com/plaid/transfer-quickstart) - Demonstrates the Transfer API (up to date)
 
-Plaid Pattern apps are provided for illustrative purposes and are not meant to be run as production applications.
+[Plaid Pattern Transfer App (deprecated) ](https://github.com/plaid/pattern-transfers) - Demonstrates the Transfer API (deprecated)
+
+Plaid sample apps are provided for illustrative purposes and are not meant to be run as production applications.
 
 ## Requirements
 
@@ -84,7 +86,7 @@ Aside from websocket listeners (see below), all HTTP calls to the Pattern server
 
 ### Rendering Link
 
-This app uses the classic mode of rendering Link. If you are building a Pay-by-bank app rather than an account funding app, the [Embedded Institution Search](https://plaid.com/docs/link/embedded-institution-search/) feature is strongly recommended instead, to increase uptake of pay-by-bank.
+This app uses the classic mode of rendering Link. If you are building a Pay-by-bank app rather than an account funding app, the [Embedded Institution Search](https://plaid.com/docs/link/embedded-institution-search/) feature is strongly recommended instead, to increase uptake of pay-by-bank. See the [Plaid Transfer Quickstart](https://github.com/plaid/transfer-quickstart) for an example of this in action.
 
 ### Webhooks and Websockets
 
