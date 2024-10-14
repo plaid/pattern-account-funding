@@ -66,7 +66,8 @@ const itemsHandler = async (requestBody, io) => {
       );
       break;
     }
-    case 'PENDING_DISCONNECT': {
+    case 'PENDING_DISCONNECT':
+    case 'PENDING_EXPIRATION': {
       const { id: itemId } = await retrieveItemByPlaidItemId(plaidItemId);
       await updateItemStatus(itemId, 'bad');
       serverLogAndEmitSocket(
