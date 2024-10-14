@@ -82,6 +82,10 @@ The Pattern web client is written in JavaScript using [React]. It presents a bas
 
 Aside from websocket listeners (see below), all HTTP calls to the Pattern server are defined in `src/services/api.js`.
 
+### Rendering Link
+
+This app uses the classic mode of rendering Link. If you are building a Pay-by-bank app rather than an account funding app, the [Embedded Institution Search](https://plaid.com/docs/link/embedded-institution-search/) feature is strongly recommended instead, to increase uptake of pay-by-bank.
+
 ### Webhooks and Websockets
 
 The Pattern server is configured to send a message over a websocket whenever it receives a webhook from Plaid. On the client side have websocket listeners defined in `src/components/Sockets.jsx` that wait for these messages and update data in real time accordingly.
