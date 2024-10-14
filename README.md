@@ -14,7 +14,7 @@ The full Plaid collection of sample apps includes:
 
 [Plaid Transfer Quickstart app](https://github.com/plaid/transfer-quickstart) - Demonstrates the Transfer API (up to date)
 
-[Plaid Pattern Transfer App (deprecated) ](https://github.com/plaid/pattern-transfers) - Demonstrates the Transfer API (deprecated)
+[Plaid Pattern Transfer App (deprecated) ](https://github.com/plaid/pattern-transfers) - Demonstrates the Transfer API (this sample app is deprecated, use the Transfer Quickstart app instead)
 
 Plaid sample apps are provided for illustrative purposes and are not meant to be run as production applications.
 
