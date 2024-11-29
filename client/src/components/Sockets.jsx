@@ -1,7 +1,9 @@
 import React, { useEffect, useRef } from 'react';
 import { toast } from 'react-toastify';
 
-import { useAccounts, useItems } from '../services';
+import useAccounts from '../services/accounts.tsx';
+import useItems from '../services/items.tsx';
+
 const io = require('socket.io-client');
 const { REACT_APP_SERVER_PORT } = process.env;
 

@@ -4,7 +4,7 @@ import ModalBody from 'plaid-threads/ModalBody';
 import Button from 'plaid-threads/Button';
 import TextInput from 'plaid-threads/TextInput';
 
-import { useCurrentUser } from '../services';
+import useCurrentUser from '../services/currentUser.tsx';
 
 const Login: React.FC = () => {
   const { login } = useCurrentUser();

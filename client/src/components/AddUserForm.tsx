@@ -3,7 +3,8 @@ import Button from 'plaid-threads/Button';
 import TextInput from 'plaid-threads/TextInput';
 import Checkbox from 'plaid-threads/Checkbox';
 
-import { useUsers, useCurrentUser } from '../services';
+import useUsers from '../services/users.tsx';
+import useCurrentUser from '../services/currentUser.tsx';
 
 const PLAID_ENV = process.env.REACT_APP_PLAID_ENV;
 

@@ -4,7 +4,7 @@ import Button from 'plaid-threads/Button';
 
 import { UserType, AppFundType } from './types';
 
-import { currencyFilter } from '../util';
+import { currencyFilter } from '../util/index.tsx';
 
 interface Props {
   userTransfer: () => void;

@@ -4,10 +4,15 @@ import Button from 'plaid-threads/Button';
 import Note from 'plaid-threads/Note';
 import { Institution } from 'plaid/dist/api';
 
-import { LinkButton, UpdateLink } from '.';
-import { useItems, useLink, useInstitutions, useAccounts } from '../services';
+import setItemToBadState from '../services/api.tsx';
+import LinkButton from './LinkButton.tsx';
+import UpdateLink from './UpdateLink.tsx';
+import useItems from '../services/items.tsx';
+import useLink from '../services/link.tsx';
+import useInstitutions from '../services/institutions.tsx';
+import useAccounts from '../services/accounts.tsx';
+
 import { UserType, ItemType } from './types';
-import { setItemToBadState } from '../services/api';
 
 const PLAID_ENV = process.env.REACT_APP_PLAID_ENV || 'sandbox';
 const IS_PROCESSOR = process.env.REACT_APP_IS_PROCESSOR;

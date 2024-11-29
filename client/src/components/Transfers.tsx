@@ -3,9 +3,10 @@ import Callout from 'plaid-threads/Callout';
 import { Button } from 'plaid-threads/Button';
 
 import { AccountType, AppFundType } from './types';
-import { currencyFilter } from '../util';
-import { TransferForm } from '.';
-import { updateAppFundsBalance, makeTransfer } from '../services/api';
+import { currencyFilter } from '../util/index.tsx';
+
+import TransferForm from './TransferForm.tsx';
+import { updateAppFundsBalance, makeTransfer } from '../services/api.tsx';
 
 const IS_PROCESSOR = process.env.REACT_APP_IS_PROCESSOR;
 

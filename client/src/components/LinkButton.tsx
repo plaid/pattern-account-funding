@@ -10,9 +10,12 @@ import {
 } from 'react-plaid-link';
 import { useHistory } from 'react-router-dom';
 
-import { logEvent, logSuccess, logExit } from '../util'; // functions to log and save errors and metadata from Link events.
-import { exchangeToken, setItemState } from '../services/api';
-import { useItems, useLink, useErrors } from '../services';
+import { logEvent, logSuccess, logExit } from '../util/index.tsx'; // functions to log and save errors and metadata from Link events.
+import { exchangeToken, setItemState } from '../services/api.tsx';
+
+import useItems from '../services/items.tsx';
+import useLink from '../services/link.tsx';
+import useErrors from '../services/errors.tsx';
 
 interface Props {
   isOauth?: boolean;
