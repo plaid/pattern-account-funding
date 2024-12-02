@@ -11,21 +11,25 @@ import {
   AppFundType,
   UserType,
 } from './types';
-import { useItems, useAccounts, useUsers, useInstitutions } from '../services';
+
+import useItems from '../services/items.tsx';
+import useInstitutions from '../services/institutions.tsx';
+import useUsers from '../services/users.tsx';
+import useAccounts from '../services/accounts.tsx';
+
+import Banner from './Banner.tsx';
+import Item from './Item.tsx';
+import ConfirmIdentityForm from './ConfirmIdentityForm.tsx';
+import PatternAccount from './PatternAccount.tsx';
+import Transfers from './Transfers.tsx';
+import ErrorMessage from './ErrorMessage.tsx';
+
 import {
   updateIdentityCheckById,
   getBalanceByItem,
   getAppFundsByUser,
-} from '../services/api';
+} from '../services/api.tsx';
 
-import {
-  Banner,
-  Item,
-  ErrorMessage,
-  ConfirmIdentityForm,
-  PatternAccount,
-  Transfers,
-} from '.';
 
 const UserPage = ({ match }: RouteComponentProps<RouteInfo>) => {
   const [user, setUser] = useState<UserType>({

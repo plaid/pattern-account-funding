@@ -6,7 +6,7 @@ import {
   PlaidLinkError,
 } from 'react-plaid-link';
 
-import { postLinkEvent as apiPostLinkEvent } from '../services/api';
+import { postLinkEvent as apiPostLinkEvent } from '../services/api.tsx';
 
 /**
  * @desc converts number values into $ currency strings

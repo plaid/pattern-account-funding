@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { HashLink } from 'react-router-hash-link';
 import Button from 'plaid-threads/Button';
 import Touchable from 'plaid-threads/Touchable';
-import { useUsers } from '../services';
+import useUsers from '../services/users.tsx';
 import { UserType } from './types';
 // This provides developers with a list of all users by username, and ability to delete a user.
 // View at path: "/admin"
