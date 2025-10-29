@@ -18,6 +18,7 @@ import {
   getAppFundsByUser,
 } from '../services/api';
 
+<<<<<<< HEAD
 import {
   Banner,
   Item,
@@ -27,6 +28,8 @@ import {
   Transfers,
 } from '.';
 
+=======
+>>>>>>> 445a453 (updates)
 const UserPage = ({ match }: RouteComponentProps<RouteInfo>) => {
   const [user, setUser] = useState<UserType>({
     id: 0,

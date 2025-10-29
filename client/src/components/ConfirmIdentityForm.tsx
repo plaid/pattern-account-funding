@@ -1,8 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import Button from 'plaid-threads/Button';
 import TextInput from 'plaid-threads/TextInput';
+<<<<<<< HEAD
 
 import { useUsers } from '../services';
+=======
+import useUsers from '../services/users.tsx';
+>>>>>>> 445a453 (updates)
 import { UserType } from './types';
 import { updateUserInfo } from '../services/api';
 

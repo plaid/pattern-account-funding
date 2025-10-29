@@ -29,9 +29,21 @@ const asyncWrapper = fn => (req, res, next) => {
 const errorHandler = (err, req, res, next) => {
   let error = err;
 
-  // handle errors from the Plaid api.
-  if (error.name === 'PlaidError')
+  // Log the actual error for debugging
+  console.error('Error details:', err);
+  console.error('Error stack:', err.stack);
+
+  // handle errors from the Plaid api (SDK v39+ uses response.data structure)
+  if (error.response && error.response.data) {
+    const { error_type, error_code, error_message, display_message } = error.response.data;
+    error = new Boom(display_message || error_message || 'Plaid API error', {
+      statusCode: error.response.status || 500,
+      data: { error_type, error_code }
+    });
+  } else if (error.name === 'PlaidError') {
+    // Fallback for older SDK versions
     error = new Boom(error.error_message, { statusCode: error.status_code });
+  }
 
   // handle standard javascript errors.
   if (!error.isBoom) error = Boom.boomify(error);

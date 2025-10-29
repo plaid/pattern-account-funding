@@ -6,9 +6,13 @@
     "@types/jest": "^26.0.23",
     "@types/react": "^17.0.11",
     "@types/react-dom": "^17.0.7",
-    "axios": "^0.21.1",
+    "axios": "^1.7.9",
     "date-fns": "^1.30.1",
+<<<<<<< HEAD
     "plaid": "^9.3.0",
+=======
+    "plaid": "^39.1.0",
+>>>>>>> 445a453 (updates)
     "plaid-threads": "^11.5.0",
     "prop-types": "^15.7.2",
     "react": "^16.14.0",
@@ -20,8 +24,13 @@
     "react-toastify": "^5.1.0",
     "recharts": "^2.0.9",
     "sass": "^1.42.1",
+<<<<<<< HEAD
     "socket.io-client": "^2.2.0",
     "typescript": "^4.3.2"
+=======
+    "socket.io-client": "^4.8.0",
+    "typescript": "^3.9.0"
+>>>>>>> 445a453 (updates)
   },
   "scripts": {
     "start": "PORT=3002 react-scripts start",

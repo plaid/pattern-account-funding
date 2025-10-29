@@ -444,6 +444,8 @@ router.post(
       const resetResponse = await plaid.sandboxItemResetLogin({
         access_token: accessToken,
       });
+      // Update item status immediately (webhook may not arrive if ngrok expired)
+      await updateItemStatus(itemId, 'bad');
       res.json(resetResponse.data);
     } catch (error) {
       if (error.response && error.response.status === 400) {
