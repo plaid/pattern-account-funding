@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 
 import { NumberInput } from 'plaid-threads/NumberInput';
 import { Button } from 'plaid-threads/Button';
-import { currencyFilter } from '../util';
+import { currencyFilter } from '../util/index.tsx';
 
 interface Props {
   checkAmountAndInitiate: (amount: number) => void;

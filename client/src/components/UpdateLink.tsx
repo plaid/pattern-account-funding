@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import Button from 'plaid-threads/Button';
 
-import { LinkButton } from '.';
-import { useLink } from '../services';
+import LinkButton from './LinkButton.tsx';
+import { useLink } from '../services/index.js';
 
 interface Props {
   setBadStateShown: boolean;

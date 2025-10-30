@@ -10,12 +10,12 @@ import React, {
 import groupBy from 'lodash/groupBy';
 import keyBy from 'lodash/keyBy';
 import omitBy from 'lodash/omitBy';
-import { AccountType } from '../components/types';
+import { AccountType } from '../components/types.ts';
 
 import {
   getAccountsByItem as apiGetAccountsByItem,
   getAccountsByUser as apiGetAccountsByUser,
-} from './api';
+} from './api.tsx';
 
 interface AccountsState {
   [accountId: number]: AccountType;

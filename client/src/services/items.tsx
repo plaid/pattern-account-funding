@@ -12,13 +12,13 @@ import keyBy from 'lodash/keyBy';
 import omit from 'lodash/omit';
 import omitBy from 'lodash/omitBy';
 
-import { ItemType } from '../components/types';
+import { ItemType } from '../components/types.ts';
 
 import {
   getItemsByUser as apiGetItemsByUser,
   getItemById as apiGetItemById,
   deleteItemById as apiDeleteItemById,
-} from './api';
+} from './api.tsx';
 
 interface ItemsState {
   [itemId: number]: ItemType;

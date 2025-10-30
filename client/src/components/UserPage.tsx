@@ -3,6 +3,7 @@ import { Link, RouteComponentProps } from 'react-router-dom';
 import NavigationLink from 'plaid-threads/NavigationLink';
 import Callout from 'plaid-threads/Callout';
 import { Institution } from 'plaid/dist/api';
+import { toast } from 'react-toastify';
 
 import {
   RouteInfo,
@@ -10,13 +11,13 @@ import {
   AccountType,
   AppFundType,
   UserType,
-} from './types';
-import { useItems, useAccounts, useUsers, useInstitutions } from '../services';
+} from './types.ts';
+import { useItems, useAccounts, useUsers, useInstitutions } from '../services/index.js';
 import {
   updateIdentityCheckById,
   getBalanceByItem,
   getAppFundsByUser,
-} from '../services/api';
+} from '../services/api.tsx';
 import Banner from './Banner.tsx';
 import Item from './Item.tsx';
 import ErrorMessage from './ErrorMessage.tsx';
@@ -74,16 +75,28 @@ const UserPage = ({ match }: RouteComponentProps<RouteInfo>) => {
       timeSinceCreation > 60 * 60 * 1000 || // if it's been more than one hour
         account.available_balance == null)
     ) {
-      const { data: newAccount } = await getBalanceByItem(
-        item.id,
-        account.plaid_account_id
-      );
-      setAccount(newAccount || {});
+      try {
+        const { data: newAccount } = await getBalanceByItem(
+          item.id,
+          account.plaid_account_id
+        );
+        setAccount(newAccount || {});
+      } catch (error: any) {
+        const errorMessage = error?.response?.data?.error_message ||
+                           error?.response?.data?.message ||
+                           'Unable to retrieve account balance. Please try updating your login credentials.';
+        toast.error(errorMessage);
+        console.error('Error fetching balance:', error);
+      }
     }
   }, [account, item]);
 
-  const userTransfer = () => {
-    getBalance();
+  const userTransfer = async () => {
+    if (account == null || item == null) {
+      toast.error('No account available for transfer. Please link a bank account first.');
+      return;
+    }
+    await getBalance();
     setShowTransfer(true);
   };
 

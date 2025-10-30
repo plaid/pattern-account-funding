@@ -11,14 +11,14 @@ import keyBy from 'lodash/keyBy';
 import omit from 'lodash/omit';
 import { toast } from 'react-toastify';
 
-import { UserType } from '../components/types';
-import { useAccounts, useItems } from '.';
+import { UserType } from '../components/types.ts';
+import { useAccounts, useItems } from './index.js';
 import {
   getUsers as apiGetUsers,
   getUserById as apiGetUserById,
   addNewUser as apiAddNewUser,
   deleteUserById as apiDeleteUserById,
-} from './api';
+} from './api.tsx';
 
 interface UsersState {
   [key: string]: UserType | any;

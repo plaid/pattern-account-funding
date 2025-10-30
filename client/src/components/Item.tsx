@@ -12,7 +12,7 @@ import useLink from '../services/link.tsx';
 import useInstitutions from '../services/institutions.tsx';
 import useAccounts from '../services/accounts.tsx';
 
-import { UserType, ItemType } from './types';
+import { UserType, ItemType } from './types.ts';
 
 const PLAID_ENV = process.env.REACT_APP_PLAID_ENV || 'sandbox';
 const IS_PROCESSOR = process.env.REACT_APP_IS_PROCESSOR;
