@@ -29,20 +29,16 @@ const { PORT } = process.env;
 const server = app.listen(PORT, () => {
   console.log(`listening on port ${PORT}`);
 });
-<<<<<<< HEAD
-const io = socketIo(server);
-=======
 
 const io = socketIo(server, {
   cors: {
     origin: "http://localhost:3002",
-    methods: ["*"], 
+    methods: ["*"],
     allowedHeaders: ["*"],
-    credentials: true, 
+    credentials: true,
   },
   allowEIO3: true
 });
->>>>>>> 445a453 (updates)
 
 
 app.use(logger('dev'));
