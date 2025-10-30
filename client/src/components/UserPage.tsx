@@ -17,19 +17,13 @@ import {
   getBalanceByItem,
   getAppFundsByUser,
 } from '../services/api';
+import Banner from './Banner.tsx';
+import Item from './Item.tsx';
+import ErrorMessage from './ErrorMessage.tsx';
+import ConfirmIdentityForm from './ConfirmIdentityForm.tsx';
+import PatternAccount from './PatternAccount.tsx';
+import Transfers from './Transfers.tsx';
 
-<<<<<<< HEAD
-import {
-  Banner,
-  Item,
-  ErrorMessage,
-  ConfirmIdentityForm,
-  PatternAccount,
-  Transfers,
-} from '.';
-
-=======
->>>>>>> 445a453 (updates)
 const UserPage = ({ match }: RouteComponentProps<RouteInfo>) => {
   const [user, setUser] = useState<UserType>({
     id: 0,
