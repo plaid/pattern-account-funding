@@ -26,7 +26,7 @@ router.post(
     try {
       const { userId, itemId, isIdentity } = req.body;
       let accessToken = null;
-      let products = ['auth']; // must include transactions in order to receive transactions webhooks
+      let products = ['auth', 'signal']; // signal is recommended even if just using balance
       if (isIdentity) {
         products.push('identity');
       }

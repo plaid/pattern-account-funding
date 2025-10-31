@@ -358,6 +358,7 @@ router.put(
     const { itemId } = req.params;
     const { accountId } = req.body;
     const { plaid_access_token: accessToken } = await retrieveItemById(itemId);
+
     const balanceRequest = {
       access_token: accessToken,
       options: {
@@ -366,14 +367,85 @@ router.put(
     };
 
     const balanceResponse = await plaid.accountsBalanceGet(balanceRequest);
-
     const account = balanceResponse.data.accounts[0];
+
     const updatedAccount = await updateBalances(
       accountId,
       account.balances.current,
       account.balances.available
     );
+
     res.json(updatedAccount[0]);
+  })
+);
+
+/**
+ * Evaluates transfer risk using Plaid Signal before allowing a transfer
+ *
+ * @param {number} itemId the ID of the item.
+ * @param {string} accountId the account id.
+ * @param {number} amount the transfer amount to evaluate.
+ * @param {string} userId the user id for tracking.
+ * @returns {Object} signal evaluation result with acceptance status.
+ */
+router.post(
+  '/:itemId/signal/evaluate',
+  asyncWrapper(async (req, res) => {
+    const { itemId } = req.params;
+    const { accountId, amount, userId } = req.body;
+
+    if (!amount || amount <= 0) {
+      throw new Boom('Valid transfer amount is required', {
+        statusCode: 400,
+      });
+    }
+
+    const { plaid_access_token: accessToken } = await retrieveItemById(itemId);
+    const RULESET_KEY = process.env.RULESET_KEY;
+
+    if (!RULESET_KEY) {
+      const error = new Boom('RULESET_KEY is not configured in environment variables. Please add it to your .env file.', {
+        statusCode: 503, // Service Unavailable
+      });
+      // Override Boom's default behavior of hiding 5xx error messages
+      error.output.payload.message = error.message;
+      throw error;
+    }
+
+    // Generate a unique client_transaction_id
+    // Format: user_<userId>_<timestamp>_<random>
+    const randomString = Math.random().toString(36).substring(2, 15);
+    const clientTransactionId = `user_${userId}_${Date.now()}_${randomString}`;
+
+    // Use Signal Evaluate to assess transfer risk with the actual transfer amount
+    const signalRequest = {
+      access_token: accessToken,
+      account_id: accountId,
+      client_transaction_id: clientTransactionId,
+      amount: parseFloat(amount),
+      client_user_id: userId.toString(),
+      ruleset_key: RULESET_KEY,
+    };
+
+    const signalResponse = await plaid.signalEvaluate(signalRequest);
+
+    // Check the ruleset evaluation result
+    const ruleset = signalResponse.data.ruleset;
+    const outcome = ruleset?.result;
+    const isAccepted = outcome?.toUpperCase() === 'ACCEPT';
+    const coreAttributes = signalResponse.data.core_attributes || {};
+
+    // Return the complete signal evaluation result
+    res.json({
+      is_accepted: isAccepted,
+      outcome: outcome,
+      ruleset_key: ruleset?.ruleset_key,
+      client_transaction_id: clientTransactionId,
+      core_attributes: coreAttributes,
+      ruleset: ruleset,
+      scores: signalResponse.data.scores,
+      warnings: signalResponse.data.warnings,
+    });
   })
 );
 
@@ -444,6 +516,8 @@ router.post(
       const resetResponse = await plaid.sandboxItemResetLogin({
         access_token: accessToken,
       });
+      // Update item status immediately (webhook may not arrive if ngrok expired)
+      await updateItemStatus(itemId, 'bad');
       res.json(resetResponse.data);
     } catch (error) {
       if (error.response && error.response.status === 400) {

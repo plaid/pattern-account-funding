@@ -50,6 +50,12 @@ export interface AccountType {
     | 'credit card';
   created_at: string;
   updated_at: string;
+  signal_evaluation?: {
+    is_accepted: boolean;
+    outcome: string;
+    ruleset_key: string;
+    core_attributes?: any;
+  };
 }
 export interface UserType {
   id: number;

@@ -2,10 +2,11 @@ import React, { useEffect } from 'react';
 import Button from 'plaid-threads/Button';
 import { useHistory } from 'react-router-dom';
 
-import { useCurrentUser } from '../services';
-import { Login, Banner, AddUserForm } from '.';
-
-import { useBoolean } from '../hooks';
+import { useCurrentUser } from '../services/index.js';
+import Login from './Login.tsx';
+import Banner from './Banner.tsx';
+import AddUserForm from './AddUserForm.tsx';
+import { useBoolean } from '../hooks/index.ts';
 
 const Landing: React.FC = () => {
   const { userState, setCurrentUser } = useCurrentUser();

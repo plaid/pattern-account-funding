@@ -39,6 +39,8 @@ Note: We recommend running these commands in a unix terminal. Windows users can 
     ```
 1. Update the `.env` file with your [Plaid API keys][plaid-keys] and OAuth redirect uri (in sandbox this is 'http<span>://localhost:3002/oauth-link'</span>).
 
+1. **Configure Signal Ruleset** (Required): This app uses Plaid Signal to evaluate transfer risk. You must create a ruleset in the [Plaid Dashboard](https://dashboard.plaid.com/signal/rulesets) and add the `RULESET_KEY` to your `.env` file. Without this, balance checks and transfers will fail.
+
 1. Update the `ngrok.yml` file in the ngrok folder with your [ngrok authtoken](https://dashboard.ngrok.com/get-started/your-authtoken). 
 
 1. (Optional, only required if using an OAuth redirect URI) You will also need to configure an allowed redirect URI for your client ID through the [Plaid developer dashboard](https://dashboard.plaid.com/team/api).
@@ -140,7 +142,11 @@ This sample app uses Dwolla sandbox to demonstrate the transferring of funds wit
 
 ### Verifying and transferring funds
 
-This sample app demonstrates how to get the available balance in order to verify and transfer funds. However, it does not actually conduct a transfer of funds because it uses Dwolla sandbox. The balance in the linked account (whether in sandbox or production) will not decrement when a transfer is made in this app.
+This sample app uses Plaid Signal to evaluate transfer risk before allowing funds to be transferred. The app calls the `/signal/evaluate` endpoint with a configured ruleset to assess the risk of each transfer. Only transfers that receive an "accept" outcome from the ruleset evaluation are allowed to proceed.
+
+The app also displays account details including account and routing numbers, as well as the available balance. If the balance is too low or if the payment method is not accepted for the transfer, users are prompted to use a different payment method.
+
+Note: This app does not actually conduct real transfers of funds. The balance in the linked account (whether in sandbox or production) will not decrement when a transfer is made in this app, as this is for demonstration purposes only.
 
 ## Debugging
 
