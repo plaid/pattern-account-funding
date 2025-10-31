@@ -22,10 +22,15 @@ const {
 router.get(
   '/ngrok',
   asyncWrapper(async (req, res) => {
-    const response = await fetch('http://ngrok:4040/api/tunnels');
-    const { tunnels } = await response.json();
-    const httpTunnel = tunnels.find(t => t.proto === 'http');
-    res.json({ url: httpTunnel.public_url });
+    try {
+      const response = await fetch('http://ngrok:4040/api/tunnels');
+      const { tunnels } = await response.json();
+      const httpTunnel = tunnels.find(t => t.proto === 'http');
+      res.json({ url: httpTunnel?.public_url || null });
+    } catch (err) {
+      console.log('ngrok not available');
+      res.json({ url: null, error: 'ngrok not available' });
+    }
   })
 );
 

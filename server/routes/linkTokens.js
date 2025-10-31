@@ -36,9 +36,18 @@ router.post(
         accessToken = itemIdResponse.plaid_access_token;
         products = [];
       }
-      const response = await fetch('http://ngrok:4040/api/tunnels');
-      const { tunnels } = await response.json();
-      const httpsTunnel = tunnels.find(t => t.proto === 'https');
+      let webhookUrl = null;
+      try {
+        const response = await fetch('http://ngrok:4040/api/tunnels');
+        const { tunnels } = await response.json();
+        const httpsTunnel = tunnels.find(t => t.proto === 'https');
+        if (httpsTunnel) {
+          webhookUrl = httpsTunnel.public_url + '/services/webhook';
+        }
+      } catch (ngrokErr) {
+        console.log('ngrok not available, webhook will not be configured');
+      }
+
       const linkTokenParams = {
         user: {
           // This should correspond to a unique id for the current user.
@@ -48,9 +57,12 @@ router.post(
         products,
         country_codes: ['US'],
         language: 'en',
-        webhook: httpsTunnel.public_url + '/services/webhook',
         access_token: accessToken,
       };
+
+      if (webhookUrl) {
+        linkTokenParams.webhook = webhookUrl;
+      }
 
       // If user has entered a redirect uri in the .env file
       if (redirect_uri.indexOf('http') === 0) {
@@ -59,8 +71,19 @@ router.post(
       const createResponse = await plaid.linkTokenCreate(linkTokenParams);
       res.json(createResponse.data);
     } catch (err) {
-      console.log('error while fetching client token', err.response.data);
-      return res.json(err.response.data);
+      console.log('error while fetching client token', err.response?.data || err.message || err);
+
+      let errorMessage = err.message || 'An error occurred while creating link token';
+
+      if (err.message && (err.message.includes('PLAID-CLIENT-ID') || err.message.includes('PLAID-SECRET'))) {
+        errorMessage = 'Plaid API keys are not configured. Please add PLAID_CLIENT_ID and PLAID_SECRET_SANDBOX to your .env file.';
+      }
+
+      const errorResponse = err.response?.data || {
+        error: 'Internal Server Error',
+        message: errorMessage
+      };
+      return res.status(500).json(errorResponse);
     }
   })
 );

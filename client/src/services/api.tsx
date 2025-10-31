@@ -98,6 +98,7 @@ export const getInstitutionById = (instId: string) =>
 
 // misc
 export const postLinkEvent = (event: any) => api.post(`/link-event`, event);
+export const getNgrokStatus = () => api.get('/services/ngrok');
 
 export const exchangeToken = async (
   publicToken: string,

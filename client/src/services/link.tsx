@@ -62,23 +62,38 @@ export function LinkProvider(props: any) {
 
   const generateLinkToken = useCallback(async (userId, itemId, isIdentity) => {
     // if itemId is not null, update mode is triggered
-    const linkTokenResponse = await getLinkToken(userId, itemId, isIdentity);
-    if (linkTokenResponse.data.link_token) {
-      const token = await linkTokenResponse.data.link_token;
-      console.log('success', linkTokenResponse.data);
+    try {
+      const linkTokenResponse = await getLinkToken(userId, itemId, isIdentity);
+      if (linkTokenResponse.data.link_token) {
+        const token = await linkTokenResponse.data.link_token;
+        console.log('success', linkTokenResponse.data);
 
-      if (itemId != null) {
-        dispatch({
-          type: 'LINK_TOKEN_UPDATE_MODE_CREATED',
-          id: itemId,
-          token: token,
-        });
+        if (itemId != null) {
+          dispatch({
+            type: 'LINK_TOKEN_UPDATE_MODE_CREATED',
+            id: itemId,
+            token: token,
+          });
+        } else {
+          dispatch({ type: 'LINK_TOKEN_CREATED', id: userId, token: token });
+        }
       } else {
-        dispatch({ type: 'LINK_TOKEN_CREATED', id: userId, token: token });
+        dispatch({ type: 'LINK_TOKEN_ERROR', error: linkTokenResponse.data });
+        console.log('error', linkTokenResponse.data);
       }
-    } else {
-      dispatch({ type: 'LINK_TOKEN_ERROR', error: linkTokenResponse.data });
-      console.log('error', linkTokenResponse.data);
+    } catch (err) {
+      const errorData = err.response?.data || err;
+      const errorMessage = errorData.message || errorData.error_message || 'Failed to create link token';
+
+      dispatch({
+        type: 'LINK_TOKEN_ERROR',
+        error: {
+          error_code: 'API_ERROR',
+          error_message: errorMessage,
+          display_message: errorMessage
+        }
+      });
+      console.error('Link token generation failed:', errorMessage);
     }
   }, []);
 

@@ -412,13 +412,16 @@ router.post(
       throw error;
     }
 
+    // Generate a unique client_transaction_id to track this specific proposed transaction
+    // Note: Using Math.random() for simplicity in this demo. In production, use a proper
+    // UUID library (e.g., uuid.v4()) or your system's transaction ID scheme.
     const randomString = Math.random().toString(36).substring(2, 15);
     const clientTransactionId = `user_${userId}_${Date.now()}_${randomString}`;
 
     const signalRequest = {
       access_token: accessToken,
       account_id: accountId,
-      client_transaction_id: clientTransactionId,
+      client_transaction_id: clientTransactionId,  // Unique ID to track this proposed transaction
       amount: parseFloat(amount),
       client_user_id: userId.toString(),
       ruleset_key: RULESET_KEY,

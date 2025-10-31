@@ -103,6 +103,10 @@ class PlaidClientWrapper {
   constructor() {
     // Initialize the Plaid client.
 
+    if (!PLAID_CLIENT_ID || !PLAID_SECRET) {
+      console.error('⚠️  Plaid API keys are not configured. PLAID_CLIENT_ID and PLAID_SECRET must be set.');
+    }
+
     const configuration = new Configuration({
       basePath: PlaidEnvironments[PLAID_ENV],
       baseOptions: {

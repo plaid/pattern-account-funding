@@ -137,14 +137,14 @@ const Transfers: React.FC<Props> = (props: Props) => {
     } catch (error) {
       console.error('Signal evaluation or transfer failed:', error);
       setIsEvaluating(false);
-      const serverErrorMessage =
-        error?.response?.data?.message ||
-        error?.response?.data?.error_message ||
-        error?.message;
+
+      // Extract error message from server response
+      // Boom errors are structured as: { statusCode, error, message }
+      const serverErrorMessage = error?.response?.data?.message || error?.message;
 
       setErrorMessage(
         serverErrorMessage ||
-          'Unable to evaluate transfer. Please try again or contact support.'
+          'Unable to evaluate transfer risk. Please try again or contact support.'
       );
       setShowError(true);
     }
@@ -160,9 +160,9 @@ const Transfers: React.FC<Props> = (props: Props) => {
             setShowInput={setShowInput}
           />
           <Callout className="callout" info>
-            Note: This is a sandbox environment. No actual money will be
-            transferred. The balance shown will not decrease when you make
-            transfers, as this is for demonstration purposes only.
+            No actual money will be transferred. The balance shown will not
+            decrease when you make transfers, as this is for demonstration
+            purposes only.
           </Callout>
         </>
       )}
