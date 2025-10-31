@@ -14,7 +14,16 @@ module.exports = function(app) {
 
   // Also proxy all other non-static requests
   app.use(
-    ['/sessions', '/users', '/items', '/accounts', '/appFunds', '/institutions', '/link-token', '/link-event'],
+    [
+      '/sessions',
+      '/users',
+      '/items',
+      '/accounts',
+      '/appFunds',
+      '/institutions',
+      '/link-token',
+      '/link-event',
+    ],
     createProxyMiddleware({
       target: 'http://server:5000',
       changeOrigin: true,

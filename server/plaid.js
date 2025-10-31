@@ -96,6 +96,7 @@ const clientMethodLoggingFns = {
   identityGet: defaultLogger,
   accountsBalanceGet: defaultLogger,
   processorTokenCreate: defaultLogger,
+  signalEvaluate: defaultLogger,
 };
 // Wrapper for the Plaid client. This allows us to easily log data for all Plaid client requests.
 class PlaidClientWrapper {

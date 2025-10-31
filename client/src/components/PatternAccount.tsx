@@ -20,7 +20,10 @@ const PatternAccount: React.FC<Props> = (props: Props) => {
   return (
     <div className="pattern-account">
       <div className="pattern-account__header">
-        <h3 className="subheading">Plaid Pattern Funds Balance</h3>{' '}
+        <h3 className="subheading">Your Balance</h3>
+        <h3 className="account-dollars">
+          {currencyFilter(props.appFund.balance)}
+        </h3>
         {props.numOfItems > 0 && (
           <div className="transfer-funds__button-container">
             <Button onClick={handleClick} inline small>
@@ -28,11 +31,6 @@ const PatternAccount: React.FC<Props> = (props: Props) => {
             </Button>
           </div>
         )}
-      </div>
-      <div>
-        <h3 className="account-dollars">
-          {currencyFilter(props.appFund.balance)}
-        </h3>
       </div>
     </div>
   );

@@ -1,5 +1,4 @@
 import React from 'react';
-import Button from 'plaid-threads/Button';
 
 interface Props {
   initialSubheading?: boolean;
@@ -7,34 +6,27 @@ interface Props {
 }
 
 const Banner: React.FC<Props> = (props: Props) => {
-  const initialText =
-    'This is an example account funding app that outlines an end-to-end integration with Plaid.';
-
-  const successText =
-    "This page shows a user's Plaid Pattern account funding balance and allows them to transfer funds from their financial institution to their Plaid Pattern account.";
-  const subheadingText = props.initialSubheading ? initialText : successText;
-
   return (
-    <div id="banner" className="bottom-border-content">
-      {!props.initialSubheading && <h4>username: {props.username} </h4>}
+    <div id="banner" style={{ marginBottom: '1rem' }}>
       <div className="header">
-        <h1 className="everpresent-content__heading">
-          Plaid Pattern Account Funding
-        </h1>
-        <Button
-          href="https://docs.google.com/forms/d/e/1FAIpQLSfF4Xev5w9RPGr7fNkSHjmtE_dj0ELuHRbDexQ7Tg2xoo6tQg/viewform"
-          target="_blank"
-          rel="noopener noreferrer"
-          inline
-          centered
-          secondary
+        <h1
+          className="everpresent-content__heading"
+          style={{ marginTop: 0, marginBottom: '0.5rem' }}
         >
-          Provide feedback on this Plaid Pattern sample app
-        </Button>
+          Account Funding
+          {!props.initialSubheading && props.username && (
+            <span
+              style={{
+                fontSize: '1rem',
+                fontWeight: 'normal',
+                marginLeft: '1rem',
+              }}
+            >
+              ({props.username})
+            </span>
+          )}
+        </h1>
       </div>
-      <p id="intro" className="everpresent-content__subheading">
-        {subheadingText}
-      </p>
     </div>
   );
 };
