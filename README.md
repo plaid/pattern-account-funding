@@ -8,7 +8,7 @@ For an interactive tutorial showing how to make this app, see [Plaid Account Fun
 
 The full Plaid collection of sample apps includes:
 
-[Plaid Pattern Account Funding App](https://github.com/plaid/pattern-account-funding) - (you are here) Demonstrates the Plaid Auth, Balance, and Identity APIs
+[Plaid Pattern Account Funding App](https://github.com/plaid/pattern-account-funding) - (you are here) Demonstrates the Plaid Auth, Balance / Signal, and Identity APIs
 
 [Plaid Pattern Personal Finance Manager](https://github.com/plaid/pattern/) - Demonstrates the Plaid Transactions API
 
@@ -39,7 +39,7 @@ Note: We recommend running these commands in a unix terminal. Windows users can 
     ```
 1. Update the `.env` file with your [Plaid API keys][plaid-keys] and OAuth redirect uri (in sandbox this is 'http<span>://localhost:3002/oauth-link'</span>).
 
-1. **Configure Signal Ruleset** (Required): This app uses Plaid Signal to evaluate transfer risk. You must create a ruleset in the [Plaid Dashboard](https://dashboard.plaid.com/signal/rulesets) and add the `RULESET_KEY` to your `.env` file. Without this, balance checks and transfers will fail.
+1. **Configure Ruleset** (Required): This app uses Signal Rules to evaluate transfer risk. You must create a ruleset in the [Plaid Dashboard](https://dashboard.plaid.com/signal/risk-profiles/default?environment=sandbox) and add the `RULESET_KEY` to your `.env` file. Without this, balance checks and transfers will fail. You can use either a Balance-only Ruleset or a Signal Transaction Scores-powered ruleset.
 
 1. Update the `ngrok.yml` file in the ngrok folder with your [ngrok authtoken](https://dashboard.ngrok.com/get-started/your-authtoken). 
 
@@ -142,11 +142,13 @@ This sample app uses Dwolla sandbox to demonstrate the transferring of funds wit
 
 ### Verifying and transferring funds
 
-This sample app uses Plaid Signal to evaluate transfer risk before allowing funds to be transferred. The app calls the `/signal/evaluate` endpoint with a configured ruleset to assess the risk of each transfer. Only transfers that receive an "accept" outcome from the ruleset evaluation are allowed to proceed.
+This sample app uses Signal Rulesets to evaluate transfer risk before allowing funds to be transferred.  These Rulesets can be powered by either Balance or Signal Transaction Scores. To learn more, see the [Ruleset docs](https://plaid.com/docs/signal/signal-rules/).
 
-The app also displays account details including account and routing numbers, as well as the available balance. If the balance is too low or if the payment method is not accepted for the transfer, users are prompted to use a different payment method.
+The app calls the `/signal/evaluate` endpoint with a configured ruleset to assess the risk of each transfer.Only transfers that receive an "accept" outcome from the ruleset evaluation are allowed to proceed.
 
-Note: This app does not actually conduct real transfers of funds. The balance in the linked account (whether in sandbox or production) will not decrement when a transfer is made in this app, as this is for demonstration purposes only.
+The app also displays account details including account and routing numbers, as well as the available balance. 
+
+Note: This app does not actually make real transfers of funds. The balance in the linked Sandbox account will not decrement when a transfer is made in this app.
 
 ## Debugging
 
