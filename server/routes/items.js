@@ -412,12 +412,9 @@ router.post(
       throw error;
     }
 
-    // Generate a unique client_transaction_id
-    // Format: user_<userId>_<timestamp>_<random>
     const randomString = Math.random().toString(36).substring(2, 15);
     const clientTransactionId = `user_${userId}_${Date.now()}_${randomString}`;
 
-    // Use Signal Evaluate to assess transfer risk with the actual transfer amount
     const signalRequest = {
       access_token: accessToken,
       account_id: accountId,
@@ -429,7 +426,6 @@ router.post(
 
     const signalResponse = await plaid.signalEvaluate(signalRequest);
 
-    // Check the ruleset evaluation result
     const ruleset = signalResponse.data.ruleset;
     const outcome = ruleset?.result;
     const isAccepted = outcome?.toUpperCase() === 'ACCEPT';

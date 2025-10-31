@@ -26,12 +26,6 @@ interface Props {
   setAccount: (arg: AccountType) => void;
 }
 
-// This component checks to make sure the amount of transfer does not
-// exceed the balance in the account and then initiates the ach transfer or processor request.
-// Note that no transfers are actually made in this sample app; therefore balances in
-// linked accounts will not actually be decremented when
-// a transfer is made in this app.
-
 const Transfers: React.FC<Props> = (props: Props) => {
   const [transferAmount, setTransferAmount] = useState(0);
   const [isTransferConfirmed, setIsTransferConfirmed] = useState(false);
@@ -41,10 +35,6 @@ const Transfers: React.FC<Props> = (props: Props) => {
   const [signalEvaluation, setSignalEvaluation] = useState<any>(null);
   const [isEvaluating, setIsEvaluating] = useState(false);
   const account = props.account;
-
-  // use available_balance only; leave it up to developer to decide
-  // the risk of using current_balance:
-  const balance = account.available_balance;
 
   const sendRequestToProcessor = async (
     amount: number,
@@ -91,7 +81,6 @@ const Transfers: React.FC<Props> = (props: Props) => {
     }
 
     try {
-      // CRITICAL: Evaluate transfer risk using Signal with the actual transfer amount
       const { data: signalEval } = await evaluateTransferSignal(
         account.item_id,
         account.plaid_account_id,
@@ -99,15 +88,12 @@ const Transfers: React.FC<Props> = (props: Props) => {
         props.userId
       );
 
-      // Store the signal evaluation for display
       setSignalEvaluation(signalEval);
       setIsEvaluating(false);
 
-      // Handle Signal evaluation outcomes
       const outcome = signalEval.outcome?.toUpperCase();
 
       if (outcome === 'ACCEPT') {
-        // Signal approved, proceed with the transfer
         const confirmedAmount =
           IS_PROCESSOR === 'true'
             ? await sendRequestToProcessor(
@@ -124,8 +110,6 @@ const Transfers: React.FC<Props> = (props: Props) => {
           setShowError(true);
         } else {
           const response: TransferResponse | any = await updateAppFundsBalance(
-            // this route updates the appFunds with the new balance and also
-            // increments the number of transfers for this account by 1
             props.userId,
             confirmedAmount,
             account.plaid_account_id
@@ -145,7 +129,6 @@ const Transfers: React.FC<Props> = (props: Props) => {
         );
         setShowError(true);
       } else {
-        // Unknown outcome or not accepted
         setErrorMessage(
           `Risk evaluation outcome: ${outcome || 'UNKNOWN'}. This transaction cannot be processed at this time. Please try a different payment method.`
         );
@@ -154,7 +137,6 @@ const Transfers: React.FC<Props> = (props: Props) => {
     } catch (error) {
       console.error('Signal evaluation or transfer failed:', error);
       setIsEvaluating(false);
-      // Boom errors come back as error.response.data with {statusCode, error, message}
       const serverErrorMessage =
         error?.response?.data?.message ||
         error?.response?.data?.error_message ||

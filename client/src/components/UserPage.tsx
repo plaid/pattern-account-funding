@@ -62,9 +62,6 @@ const UserPage = ({ match }: RouteComponentProps<RouteInfo>) => {
   }, []);
 
   const getBalance = useCallback(async () => {
-    // This is triggered when user clicks "transfer funds."
-    // Always fetch fresh balance to ensure we have the most up-to-date information
-    // Signal evaluation happens later when user submits the actual transfer amount
     if (account != null && item != null) {
       try {
         const { data: newAccount } = await getBalanceByItem(
