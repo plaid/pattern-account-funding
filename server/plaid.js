@@ -96,11 +96,16 @@ const clientMethodLoggingFns = {
   identityGet: defaultLogger,
   accountsBalanceGet: defaultLogger,
   processorTokenCreate: defaultLogger,
+  signalEvaluate: defaultLogger,
 };
 // Wrapper for the Plaid client. This allows us to easily log data for all Plaid client requests.
 class PlaidClientWrapper {
   constructor() {
     // Initialize the Plaid client.
+
+    if (!PLAID_CLIENT_ID || !PLAID_SECRET) {
+      console.error('⚠️  Plaid API keys are not configured. PLAID_CLIENT_ID and PLAID_SECRET must be set.');
+    }
 
     const configuration = new Configuration({
       basePath: PlaidEnvironments[PLAID_ENV],

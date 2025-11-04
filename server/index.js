@@ -24,12 +24,33 @@ const {
 
 const app = express();
 
-const { PORT } = process.env;
+const { PORT, PLAID_CLIENT_ID, PLAID_SECRET_SANDBOX, PLAID_SECRET_PRODUCTION } = process.env;
+
+const hasApiKeys = PLAID_CLIENT_ID && (PLAID_SECRET_SANDBOX || PLAID_SECRET_PRODUCTION);
+
+if (!hasApiKeys) {
+  console.warn('\n⚠️  WARNING: Plaid API keys are not configured!');
+  console.warn('Please add PLAID_CLIENT_ID and PLAID_SECRET_SANDBOX to your .env file');
+  console.warn('See .env.template for instructions\n');
+}
 
 const server = app.listen(PORT, () => {
   console.log(`listening on port ${PORT}`);
+  if (!hasApiKeys) {
+    console.warn('⚠️  Server running but Plaid API keys are missing - Link will not work');
+  }
 });
-const io = socketIo(server);
+
+const io = socketIo(server, {
+  cors: {
+    origin: "http://localhost:3002",
+    methods: ["*"],
+    allowedHeaders: ["*"],
+    credentials: true,
+  },
+  allowEIO3: true
+});
+
 
 app.use(logger('dev'));
 app.use(express.json());

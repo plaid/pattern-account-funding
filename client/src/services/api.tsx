@@ -80,6 +80,13 @@ export const makeTransfer = (
 // accounts
 export const getBalanceByItem = (itemId: number, accountId: string) =>
   api.put(`/items/${itemId}/balance`, { accountId });
+export const evaluateTransferSignal = (
+  itemId: number,
+  accountId: string,
+  amount: number,
+  userId: number
+) =>
+  api.post(`/items/${itemId}/signal/evaluate`, { accountId, amount, userId });
 export const getAccountsByItem = (itemId: number) =>
   api.get(`/items/${itemId}/accounts`);
 export const getAccountsByUser = (userId: number) =>
@@ -91,6 +98,7 @@ export const getInstitutionById = (instId: string) =>
 
 // misc
 export const postLinkEvent = (event: any) => api.post(`/link-event`, event);
+export const getNgrokStatus = () => api.get('/services/ngrok');
 
 export const exchangeToken = async (
   publicToken: string,

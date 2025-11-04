@@ -8,8 +8,8 @@ import React, {
 } from 'react';
 import { toast } from 'react-toastify';
 import { useHistory } from 'react-router-dom';
-import { getLoginUser as apiGetLoginUser } from './api';
-import { UserType } from '../components/types';
+import { getLoginUser as apiGetLoginUser } from './api.tsx';
+import { UserType } from '../components/types.ts';
 
 interface CurrentUserState {
   currentUser: UserType;

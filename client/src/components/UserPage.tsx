@@ -3,6 +3,7 @@ import { Link, RouteComponentProps } from 'react-router-dom';
 import NavigationLink from 'plaid-threads/NavigationLink';
 import Callout from 'plaid-threads/Callout';
 import { Institution } from 'plaid/dist/api';
+import { toast } from 'react-toastify';
 
 import {
   RouteInfo,
@@ -10,22 +11,24 @@ import {
   AccountType,
   AppFundType,
   UserType,
-} from './types';
-import { useItems, useAccounts, useUsers, useInstitutions } from '../services';
+} from './types.ts';
+import {
+  useItems,
+  useAccounts,
+  useUsers,
+  useInstitutions,
+} from '../services/index.js';
 import {
   updateIdentityCheckById,
   getBalanceByItem,
   getAppFundsByUser,
-} from '../services/api';
-
-import {
-  Banner,
-  Item,
-  ErrorMessage,
-  ConfirmIdentityForm,
-  PatternAccount,
-  Transfers,
-} from '.';
+} from '../services/api.tsx';
+import Banner from './Banner.tsx';
+import Item from './Item.tsx';
+import ErrorMessage from './ErrorMessage.tsx';
+import ConfirmIdentityForm from './ConfirmIdentityForm.tsx';
+import PatternAccount from './PatternAccount.tsx';
+import Transfers from './Transfers.tsx';
 
 const UserPage = ({ match }: RouteComponentProps<RouteInfo>) => {
   const [user, setUser] = useState<UserType>({
@@ -59,34 +62,32 @@ const UserPage = ({ match }: RouteComponentProps<RouteInfo>) => {
   }, []);
 
   const getBalance = useCallback(async () => {
-    // This is triggered when user clicks "transfer funds."
-    // Only call balance/get if this is not the initial transfer and it's been less than an hour since the item was linked (because the balance data already exists
-    // from the auth/get or identity/get make upon creating the item).
-    // However, if neither auth nor identity have not been called on item creation (i.e. account.available_balance=null),
-    // make the balance/get call
-    let timeSinceCreation = 0; // time in milliseconds
-    if (account != null) {
-      timeSinceCreation =
-        new Date().getTime() - new Date(account.created_at).getTime();
-    }
-
-    if (
-      account != null &&
-      item != null &&
-      (account.number_of_transfers !== 0 ||
-      timeSinceCreation > 60 * 60 * 1000 || // if it's been more than one hour
-        account.available_balance == null)
-    ) {
-      const { data: newAccount } = await getBalanceByItem(
-        item.id,
-        account.plaid_account_id
-      );
-      setAccount(newAccount || {});
+    if (account != null && item != null) {
+      try {
+        const { data: newAccount } = await getBalanceByItem(
+          item.id,
+          account.plaid_account_id
+        );
+        setAccount(newAccount || {});
+      } catch (error) {
+        const errorMessage =
+          error?.response?.data?.error_message ||
+          error?.response?.data?.message ||
+          'Unable to retrieve account balance. Please try updating your login credentials.';
+        toast.error(errorMessage);
+        console.error('Error fetching balance:', error);
+      }
     }
   }, [account, item]);
 
-  const userTransfer = () => {
-    getBalance();
+  const userTransfer = async () => {
+    if (account == null || item == null) {
+      toast.error(
+        'No account available for transfer. Please link a bank account first.'
+      );
+      return;
+    }
+    await getBalance();
     setShowTransfer(true);
   };
 
@@ -207,9 +208,30 @@ const UserPage = ({ match }: RouteComponentProps<RouteInfo>) => {
 
   return (
     <div>
-      <NavigationLink component={Link} to="/">
-        LOGOUT
-      </NavigationLink>
+      <div
+        style={{
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+          marginBottom: '0.5rem',
+        }}
+      >
+        <NavigationLink component={Link} to="/">
+          LOGOUT
+        </NavigationLink>
+        <a
+          href="https://docs.google.com/forms/d/e/1FAIpQLSfF4Xev5w9RPGr7fNkSHjmtE_dj0ELuHRbDexQ7Tg2xoo6tQg/viewform"
+          target="_blank"
+          rel="noopener noreferrer"
+          style={{
+            fontSize: '1rem',
+            color: '#0055ff',
+            textDecoration: 'underline',
+          }}
+        >
+          Give Feedback
+        </a>
+      </div>
 
       <Banner username={user.username} />
       {appFund != null && !showTransfer && isIdentityChecked && (
@@ -243,6 +265,7 @@ const UserPage = ({ match }: RouteComponentProps<RouteInfo>) => {
         accountName={accountName}
         item={item}
         isIdentityChecked={isIdentityChecked}
+        account={account}
       />
       <ErrorMessage />
       {numOfItems > 0 && !isIdentityChecked && (

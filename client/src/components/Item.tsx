@@ -4,10 +4,16 @@ import Button from 'plaid-threads/Button';
 import Note from 'plaid-threads/Note';
 import { Institution } from 'plaid/dist/api';
 
-import { LinkButton, UpdateLink } from '.';
-import { useItems, useLink, useInstitutions, useAccounts } from '../services';
-import { UserType, ItemType } from './types';
-import { setItemToBadState } from '../services/api';
+import { setItemToBadState } from '../services/api.tsx';
+import LinkButton from './LinkButton.tsx';
+import UpdateLink from './UpdateLink.tsx';
+import useItems from '../services/items.tsx';
+import useLink from '../services/link.tsx';
+import useInstitutions from '../services/institutions.tsx';
+import useAccounts from '../services/accounts.tsx';
+
+import { UserType, ItemType, AccountType } from './types.ts';
+import { currencyFilter } from '../util/index.tsx';
 
 const PLAID_ENV = process.env.REACT_APP_PLAID_ENV || 'sandbox';
 const IS_PROCESSOR = process.env.REACT_APP_IS_PROCESSOR;
@@ -21,6 +27,7 @@ interface Props {
   accountName: string;
   item: ItemType | null;
   isIdentityChecked: boolean;
+  account?: AccountType | null;
 }
 
 const Item: React.FC<Props> = (props: Props) => {
@@ -47,8 +54,10 @@ const Item: React.FC<Props> = (props: Props) => {
     await generateLinkToken(props.userId, null, isIdentity);
   };
 
-  const handleSetBadState = () => {
-    setItemToBadState(id);
+  const handleSetBadState = async () => {
+    await setItemToBadState(id);
+    // Refresh items to show updated status
+    await getItemsByUser(props.userId, true);
   };
   const handleDeleteItem = () => {
     deleteItemById(id, props.userId);
@@ -97,21 +106,40 @@ const Item: React.FC<Props> = (props: Props) => {
             <h3 className="subheading">Linked Bank</h3>
             <div className="item-info">
               <div>
-                <h3 className="heading">bank</h3>
+                <h3 className="heading">Bank</h3>
                 {institution != null && (
                   <p className="value">{institution.name}</p>
                 )}
               </div>
               <div>
-                <h3 className="heading">account</h3>
+                <h3 className="heading">Account</h3>
                 <p className="value">{props.accountName}</p>
+                {props.account && (
+                  <div className="account-details-compact">
+                    {props.account.ach_account && (
+                      <p className="value-small">
+                        Acct: {props.account.ach_account}
+                      </p>
+                    )}
+                    {props.account.ach_routing && (
+                      <p className="value-small">
+                        Routing: {props.account.ach_routing}
+                      </p>
+                    )}
+                    {props.account.available_balance != null && (
+                      <p className="value-small">
+                        Bal: {currencyFilter(props.account.available_balance)}
+                      </p>
+                    )}
+                  </div>
+                )}
               </div>
               <div>
-                <h3 className="heading"> login status</h3>
+                <h3 className="heading">Status</h3>
                 <div className="update-mode__note">
                   {isGoodState ? (
                     <Note info solid>
-                      Login Updated
+                      Connected
                     </Note>
                   ) : (
                     <Note error solid>
@@ -121,7 +149,7 @@ const Item: React.FC<Props> = (props: Props) => {
                 </div>
               </div>
               <div>
-                <h3 className="heading">actions</h3>
+                <h3 className="heading">Actions</h3>
                 <div className="actions-container">
                   {isSandbox && isGoodState && (
                     <Button

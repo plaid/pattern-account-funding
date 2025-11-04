@@ -3,15 +3,18 @@ import { Route, Switch, withRouter } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.min.css';
 
-import { UserPage, Landing, Sockets, OAuthLink, UserList } from './components';
-import { AccountsProvider } from './services/accounts';
-import { InstitutionsProvider } from './services/institutions';
-import { ItemsProvider } from './services/items';
-import { LinkProvider } from './services/link';
-
-import { UsersProvider } from './services/users';
-import { CurrentUserProvider } from './services/currentUser';
-import { ErrorsProvider } from './services/errors';
+import Sockets from './components/Sockets.jsx';
+import OAuthLink from './components/OAuthLink.tsx';
+import Landing from './components/Landing.tsx';
+import UserPage from './components/UserPage.tsx';
+import UserList from './components/UserList.tsx';
+import { AccountsProvider } from './services/accounts.tsx';
+import { InstitutionsProvider } from './services/institutions.tsx';
+import { ItemsProvider } from './services/items.tsx';
+import { LinkProvider } from './services/link.tsx';
+import { UsersProvider } from './services/users.tsx';
+import { CurrentUserProvider } from './services/currentUser.tsx';
+import { ErrorsProvider } from './services/errors.tsx';
 
 import './App.scss';
 
@@ -19,34 +22,32 @@ function App() {
   toast.configure({
     autoClose: 8000,
     draggable: false,
-    toastClassName: 'box toast__background',
-    bodyClassName: 'toast__body',
     hideProgressBar: true,
   });
 
   return (
     <div className="App">
-      <InstitutionsProvider>
-        <ItemsProvider>
-          <LinkProvider>
-            <AccountsProvider>
-              <ErrorsProvider>
-                <UsersProvider>
-                  <CurrentUserProvider>
+      <CurrentUserProvider>
+        <UsersProvider>
+          <ErrorsProvider>
+            <ItemsProvider>
+              <AccountsProvider>
+                <InstitutionsProvider>
+                  <LinkProvider>
                     <Sockets />
                     <Switch>
                       <Route exact path="/" component={Landing} />
                       <Route path="/user/:userId" component={UserPage} />
-                      <Route path="/oauth-link" component={OAuthLink} />
                       <Route path="/admin" component={UserList} />
+                      <Route path="/oauth-link" component={OAuthLink} />
                     </Switch>
-                  </CurrentUserProvider>
-                </UsersProvider>
-              </ErrorsProvider>
-            </AccountsProvider>
-          </LinkProvider>
-        </ItemsProvider>
-      </InstitutionsProvider>
+                  </LinkProvider>
+                </InstitutionsProvider>
+              </AccountsProvider>
+            </ItemsProvider>
+          </ErrorsProvider>
+        </UsersProvider>
+      </CurrentUserProvider>
     </div>
   );
 }

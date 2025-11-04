@@ -18,10 +18,10 @@ CREATE TABLE users_table
 (
   id SERIAL PRIMARY KEY,
   username text UNIQUE NOT NULL,
-  fullname text NOT NULL,
-  email text NOT NULL,
-  identity_check boolean NOT NULL,
-  should_verify_identity boolean NOT NULL,
+  fullname text,
+  email text,
+  identity_check boolean DEFAULT false,
+  should_verify_identity boolean DEFAULT false,
   created_at timestamptz default now(),
   updated_at timestamptz default now()
 );

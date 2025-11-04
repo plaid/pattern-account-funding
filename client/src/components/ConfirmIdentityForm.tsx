@@ -1,10 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import Button from 'plaid-threads/Button';
 import TextInput from 'plaid-threads/TextInput';
-
-import { useUsers } from '../services';
-import { UserType } from './types';
-import { updateUserInfo } from '../services/api';
+import useUsers from '../services/users.tsx';
+import { UserType } from './types.ts';
+import { updateUserInfo } from '../services/api.tsx';
 
 const PLAID_ENV = process.env.REACT_APP_PLAID_ENV;
 
