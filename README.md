@@ -4,17 +4,16 @@
 
 This is a sample Account Funding application demonstrating an end-to-end [Plaid][plaid] integration, focused on using the auth (or working with a Plaid partner using processor tokens), identity and balance endpoints to safely transfer funds.
 
-For an interactive tutorial showing how to make this app, see [Plaid Account Funding tutorial](https://github.com/plaid/account-funding-tutorial).
-
-The full Plaid collection of sample apps includes:
+The full Plaid collection of related sample apps includes:
 
 [Plaid Pattern Account Funding App](https://github.com/plaid/pattern-account-funding) - (you are here) Demonstrates the Plaid Auth, Balance / Signal, and Identity APIs
 
-[Plaid Pattern Personal Finance Manager](https://github.com/plaid/pattern/) - Demonstrates the Plaid Transactions API
+[Plaid Auth tutorial app](https://github.com/plaid/tutorial-resources/tree/main) - Demonstrates the Auth API in more depth (including micro-deposit-based verification) but does NOT include Balance / Signal or Identity APIs. Has an accompanying [video tutorial](https://www.youtube.com/watch?v=FlZ5nzlIq74).
 
-[Plaid Transfer Quickstart app](https://github.com/plaid/transfer-quickstart) - Demonstrates the Transfer API (up to date)
+[Plaid Transfer Quickstart app](https://github.com/plaid/transfer-quickstart) - Demonstrates the Transfer API 
 
-[Plaid Pattern Transfer App (deprecated) ](https://github.com/plaid/pattern-transfers) - Demonstrates the Transfer API (this sample app is deprecated, use the Transfer Quickstart app instead)
+[Plaid Pattern Personal Finance Manager](https://github.com/plaid/pattern/) - Demonstrates the Plaid Transactions API, with a focus on webhooks and transaction reconciliation
+
 
 Plaid sample apps are provided for illustrative purposes and are not meant to be run as production applications.
 
