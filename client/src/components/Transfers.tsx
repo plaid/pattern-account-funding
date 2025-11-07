@@ -130,7 +130,8 @@ const Transfers: React.FC<Props> = (props: Props) => {
         setShowError(true);
       } else {
         setErrorMessage(
-          `Risk evaluation outcome: ${outcome || 'UNKNOWN'}. This transaction cannot be processed at this time. Please try a different payment method.`
+          `Risk evaluation outcome: ${outcome ||
+            'UNKNOWN'}. This transaction cannot be processed at this time. Please try a different payment method.`
         );
         setShowError(true);
       }
@@ -140,7 +141,8 @@ const Transfers: React.FC<Props> = (props: Props) => {
 
       // Extract error message from server response
       // Boom errors are structured as: { statusCode, error, message }
-      const serverErrorMessage = error?.response?.data?.message || error?.message;
+      const serverErrorMessage =
+        error?.response?.data?.message || error?.message;
 
       setErrorMessage(
         serverErrorMessage ||

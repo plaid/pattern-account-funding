@@ -8,11 +8,15 @@ interface Props {
 }
 
 const Banner: React.FC<Props> = (props: Props) => {
-  const [webhookStatus, setWebhookStatus] = useState<'loading' | 'available' | 'unavailable'>('loading');
+  const [webhookStatus, setWebhookStatus] = useState<
+    'loading' | 'available' | 'unavailable'
+  >('loading');
   const [isDismissed, setIsDismissed] = useState<boolean>(() => {
     return localStorage.getItem('webhookBadgeDismissed') === 'true';
   });
-  const [isApiKeyWarningDismissed, setIsApiKeyWarningDismissed] = useState<boolean>(() => {
+  const [isApiKeyWarningDismissed, setIsApiKeyWarningDismissed] = useState<
+    boolean
+  >(() => {
     return localStorage.getItem('apiKeyWarningDismissed') === 'true';
   });
 
@@ -92,8 +96,8 @@ const Banner: React.FC<Props> = (props: Props) => {
               lineHeight: '1',
               opacity: 0.7,
             }}
-            onMouseEnter={(e) => (e.currentTarget.style.opacity = '1')}
-            onMouseLeave={(e) => (e.currentTarget.style.opacity = '0.7')}
+            onMouseEnter={e => (e.currentTarget.style.opacity = '1')}
+            onMouseLeave={e => (e.currentTarget.style.opacity = '0.7')}
             title="Dismiss"
           >
             ×
@@ -131,8 +135,8 @@ const Banner: React.FC<Props> = (props: Props) => {
             lineHeight: '1',
             opacity: 0.7,
           }}
-          onMouseEnter={(e) => (e.currentTarget.style.opacity = '1')}
-          onMouseLeave={(e) => (e.currentTarget.style.opacity = '0.7')}
+          onMouseEnter={e => (e.currentTarget.style.opacity = '1')}
+          onMouseLeave={e => (e.currentTarget.style.opacity = '0.7')}
           title="Dismiss"
         >
           ×
@@ -142,13 +146,15 @@ const Banner: React.FC<Props> = (props: Props) => {
   };
 
   const getApiKeyWarning = () => {
-    if (isApiKeyWarningDismissed || !linkTokens.error?.error_message) return null;
+    if (isApiKeyWarningDismissed || !linkTokens.error?.error_message)
+      return null;
 
     const errorMessage = linkTokens.error.error_message || '';
-    const isApiKeyError = errorMessage.toLowerCase().includes('plaid') &&
-                          (errorMessage.toLowerCase().includes('key') ||
-                           errorMessage.toLowerCase().includes('client_id') ||
-                           errorMessage.toLowerCase().includes('secret'));
+    const isApiKeyError =
+      errorMessage.toLowerCase().includes('plaid') &&
+      (errorMessage.toLowerCase().includes('key') ||
+        errorMessage.toLowerCase().includes('client_id') ||
+        errorMessage.toLowerCase().includes('secret'));
 
     if (!isApiKeyError) return null;
 
@@ -178,7 +184,37 @@ const Banner: React.FC<Props> = (props: Props) => {
             🔑 API Keys Missing
           </div>
           <div style={{ fontSize: '11pt', lineHeight: '1.4' }}>
-            Plaid Link will not work. Add <code style={{ background: 'rgba(0,0,0,0.1)', padding: '0.1rem 0.3rem', borderRadius: '0.2rem' }}>PLAID_CLIENT_ID</code> and <code style={{ background: 'rgba(0,0,0,0.1)', padding: '0.1rem 0.3rem', borderRadius: '0.2rem' }}>PLAID_SECRET_SANDBOX</code> to your <code style={{ background: 'rgba(0,0,0,0.1)', padding: '0.1rem 0.3rem', borderRadius: '0.2rem' }}>.env</code> file.
+            Plaid Link will not work. Add{' '}
+            <code
+              style={{
+                background: 'rgba(0,0,0,0.1)',
+                padding: '0.1rem 0.3rem',
+                borderRadius: '0.2rem',
+              }}
+            >
+              PLAID_CLIENT_ID
+            </code>{' '}
+            and{' '}
+            <code
+              style={{
+                background: 'rgba(0,0,0,0.1)',
+                padding: '0.1rem 0.3rem',
+                borderRadius: '0.2rem',
+              }}
+            >
+              PLAID_SECRET_SANDBOX
+            </code>{' '}
+            to your{' '}
+            <code
+              style={{
+                background: 'rgba(0,0,0,0.1)',
+                padding: '0.1rem 0.3rem',
+                borderRadius: '0.2rem',
+              }}
+            >
+              .env
+            </code>{' '}
+            file.
           </div>
         </div>
         <button
@@ -193,8 +229,8 @@ const Banner: React.FC<Props> = (props: Props) => {
             lineHeight: '1',
             opacity: 0.7,
           }}
-          onMouseEnter={(e) => (e.currentTarget.style.opacity = '1')}
-          onMouseLeave={(e) => (e.currentTarget.style.opacity = '0.7')}
+          onMouseEnter={e => (e.currentTarget.style.opacity = '1')}
+          onMouseLeave={e => (e.currentTarget.style.opacity = '0.7')}
           title="Dismiss"
         >
           ×

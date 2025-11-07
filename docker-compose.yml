@@ -19,6 +19,9 @@ services:
   server:
     build: ./server
     image: plaidinc/pattern-server:1.0.7
+    volumes:
+      - ./server:/opt/server
+      - /opt/server/node_modules
     ports:
       - 5000:5000
     environment:
@@ -51,6 +54,9 @@ services:
   client:
     build: ./client
     image: plaidinc/pattern-client:1.0.7
+    volumes:
+      - ./client/src:/opt/client/src
+      - ./client/public:/opt/client/public
     ports:
       - 3002:3002
     environment:
