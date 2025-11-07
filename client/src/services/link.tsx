@@ -83,15 +83,18 @@ export function LinkProvider(props: any) {
       }
     } catch (err) {
       const errorData = err.response?.data || err;
-      const errorMessage = errorData.message || errorData.error_message || 'Failed to create link token';
+      const errorMessage =
+        errorData.message ||
+        errorData.error_message ||
+        'Failed to create link token';
 
       dispatch({
         type: 'LINK_TOKEN_ERROR',
         error: {
           error_code: 'API_ERROR',
           error_message: errorMessage,
-          display_message: errorMessage
-        }
+          display_message: errorMessage,
+        },
       });
       console.error('Link token generation failed:', errorMessage);
     }

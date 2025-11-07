@@ -1,6 +1,6 @@
 import React from 'react';
 import { Route, Switch, withRouter } from 'react-router-dom';
-import { toast } from 'react-toastify';
+import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.min.css';
 
 import Sockets from './components/Sockets.jsx';
@@ -19,14 +19,13 @@ import { ErrorsProvider } from './services/errors.tsx';
 import './App.scss';
 
 function App() {
-  toast.configure({
-    autoClose: 8000,
-    draggable: false,
-    hideProgressBar: true,
-  });
-
   return (
     <div className="App">
+      <ToastContainer
+        autoClose={8000}
+        draggable={false}
+        hideProgressBar={true}
+      />
       <CurrentUserProvider>
         <UsersProvider>
           <ErrorsProvider>

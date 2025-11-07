@@ -44,6 +44,8 @@ const LinkButton: React.FC<Props> = (props: Props) => {
       // update mode: no need to exchange public token
       await setItemState(props.itemId, 'good');
       getItemById(props.itemId, true);
+      resetError();
+      history.push(`/user/${props.userId}`);
       // regular link mode: exchange public token for access token
     } else {
       // call to Plaid api endpoint: /item/public_token/exchange in order to obtain access_token which is then stored with the created item
@@ -57,14 +59,21 @@ const LinkButton: React.FC<Props> = (props: Props) => {
           props.isIdentity
         );
         getItemsByUser(props.userId, true);
-      } catch (e) {
-        if (e instanceof Error) {
-          console.error('error', e.message);
-        }
+        resetError();
+        history.push(`/user/${props.userId}`);
+      } catch (e: any) {
+        console.error('Full error object:', e);
+        console.error('Error response:', e?.response);
+        console.error('Error response data:', e?.response?.data);
+        // Extract error message from API response
+        const errorMessage = e?.response?.data?.message || e?.message || 'An error occurred while linking your account';
+        const errorCode = e?.response?.data?.error || 'API_ERROR';
+        console.log('Setting error with code:', errorCode, 'message:', errorMessage);
+        setError(errorCode, errorMessage);
+        // Stay on the same page to show the error, don't navigate away
+        return;
       }
     }
-    resetError();
-    history.push(`/user/${props.userId}`);
   };
 
   const onExit = async (

@@ -120,5 +120,6 @@ export const exchangeToken = async (
     return data;
   } catch (err) {
     toast.error(`Error linking ${institution.name}`);
+    throw err;
   }
 };

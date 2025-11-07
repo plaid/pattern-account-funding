@@ -62,6 +62,53 @@ Note: We recommend running these commands in a unix terminal. Windows users can 
 
 All available commands can be seen by calling `make help`.
 
+## Development Workflow
+
+### Making Code Changes
+
+The application uses Docker volume mounts to enable hot reloading during development:
+
+- **Server code changes** (`server/` directory): Changes are immediately reflected. The server will automatically restart when files change.
+- **Client code changes** (`client/src/` directory): Webpack hot module replacement automatically recompiles and refreshes the browser.
+
+**No rebuild required** - just save your file and refresh your browser.
+
+### Changing Environment Variables
+
+Environment variables in `.env` require special handling:
+
+1. **Server environment variables**: Simply restart the server container:
+   ```shell
+   docker-compose restart server
+   ```
+
+2. **Client environment variables** (prefixed with `REACT_APP_`): These are baked into the client bundle at build time, so you must **rebuild and restart** the client:
+   ```shell
+   docker-compose up -d --build client
+   ```
+   Then perform a **hard refresh** in your browser (Cmd+Shift+R / Ctrl+Shift+R) to clear cached JavaScript.
+
+Common environment variables that require a rebuild:
+- `IS_PROCESSOR` (via `REACT_APP_IS_PROCESSOR`)
+- `PLAID_ENV` (via `REACT_APP_PLAID_ENV`)
+
+### When to Rebuild
+
+You need to rebuild containers when:
+- Environment variables change (see above)
+- Dependencies change (`package.json`, `package-lock.json`)
+- Dockerfile changes
+- First-time setup
+
+```shell
+# Rebuild all services
+make start
+
+# Rebuild specific service
+docker-compose up -d --build server
+docker-compose up -d --build client
+```
+
 ## Architecture
 
 As a modern full-stack application, Pattern consists of multiple services handling different segments of the stack:
@@ -235,7 +282,54 @@ This image is a copy of the Docker Hub image [wernight/ngrok](https://hub.docker
 
 ## Troubleshooting
 
-See [`docs/troubleshooting.md`][troubleshooting].
+View the logs with the following Docker command:
+
+```shell
+make logs
+```
+
+If you're experiencing oddities in the app, here are some common problems and their possible solutions.
+
+### Common Issues
+
+### My 'reset login' button does not work
+
+For webhooks to work, the server must be publicly accessible on the internet. For development purposes, this application uses [ngrok][ngrok-readme] to accomplish that. Therefore, if the server is re-started, any items created in this sample app previous to the current session will have a different webhook address attached to it. As a result, webhooks are only valid during the session in which an item is created; for previously created items, no webhook will be received from the call to sandboxItemResetLogin. In addition, ngrok webhook addresses are only valid for 2 hours. If you are not receiving webhooks in this sample application, restart your server to reset the ngrok webhook address.
+
+### Changes to `.env` file not taking effect
+
+**Server environment variables**: Simply restart the server container:
+```shell
+docker-compose restart server
+```
+
+**Client environment variables** (prefixed with `REACT_APP_`): These are baked into the client bundle at build time, so you must rebuild and restart the client, then perform a hard refresh in your browser:
+```shell
+docker-compose up -d --build client
+```
+Then press Cmd+Shift+R (Mac) or Ctrl+Shift+R (Windows/Linux) to clear cached JavaScript.
+
+### Port already allocated error (e.g., port 5432 for database)
+
+This means containers are already running. Check the status with:
+```shell
+docker-compose ps
+```
+
+If containers are running, use `docker-compose restart` instead of `make start`.
+
+### Code changes not appearing
+
+**For code files**: Changes should appear automatically via hot reloading. Check that webpack is recompiling:
+```shell
+docker-compose logs client
+```
+
+**For browser**: Perform a hard refresh (Cmd+Shift+R on Mac / Ctrl+Shift+R on Windows/Linux) to clear cached JavaScript.
+
+### Still need help?
+
+Please head to the [Help Center][plaid-help] or [get in touch][plaid-support-ticket] with Support.
 
 ## Additional Resources
 
@@ -289,5 +383,4 @@ Plaid Pattern is a demo app that is intended to be used only for the purpose of 
 [postgres]: https://www.postgresql.org/
 [react]: http://reactjs.org/
 [server-readme]: #plaid-pattern---server
-[troubleshooting]: docs/troubleshooting.md
 [wsl]: https://nickjanetakis.com/blog/setting-up-docker-for-windows-and-wsl-to-work-flawlessly

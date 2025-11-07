@@ -325,22 +325,17 @@ router.put(
 
     if (status) {
       if (!isValidItemStatus(status)) {
-        throw new Boom(
-          'Cannot set item status. Please use an accepted value.',
-          {
-            statusCode: 400,
-            acceptedValues: [validItemStatuses.values()],
-          }
-        );
+        const error = new Error('Cannot set item status. Please use an accepted value.');
+        error.acceptedValues = [validItemStatuses.values()];
+        throw Boom.boomify(error, { statusCode: 400 });
       }
       await updateItemStatus(itemId, status);
       const item = await retrieveItemById(itemId);
       res.json(sanitizeItems(item));
     } else {
-      throw new Boom('You must provide updated item information.', {
-        statusCode: 400,
-        acceptedKeys: ['status'],
-      });
+      const error = new Error('You must provide updated item information.');
+      error.acceptedKeys = ['status'];
+      throw Boom.boomify(error, { statusCode: 400 });
     }
   })
 );
@@ -395,7 +390,7 @@ router.post(
     const { accountId, amount, userId } = req.body;
 
     if (!amount || amount <= 0) {
-      throw new Boom('Valid transfer amount is required', {
+      throw Boom.boomify(new Error('Valid transfer amount is required'), {
         statusCode: 400,
       });
     }
@@ -404,7 +399,8 @@ router.post(
     const RULESET_KEY = process.env.RULESET_KEY;
 
     if (!RULESET_KEY) {
-      const error = new Boom('RULESET_KEY is not configured in environment variables. Please add it to your .env file.', {
+      const baseError = new Error('RULESET_KEY is not configured in environment variables. Please add it to your .env file.');
+      const error = Boom.boomify(baseError, {
         statusCode: 503, // Service Unavailable
       });
       // Override Boom's default behavior of hiding 5xx error messages
@@ -470,7 +466,7 @@ router.delete(
       const status_code = response.data.status_code;
     } catch (error) {
       if (!removed)
-        throw new Boom('Item could not be removed in the Plaid API.', {
+        throw Boom.boomify(new Error('Item could not be removed in the Plaid API.'), {
           statusCode: status_code,
         });
     }
