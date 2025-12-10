@@ -36,13 +36,17 @@ const errorHandler = (err, req, res, next) => {
   // handle errors from the Plaid api (SDK v39+ uses response.data structure)
   if (error.response && error.response.data) {
     const { error_type, error_code, error_message, display_message } = error.response.data;
-    error = new Boom(display_message || error_message || 'Plaid API error', {
-      statusCode: error.response.status || 500,
+    const statusCode = error.response.status || 500;
+    const message = display_message || error_message || 'Plaid API error';
+    const baseError = new Error(message);
+    error = Boom.boomify(baseError, {
+      statusCode,
       data: { error_type, error_code }
     });
   } else if (error.name === 'PlaidError') {
     // Fallback for older SDK versions
-    error = new Boom(error.error_message, { statusCode: error.status_code });
+    const baseError = new Error(error.error_message);
+    error = Boom.boomify(baseError, { statusCode: error.status_code });
   }
 
   // handle standard javascript errors.
