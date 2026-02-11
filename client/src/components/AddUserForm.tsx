@@ -67,6 +67,7 @@ const AddUserForm: React.FC<Props> = (props: Props) => {
                 autoComplete="off"
                 className="input_field"
                 value={username}
+                placeholder="username"
                 label="Username"
                 onChange={e => setUsername(e.target.value)}
               />
@@ -79,6 +80,7 @@ const AddUserForm: React.FC<Props> = (props: Props) => {
                     autoComplete="off"
                     className="input_field"
                     value={fullname}
+                    placeholder="First and last name"
                     label="Full Name"
                     onChange={e => setFullname(e.target.value)}
                   />
@@ -89,6 +91,7 @@ const AddUserForm: React.FC<Props> = (props: Props) => {
                     autoComplete="off"
                     className="input_field"
                     value={email}
+                    placeholder="email@example.com"
                     label="Email"
                     onChange={e => setEmail(e.target.value)}
                   />
