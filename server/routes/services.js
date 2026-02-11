@@ -25,7 +25,7 @@ router.get(
     try {
       const response = await fetch('http://ngrok:4040/api/tunnels');
       const { tunnels } = await response.json();
-      const httpTunnel = tunnels.find(t => t.proto === 'http');
+      const httpTunnel = tunnels.find(t => t.proto === 'https');
       res.json({ url: httpTunnel?.public_url || null });
     } catch (err) {
       console.log('ngrok not available');

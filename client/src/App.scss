@@ -214,6 +214,11 @@ Add User Form
 
   .input_field {
     margin-bottom: 2 * $unit;
+
+    input::placeholder {
+      color: #999;
+      opacity: 1;
+    }
   }
 }
 

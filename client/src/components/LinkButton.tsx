@@ -61,14 +61,22 @@ const LinkButton: React.FC<Props> = (props: Props) => {
         getItemsByUser(props.userId, true);
         resetError();
         history.push(`/user/${props.userId}`);
-      } catch (e: any) {
+      } catch (e) {
         console.error('Full error object:', e);
         console.error('Error response:', e?.response);
         console.error('Error response data:', e?.response?.data);
         // Extract error message from API response
-        const errorMessage = e?.response?.data?.message || e?.message || 'An error occurred while linking your account';
+        const errorMessage =
+          e?.response?.data?.message ||
+          e?.message ||
+          'An error occurred while linking your account';
         const errorCode = e?.response?.data?.error || 'API_ERROR';
-        console.log('Setting error with code:', errorCode, 'message:', errorMessage);
+        console.log(
+          'Setting error with code:',
+          errorCode,
+          'message:',
+          errorMessage
+        );
         setError(errorCode, errorMessage);
         // Stay on the same page to show the error, don't navigate away
         return;
