@@ -16,6 +16,19 @@ const AddUserForm: React.FC<Props> = (props: Props) => {
   const [email, setEmail] = useState('');
   const [shouldVerifyIdentity, setShouldVerifyIdentity] = useState(false);
 
+  const environment = PLAID_ENV === 'sandbox' ? 'sandbox' : 'production';
+
+  // Prefill sandbox values when Verify Identity Mode is enabled
+  useEffect(() => {
+    if (shouldVerifyIdentity && environment === 'sandbox') {
+      setFullname('Alberta Charleson');
+      setEmail('accountholder0@example.com');
+    } else if (!shouldVerifyIdentity) {
+      setFullname('');
+      setEmail('');
+    }
+  }, [shouldVerifyIdentity, environment]);
+
   const { addNewUser, getUsers } = useUsers();
   const { setNewUser } = useCurrentUser();
   const handleSubmit = async (e: any) => {
@@ -24,22 +37,13 @@ const AddUserForm: React.FC<Props> = (props: Props) => {
     setNewUser(username);
     props.hideForm();
   };
-  const environment = PLAID_ENV === 'sandbox' ? 'sandbox' : 'production';
 
   const messages = {
     sandbox: {
-      message: [
-        <div>Copy and paste sandbox name: </div>,
-        <code>Alberta Charleson</code>,
-        <div> and email address: </div>,
-        <code>accountholder0@example.com</code>,
-        <div> into input fields</div>,
-      ],
       namePlaceholder: 'Alberta Charleson',
       emailPlaceholder: 'accountholder0@example.com',
     },
     production: {
-      message: 'Enter name and email address in the input fields.',
       namePlaceholder: 'First and last name',
       emailPlaceholder: 'email address',
     },
@@ -64,11 +68,6 @@ const AddUserForm: React.FC<Props> = (props: Props) => {
                 {' '}
                 Verify Identity Mode{' '}
               </Checkbox>
-              {shouldVerifyIdentity && (
-                <p className="value add-user__value">
-                  {messages[environment].message}
-                </p>
-              )}
             </div>
             <div className="add-user__column-2">
               <TextInput
