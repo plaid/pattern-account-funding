@@ -38,16 +38,6 @@ const AddUserForm: React.FC<Props> = (props: Props) => {
     props.hideForm();
   };
 
-  const messages = {
-    sandbox: {
-      namePlaceholder: 'Alberta Charleson',
-      emailPlaceholder: 'accountholder0@example.com',
-    },
-    production: {
-      namePlaceholder: 'First and last name',
-      emailPlaceholder: 'email address',
-    },
-  };
 
   useEffect(() => {
     getUsers(true);
@@ -77,7 +67,6 @@ const AddUserForm: React.FC<Props> = (props: Props) => {
                 autoComplete="off"
                 className="input_field"
                 value={username}
-                placeholder="Enter a unique username"
                 label="Username"
                 onChange={e => setUsername(e.target.value)}
               />
@@ -90,7 +79,6 @@ const AddUserForm: React.FC<Props> = (props: Props) => {
                     autoComplete="off"
                     className="input_field"
                     value={fullname}
-                    placeholder={messages[environment].namePlaceholder}
                     label="Full Name"
                     onChange={e => setFullname(e.target.value)}
                   />
@@ -101,7 +89,6 @@ const AddUserForm: React.FC<Props> = (props: Props) => {
                     autoComplete="off"
                     className="input_field"
                     value={email}
-                    placeholder={messages[environment].emailPlaceholder}
                     label="Email"
                     onChange={e => setEmail(e.target.value)}
                   />
