@@ -77,7 +77,7 @@ const AddUserForm: React.FC<Props> = (props: Props) => {
                 autoComplete="off"
                 className="input_field"
                 value={username}
-                placeholder="username"
+                placeholder="Enter a unique username"
                 label="Username"
                 onChange={e => setUsername(e.target.value)}
               />
