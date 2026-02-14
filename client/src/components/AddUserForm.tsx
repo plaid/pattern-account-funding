@@ -38,7 +38,6 @@ const AddUserForm: React.FC<Props> = (props: Props) => {
     props.hideForm();
   };
 
-
   useEffect(() => {
     getUsers(true);
   }, [addNewUser, getUsers]);
@@ -56,7 +55,7 @@ const AddUserForm: React.FC<Props> = (props: Props) => {
                 onChange={() => setShouldVerifyIdentity(!shouldVerifyIdentity)}
               >
                 {' '}
-                Verify Identity Mode{' '}
+                Verify Bank Account Identity Data{' '}
               </Checkbox>
             </div>
             <div className="add-user__column-2">
