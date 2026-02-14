@@ -297,6 +297,97 @@ user list
 
 */
 
+/*
+
+Bank Account Identity Data Results
+
+*/
+
+.identity-results {
+  margin-bottom: 4 * $unit;
+}
+
+.identity-results__banner {
+  margin-bottom: 3 * $unit;
+
+  &--success {
+    background-color: #e6f4ea;
+    border-color: #34a853;
+    color: #1e7e34;
+  }
+}
+
+.identity-results__details {
+  padding: 2rem;
+}
+
+.identity-results__header {
+  margin-bottom: 2 * $unit;
+}
+
+.identity-results__table {
+  width: 100%;
+  border-collapse: collapse;
+
+  th,
+  td {
+    text-align: left;
+    padding: 1.5 * $unit 2 * $unit;
+    border-bottom: 1px solid $black200;
+    font-size: 1.4rem;
+  }
+
+  th {
+    font-weight: 700;
+    text-transform: uppercase;
+    font-size: 1.2rem;
+    color: $black800;
+    font-family: 'Inconsolata';
+  }
+
+  tr:last-child td {
+    border-bottom: none;
+  }
+}
+
+.identity-results__check-label {
+  font-weight: 600;
+}
+
+.identity-results__badge {
+  display: inline-block;
+  padding: 0.25rem 0.75rem;
+  border-radius: 4px;
+  font-size: 1.2rem;
+  font-weight: 600;
+
+  &--pass {
+    background-color: #e6f4ea;
+    color: #1e7e34;
+  }
+
+  &--fail {
+    background-color: #fce8e6;
+    color: #c5221f;
+  }
+}
+
+.identity-results__retry {
+  margin-top: 2 * $unit;
+  display: flex;
+  justify-content: center;
+}
+
+.identity-results__retry-button {
+  min-width: 25 * $unit;
+}
+
+/*
+
+user list
+
+*/
+
 .user-list {
   display: flex;
   justify-content: space-between;

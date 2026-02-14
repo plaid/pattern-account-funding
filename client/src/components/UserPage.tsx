@@ -1,7 +1,6 @@
 import React, { useEffect, useState, useCallback } from 'react';
 import { Link, RouteComponentProps } from 'react-router-dom';
 import NavigationLink from 'plaid-threads/NavigationLink';
-import Callout from 'plaid-threads/Callout';
 import { Institution } from 'plaid/dist/api';
 import { toast } from 'react-toastify';
 
@@ -27,6 +26,7 @@ import Banner from './Banner.tsx';
 import Item from './Item.tsx';
 import ErrorMessage from './ErrorMessage.tsx';
 import ConfirmIdentityForm from './ConfirmIdentityForm.tsx';
+import IdentityVerificationResults from './IdentityVerificationResults.tsx';
 import PatternAccount from './PatternAccount.tsx';
 import Transfers from './Transfers.tsx';
 
@@ -49,6 +49,10 @@ const UserPage = ({ match }: RouteComponentProps<RouteInfo>) => {
   const [isIdentityChecked, setIsIdentityChecked] = useState(
     user.identity_check
   );
+  const [nameMatch, setNameMatch] = useState(false);
+  const [emailMatch, setEmailMatch] = useState(false);
+  const [identityHasBeenChecked, setIdentityHasBeenChecked] = useState(false);
+  const [showRetryForm, setShowRetryForm] = useState(false);
   const [showTransfer, setShowTransfer] = useState(false);
   const { getAccountsByUser, accountsByUser } = useAccounts();
   const { usersById, getUserById } = useUsers();
@@ -189,18 +193,21 @@ const UserPage = ({ match }: RouteComponentProps<RouteInfo>) => {
 
   useEffect(() => {
     // checks identity of user against identity/get data stored in accounts database
-    // only checks if identity has not already been verified.
     if (
       account != null &&
-      isIdentityChecked === false &&
-      user.should_verify_identity
+      user.should_verify_identity &&
+      account.owner_names != null &&
+      account.emails != null
     ) {
       const fullnameCheck = checkFullName(account.owner_names, user.fullname);
       const emailCheck = checkUserEmail(account!.emails, user.email!);
-      updateIdentityCheckById(userId, fullnameCheck && emailCheck); // update user_table in db
-      setIsIdentityChecked(fullnameCheck && emailCheck); // set state
+      setNameMatch(fullnameCheck);
+      setEmailMatch(emailCheck);
+      setIdentityHasBeenChecked(true);
+      updateIdentityCheckById(userId, fullnameCheck && emailCheck);
+      setIsIdentityChecked(fullnameCheck && emailCheck);
     }
-  }, [account, checkUserEmail, checkFullName, userId, isIdentityChecked, user]);
+  }, [account, checkUserEmail, checkFullName, userId, user]);
 
   const accountName = account != null ? `${account.name}` : '';
 
@@ -268,14 +275,22 @@ const UserPage = ({ match }: RouteComponentProps<RouteInfo>) => {
         account={account}
       />
       <ErrorMessage />
-      {numOfItems > 0 && !isIdentityChecked && (
+      {numOfItems > 0 && identityHasBeenChecked && user.should_verify_identity && (
         <>
-          <Callout warning>
-            {' '}
-            We were not able to verify your identity. Please update your name
-            and email address below.{' '}
-          </Callout>
-          <ConfirmIdentityForm userId={userId} setUser={setUser} />
+          <IdentityVerificationResults
+            userFullname={user.fullname}
+            userEmail={user.email}
+            bankOwnerNames={account?.owner_names || []}
+            bankEmails={account?.emails || []}
+            nameMatch={nameMatch}
+            emailMatch={emailMatch}
+            overallPass={isIdentityChecked}
+            onRetry={() => setShowRetryForm(true)}
+            showRetryForm={showRetryForm}
+          />
+          {!isIdentityChecked && showRetryForm && (
+            <ConfirmIdentityForm userId={userId} setUser={setUser} />
+          )}
         </>
       )}
     </div>
