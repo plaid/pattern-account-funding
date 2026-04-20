@@ -2,7 +2,7 @@
 VALID_SEMVER='[0-9]*\.[0-9]*\.[0-9]*'
 
 # get current version
-current_version=$(grep -m 1 -o ${VALID_SEMVER} docker-compose.yml)
+current_version=$(node -p "require('./package.json').version")
 echo "Current version: ${current_version}"
 
 # get new version from user input
@@ -16,23 +16,22 @@ if [[ ! $version =~ $exp ]]; then
 fi
 echo "Updating files..."
 
-# update docker-compose.yml
-echo -n "docker-compose.yml ... "
-exp='s/'${VALID_SEMVER}'/'${version}'/g'
-perl -i -pe $exp docker-compose.yml
+# update root package.json
+echo -n "package.json ... "
+npm version $version --no-git-tag-version &>/dev/null
 echo "done"
 
 # update client package files
 echo -n "client/package*.json ... "
 cd client
-npm version $version &>/dev/null
+npm version $version --no-git-tag-version &>/dev/null
 cd ..
 echo "done"
 
 # update server package files
 echo -n "server/package*.json ... "
 cd server
-npm version $version &>/dev/null
+npm version $version --no-git-tag-version &>/dev/null
 cd ..
 echo "done"
 

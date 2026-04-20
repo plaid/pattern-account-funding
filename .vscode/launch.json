@@ -5,11 +5,9 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "Docker: Attach to Server",
+            "name": "Attach to Server",
             "type": "node",
             "request": "attach",
-            "localRoot": "${workspaceFolder}/server",
-            "remoteRoot": "/opt/server",
             "address": "localhost",
             "port": 9229,
             "protocol": "inspector",
