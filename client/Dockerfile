@@ -8,8 +8,9 @@ WORKDIR /opt/client
 RUN npm ci
 
 COPY ["src/", "/opt/client/src/"]
-COPY ["src/setupProxy.js", "/opt/client/src/setupProxy.js"]
 COPY ["public/", "/opt/client/public/"]
+COPY ["index.html", "/opt/client/"]
 COPY ["tsconfig.json", "/opt/client/"]
+COPY ["vite.config.ts", "/opt/client/"]
 
 CMD ["npm", "start"]

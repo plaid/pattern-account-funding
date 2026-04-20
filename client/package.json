@@ -3,12 +3,8 @@
   "version": "1.0.7",
   "private": true,
   "dependencies": {
-    "@types/jest": "^26.0.24",
-    "@types/react": "^18.3.28",
-    "@types/react-dom": "^18.3.7",
     "axios": "^1.13.5",
     "date-fns": "^3.6.0",
-    "http-proxy-middleware": "^2.0.9",
     "plaid": "^41.1.0",
     "plaid-threads": "^14.5.0",
     "prop-types": "^15.8.1",
@@ -17,44 +13,29 @@
     "react-plaid-link": "^4.1.1",
     "react-router-dom": "^5.3.4",
     "react-router-hash-link": "^2.4.3",
-    "react-scripts": "5.0.1",
     "react-toastify": "^10.0.6",
     "recharts": "^2.15.4",
-    "sass": "^1.97.3",
-    "socket.io-client": "^4.8.3",
-    "typescript": "^4.9.5"
+    "socket.io-client": "^4.8.3"
   },
   "scripts": {
-    "start": "PORT=3002 react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject",
-    "lint": "eslint src -c .eslintrc --ext js,jsx"
-  },
-  "eslintConfig": {
-    "extends": "react-app"
-  },
-  "browserslist": {
-    "production": [
-      ">0.2%",
-      "not dead",
-      "not ie <= 11",
-      "not op_mini all"
-    ],
-    "development": [
-      "last 1 chrome version",
-      "last 1 firefox version",
-      "last 1 safari version"
-    ]
+    "start": "vite",
+    "build": "tsc && vite build",
+    "preview": "vite preview",
+    "lint": "eslint src -c .eslintrc --ext js,jsx,ts,tsx"
   },
   "devDependencies": {
     "@types/lodash": "^4.17.23",
-    "@types/node": "^15.14.9",
+    "@types/node": "^22.0.0",
+    "@types/react": "^18.3.28",
+    "@types/react-dom": "^18.3.7",
     "@types/react-router-dom": "^5.3.3",
     "@types/react-router-hash-link": "^2.4.9",
     "@types/socket.io-client": "^3.0.0",
+    "@vitejs/plugin-react": "^4.3.4",
     "eslint-plugin-prettier": "^3.4.1",
-    "prettier": "^1.19.1"
-  },
-  "proxy": "http://server:5000"
+    "prettier": "^1.19.1",
+    "sass": "^1.97.3",
+    "typescript": "^4.9.5",
+    "vite": "^6.3.3"
+  }
 }

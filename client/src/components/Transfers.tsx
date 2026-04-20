@@ -11,7 +11,7 @@ import {
   evaluateTransferSignal,
 } from '../services/api.tsx';
 
-const IS_PROCESSOR = process.env.REACT_APP_IS_PROCESSOR;
+const IS_PROCESSOR = import.meta.env.VITE_IS_PROCESSOR;
 
 interface TransferResponse {
   newAccount: AccountType;

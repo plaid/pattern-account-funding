@@ -5,7 +5,7 @@ import useUsers from '../services/users.tsx';
 import { UserType } from './types.ts';
 import { updateUserInfo } from '../services/api.tsx';
 
-const PLAID_ENV = process.env.REACT_APP_PLAID_ENV;
+const PLAID_ENV = import.meta.env.VITE_PLAID_ENV;
 
 interface Props {
   userId: number;
