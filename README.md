@@ -69,7 +69,7 @@ All available commands can be seen by calling `make help`.
 The application uses Docker volume mounts to enable hot reloading during development:
 
 - **Server code changes** (`server/` directory): Changes are immediately reflected. The server will automatically restart when files change.
-- **Client code changes** (`client/src/` directory): Webpack hot module replacement automatically recompiles and refreshes the browser.
+- **Client code changes** (`client/src/` directory): Vite HMR automatically recompiles and refreshes the browser.
 
 **No rebuild required** - just save your file and refresh your browser.
 
@@ -82,15 +82,15 @@ Environment variables in `.env` require special handling:
    docker-compose restart server
    ```
 
-2. **Client environment variables** (prefixed with `REACT_APP_`): These are baked into the client bundle at build time, so you must **rebuild and restart** the client:
+2. **Client environment variables** (prefixed with `VITE_`): These are baked into the client bundle at build time, so you must **rebuild and restart** the client:
    ```shell
    docker-compose up -d --build client
    ```
    Then perform a **hard refresh** in your browser (Cmd+Shift+R / Ctrl+Shift+R) to clear cached JavaScript.
 
 Common environment variables that require a rebuild:
-- `IS_PROCESSOR` (via `REACT_APP_IS_PROCESSOR`)
-- `PLAID_ENV` (via `REACT_APP_PLAID_ENV`)
+- `IS_PROCESSOR` (via `VITE_IS_PROCESSOR`)
+- `PLAID_ENV` (via `VITE_PLAID_ENV`)
 
 ### When to Rebuild
 
@@ -303,7 +303,7 @@ For webhooks to work, the server must be publicly accessible on the internet. Fo
 docker-compose restart server
 ```
 
-**Client environment variables** (prefixed with `REACT_APP_`): These are baked into the client bundle at build time, so you must rebuild and restart the client, then perform a hard refresh in your browser:
+**Client environment variables** (prefixed with `VITE_`): These are baked into the client bundle at build time, so you must rebuild and restart the client, then perform a hard refresh in your browser:
 ```shell
 docker-compose up -d --build client
 ```
@@ -320,7 +320,7 @@ If containers are running, use `docker-compose restart` instead of `make start`.
 
 ### Code changes not appearing
 
-**For code files**: Changes should appear automatically via hot reloading. Check that webpack is recompiling:
+**For code files**: Changes should appear automatically via Vite HMR. Check that Vite is recompiling:
 ```shell
 docker-compose logs client
 ```

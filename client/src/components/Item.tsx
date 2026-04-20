@@ -15,8 +15,8 @@ import useAccounts from '../services/accounts.tsx';
 import { UserType, ItemType, AccountType } from './types.ts';
 import { currencyFilter } from '../util/index.tsx';
 
-const PLAID_ENV = process.env.REACT_APP_PLAID_ENV || 'sandbox';
-const IS_PROCESSOR = process.env.REACT_APP_IS_PROCESSOR;
+const PLAID_ENV = import.meta.env.VITE_PLAID_ENV || 'sandbox';
+const IS_PROCESSOR = import.meta.env.VITE_IS_PROCESSOR;
 
 interface Props {
   user: UserType;
