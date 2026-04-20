@@ -280,6 +280,18 @@ If the request returned an error, the error_type and error_code columns will be 
 
 -   [PostgreSQL documentation][postgres-docs]
 
+# ngrok
+
+This app uses [ngrok](https://ngrok.com/) to expose the local server to the internet for receiving webhooks.
+
+Browse to [localhost:4040](http://localhost:4040/inspect/http) to see the ngrok dashboard. This will show any traffic that gets routed through the ngrok URL.
+
+**Do NOT use ngrok in production!** It's only included here as a convenience for local development and is not meant to be a production-quality solution.
+
+Don't want to use ngrok? As long as you serve the app with an endpoint that is publicly exposed, all the Plaid webhooks will work.
+
+ngrok's free account has a session limit of 8 hours. To fully test out some of the webhook workflows, you will need to get a more persistent endpoint when using the production environment.
+
 ## Troubleshooting
 
 If you're experiencing oddities in the app, here are some common problems and their possible solutions.
