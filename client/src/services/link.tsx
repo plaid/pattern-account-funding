@@ -82,16 +82,17 @@ export function LinkProvider(props: any) {
         console.log('error', linkTokenResponse.data);
       }
     } catch (err) {
-      const errorData = err.response?.data || err;
+      const errorResponse = err.response?.data || {};
       const errorMessage =
-        errorData.message ||
-        errorData.error_message ||
+        errorResponse.error_message ||
+        errorResponse.message ||
         'Failed to create link token';
 
       dispatch({
         type: 'LINK_TOKEN_ERROR',
         error: {
-          error_code: 'API_ERROR',
+          error_code: errorResponse.error_code || 'API_ERROR',
+          error_type: errorResponse.error_type || '',
           error_message: errorMessage,
           display_message: errorMessage,
         },
