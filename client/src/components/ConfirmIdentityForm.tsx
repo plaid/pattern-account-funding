@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import Button from 'plaid-threads/Button';
-import TextInput from 'plaid-threads/TextInput';
+import { Button } from './ui/Button.tsx';
+import { TextInput } from './ui/TextInput.tsx';
 import useUsers from '../services/users.tsx';
 import { UserType } from './types.ts';
 import { updateUserInfo } from '../services/api.tsx';
@@ -46,7 +46,7 @@ const ConfirmIdentityForm: React.FC<Props> = (props: Props) => {
 
   return (
     <div className="box addUserForm">
-      <form>
+      <form onSubmit={handleSubmit}>
         <div className="card">
           <div className="add-user__column-1">
             <h3 className="heading add-user__heading">Confirm your identity</h3>
@@ -64,7 +64,7 @@ const ConfirmIdentityForm: React.FC<Props> = (props: Props) => {
               value={fullname}
               placeholder={messages[environment].namePlaceholder}
               label="Full Name"
-              onChange={e => setFullname(e.target.value)}
+              onChange={e => setFullname(e.currentTarget.value)}
             />
             <TextInput
               id="email"
@@ -75,15 +75,14 @@ const ConfirmIdentityForm: React.FC<Props> = (props: Props) => {
               value={email}
               placeholder={messages[environment].emailPlaceholder}
               label="Email"
-              onChange={e => setEmail(e.target.value)}
+              onChange={e => setEmail(e.currentTarget.value)}
             />
           </div>
           <div className="add-user__column-3">
             <Button
               className="add-user__button"
-              centered
               small
-              onClick={handleSubmit}
+              type="submit"
             >
               Confirm Identity
             </Button>

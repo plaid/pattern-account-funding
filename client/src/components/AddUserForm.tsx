@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import Button from 'plaid-threads/Button';
-import TextInput from 'plaid-threads/TextInput';
-import Checkbox from 'plaid-threads/Checkbox';
+import { Button } from './ui/Button.tsx';
+import { TextInput } from './ui/TextInput.tsx';
+import { Checkbox } from './ui/Checkbox.tsx';
 
 import { useUsers, useCurrentUser } from '../services/index.js';
 
@@ -68,7 +68,7 @@ const AddUserForm: React.FC<Props> = (props: Props) => {
                 value={username}
                 placeholder="username"
                 label="Username"
-                onChange={e => setUsername(e.target.value)}
+                onChange={e => setUsername(e.currentTarget.value)}
               />
               {shouldVerifyIdentity && (
                 <>
@@ -81,7 +81,7 @@ const AddUserForm: React.FC<Props> = (props: Props) => {
                     value={fullname}
                     placeholder="First and last name"
                     label="Full Name"
-                    onChange={e => setFullname(e.target.value)}
+                    onChange={e => setFullname(e.currentTarget.value)}
                   />
                   <TextInput
                     id="email"
@@ -92,18 +92,17 @@ const AddUserForm: React.FC<Props> = (props: Props) => {
                     value={email}
                     placeholder="email@example.com"
                     label="Email"
-                    onChange={e => setEmail(e.target.value)}
+                    onChange={e => setEmail(e.currentTarget.value)}
                   />
                 </>
               )}
             </div>
             <div className="add-user__column-3">
-              <Button className="add-user__button" centered small type="submit">
+              <Button className="add-user__button" small type="submit">
                 Add User
               </Button>
               <Button
                 className="add-user__button"
-                centered
                 small
                 secondary
                 onClick={props.hideForm}

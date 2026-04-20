@@ -3,7 +3,7 @@ import { createRoot } from 'react-dom/client';
 import { Router as BrowserRouter } from 'react-router-dom';
 import { createBrowserHistory } from 'history';
 
-import './index.scss';
+import './index.css';
 import App from './App.tsx';
 
 const history = createBrowserHistory();

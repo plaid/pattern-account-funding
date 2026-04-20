@@ -1,6 +1,5 @@
 import React, { useEffect, useState, useCallback } from 'react';
 import { Link, RouteComponentProps } from 'react-router-dom';
-import NavigationLink from 'plaid-threads/NavigationLink';
 import { Institution } from 'plaid/dist/api';
 import { toast } from 'react-toastify';
 
@@ -223,9 +222,9 @@ const UserPage = ({ match }: RouteComponentProps<RouteInfo>) => {
           marginBottom: '0.5rem',
         }}
       >
-        <NavigationLink component={Link} to="/">
+        <Link to="/" className="text-sm text-black-700 uppercase tracking-wider hover:text-black-1000 no-underline">
           LOGOUT
-        </NavigationLink>
+        </Link>
         <a
           href="https://docs.google.com/forms/d/e/1FAIpQLSfF4Xev5w9RPGr7fNkSHjmtE_dj0ELuHRbDexQ7Tg2xoo6tQg/viewform"
           target="_blank"
