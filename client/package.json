@@ -3,20 +3,20 @@
   "version": "1.0.7",
   "private": true,
   "dependencies": {
-    "@tailwindcss/vite": "^4.2.2",
-    "axios": "^1.13.5",
-    "date-fns": "^3.6.0",
-    "plaid": "^41.1.0",
+    "@tailwindcss/vite": "^4.2.3",
+    "axios": "^1.15.1",
+    "date-fns": "^4.1.0",
+    "plaid": "^42.1.0",
     "prop-types": "^15.8.1",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-plaid-link": "^4.1.1",
     "react-router-dom": "^5.3.4",
     "react-router-hash-link": "^2.4.3",
-    "react-toastify": "^10.0.6",
+    "react-toastify": "^11.1.0",
     "recharts": "^2.15.4",
     "socket.io-client": "^4.8.3",
-    "tailwindcss": "^4.2.2"
+    "tailwindcss": "^4.2.3"
   },
   "scripts": {
     "start": "vite",
@@ -25,18 +25,18 @@
     "lint": "eslint src -c .eslintrc --ext js,jsx,ts,tsx"
   },
   "devDependencies": {
-    "@types/lodash": "^4.17.23",
-    "@types/node": "^22.0.0",
+    "@types/lodash": "^4.17.24",
+    "@types/node": "^25.6.0",
     "@types/react": "^18.3.28",
     "@types/react-dom": "^18.3.7",
     "@types/react-router-dom": "^5.3.3",
     "@types/react-router-hash-link": "^2.4.9",
     "@types/socket.io-client": "^3.0.0",
-    "@vitejs/plugin-react": "^4.3.4",
-    "eslint-plugin-prettier": "^3.4.1",
-    "prettier": "^1.19.1",
-    "sass": "^1.97.3",
-    "typescript": "^4.9.5",
-    "vite": "^6.3.3"
+    "@vitejs/plugin-react": "^6.0.1",
+    "eslint-plugin-prettier": "^5.5.5",
+    "prettier": "^3.8.3",
+    "sass": "^1.99.0",
+    "typescript": "^5.8.3",
+    "vite": "^8.0.9"
   }
 }
