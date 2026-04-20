@@ -31,10 +31,9 @@ brew install node@20 postgresql@16 ngrok
 brew services start postgresql@16
 ```
 
-**Windows (Chocolatey):**
-```shell
-choco install nodejs-lts postgresql ngrok
-```
+**Windows:**
+
+We recommend using [WSL](https://learn.microsoft.com/en-us/windows/wsl/install) (Windows Subsystem for Linux) and following the Linux instructions below.
 
 **Linux (Ubuntu/Debian):**
 ```shell
