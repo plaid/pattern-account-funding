@@ -290,7 +290,7 @@ Browse to [localhost:4040](http://localhost:4040/inspect/http) to see the ngrok 
 
 Don't want to use ngrok? As long as you serve the app with an endpoint that is publicly exposed, all the Plaid webhooks will work.
 
-ngrok's free account has a session limit of 8 hours. To fully test out some of the webhook workflows, you will need to get a more persistent endpoint when using the production environment.
+ngrok's free account has a session limit of 8 hours.
 
 ## Troubleshooting
 
