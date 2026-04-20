@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 
-import { NumberInput } from 'plaid-threads/NumberInput';
-import { Button } from 'plaid-threads/Button';
+import { TextInput } from './ui/TextInput.tsx';
+import { Button } from './ui/Button.tsx';
 import { currencyFilter } from '../util/index.tsx';
 
 interface Props {
@@ -27,7 +27,8 @@ const TransferForm: React.FC<Props> = (props: Props) => {
       <div>
         <h3 className="subheading">Transfer Funds</h3>
         <form onSubmit={handleSubmit}>
-          <NumberInput
+          <TextInput
+            type="number"
             id="transferAmount"
             name="transfer amount"
             value={transferAmount}
@@ -39,14 +40,12 @@ const TransferForm: React.FC<Props> = (props: Props) => {
           />
           <Button
             small
-            centered
             secondary
-            inline
             onClick={() => props.setShowTransfer(false)}
           >
             Back
           </Button>
-          <Button small centered inline type="submit">
+          <Button small type="submit">
             Submit {amt}
           </Button>
         </form>

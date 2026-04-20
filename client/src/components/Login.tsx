@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
-import Modal from 'plaid-threads/Modal';
-import ModalBody from 'plaid-threads/ModalBody';
-import Button from 'plaid-threads/Button';
-import TextInput from 'plaid-threads/TextInput';
+import { Modal } from './ui/Modal.tsx';
+import { ModalBody } from './ui/ModalBody.tsx';
+import { Button } from './ui/Button.tsx';
+import { TextInput } from './ui/TextInput.tsx';
 
 import { useCurrentUser } from '../services/index.js';
 
@@ -19,7 +19,7 @@ const Login: React.FC = () => {
 
   return (
     <div>
-      <Button centered inline onClick={() => setShow(!show)}>
+      <Button onClick={() => setShow(!show)}>
         Login
       </Button>
       <Modal
@@ -29,8 +29,7 @@ const Login: React.FC = () => {
           setValue('');
         }}
       >
-        <>
-          <ModalBody
+        <ModalBody
             onClickCancel={() => {
               setShow(false);
               setValue('');
@@ -47,8 +46,7 @@ const Login: React.FC = () => {
               value={value}
               onChange={e => setValue(e.currentTarget.value)}
             />
-          </ModalBody>
-        </>
+        </ModalBody>
       </Modal>
     </div>
   );

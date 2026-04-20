@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import Callout from 'plaid-threads/Callout';
-import Button from 'plaid-threads/Button';
-import Note from 'plaid-threads/Note';
+import { Callout } from './ui/Callout.tsx';
+import { Button } from './ui/Button.tsx';
 import { Institution } from 'plaid/dist/api';
 
 import { setItemToBadState } from '../services/api.tsx';
@@ -138,13 +137,13 @@ const Item: React.FC<Props> = (props: Props) => {
                 <h3 className="heading">Status</h3>
                 <div className="update-mode__note">
                   {isGoodState ? (
-                    <Note info solid>
+                    <span className="inline-flex items-center px-2 py-1 rounded text-xs font-medium bg-blue-400 text-blue-900">
                       Connected
-                    </Note>
+                    </span>
                   ) : (
-                    <Note error solid>
+                    <span className="inline-flex items-center px-2 py-1 rounded text-xs font-medium bg-red-200 text-red-900">
                       Login Required
-                    </Note>
+                    </span>
                   )}
                 </div>
               </div>
@@ -153,11 +152,9 @@ const Item: React.FC<Props> = (props: Props) => {
                 <div className="actions-container">
                   {isSandbox && isGoodState && (
                     <Button
-                      tertiary
                       small
-                      centered
+                      tertiary
                       className="action__button"
-                      inline
                       onClick={handleSetBadState}
                     >
                       Test Item Login Required
@@ -174,10 +171,8 @@ const Item: React.FC<Props> = (props: Props) => {
                   )}
                   <Button
                     small
-                    inline
                     tertiary
                     className="action__button remove-bank"
-                    centered
                     onClick={handleDeleteItem}
                   >
                     Remove Bank
@@ -190,7 +185,6 @@ const Item: React.FC<Props> = (props: Props) => {
         {numOfItems === 0 && (
           <Button
             large
-            inline
             className="add-account__button"
             onClick={initiateLink}
           >

@@ -1,6 +1,6 @@
 import React from 'react';
-import Callout from 'plaid-threads/Callout';
-import Button from 'plaid-threads/Button';
+import { Callout } from './ui/Callout.tsx';
+import { Button } from './ui/Button.tsx';
 
 interface Props {
   userFullname: string | null;
@@ -97,7 +97,6 @@ const IdentityVerificationResults: React.FC<Props> = ({
         <div className="identity-results__retry">
           <Button
             className="identity-results__retry-button"
-            centered
             small
             onClick={onRetry}
           >

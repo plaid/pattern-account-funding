@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import Button from 'plaid-threads/Button';
+import { Button } from './ui/Button.tsx';
 import { useHistory } from 'react-router-dom';
 
 import { useCurrentUser } from '../services/index.js';
@@ -37,16 +37,12 @@ const Landing: React.FC = () => {
             <Button
               className="btn-with-margin"
               onClick={toggleForm}
-              centered
-              inline
             >
               Create Account
             </Button>
             {userState.currentUser.username != null && (
               <Button
                 className="btn-with-margin"
-                centered
-                inline
                 onClick={returnToCurrentUser}
               >
                 Return to Current User

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { Callout } from 'plaid-threads/Callout';
-import { IconButton } from 'plaid-threads/IconButton';
-import { CloseS2 } from 'plaid-threads/Icons/CloseS2';
+import { Callout } from './ui/Callout.tsx';
+import { IconButton } from './ui/IconButton.tsx';
+import { CloseIcon } from './ui/icons.tsx';
 
 import useErrors from '../services/errors.tsx';
 
@@ -33,7 +33,7 @@ const ErrorMessage: React.FC = () => {
               setShow(false);
               resetError();
             }}
-            icon={<CloseS2 />}
+            icon={<CloseIcon />}
           />
           Error: {error.code} <br />
           {message}

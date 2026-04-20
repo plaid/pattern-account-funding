@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import Button from 'plaid-threads/Button';
+import { Button } from './ui/Button.tsx';
 
 import LinkButton from './LinkButton.tsx';
 import { useLink } from '../services/index.js';
@@ -32,8 +32,6 @@ const UpdateLink: React.FC<Props> = (props: Props) => {
       {
         <Button
           small
-          centered
-          inline
           tertiary
           className="action__button"
           onClick={initiateLinkUpdate}

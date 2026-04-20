@@ -1,6 +1,6 @@
 import React from 'react';
 
-import Button from 'plaid-threads/Button';
+import { Button } from './ui/Button.tsx';
 
 import { UserType, AppFundType } from './types.ts';
 
@@ -20,13 +20,13 @@ const PatternAccount: React.FC<Props> = (props: Props) => {
   return (
     <div className="pattern-account">
       <div className="pattern-account__header">
-        <h3 className="subheading">Your Balance</h3>
-        <h3 className="account-dollars">
-          {currencyFilter(props.appFund.balance)}
-        </h3>
+        <div>
+          <h3 className="subheading">Your Balance</h3>
+          <p className="account-dollars">{currencyFilter(props.appFund.balance)}</p>
+        </div>
         {props.numOfItems > 0 && (
           <div className="transfer-funds__button-container">
-            <Button onClick={handleClick} inline small>
+            <Button onClick={handleClick} small>
               Transfer funds
             </Button>
           </div>

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import Callout from 'plaid-threads/Callout';
-import { Button } from 'plaid-threads/Button';
+import { Callout } from './ui/Callout.tsx';
+import { Button } from './ui/Button.tsx';
 
 import { AccountType, AppFundType } from './types.ts';
 import { currencyFilter } from '../util/index.tsx';
@@ -224,8 +224,6 @@ const Transfers: React.FC<Props> = (props: Props) => {
           )}
           <Button
             small
-            centered
-            inline
             onClick={() => props.setShowTransfer(false)}
           >
             Done
@@ -263,8 +261,6 @@ const Transfers: React.FC<Props> = (props: Props) => {
           )}
           <Button
             small
-            centered
-            inline
             onClick={() => props.setShowTransfer(false)}
           >
             Back

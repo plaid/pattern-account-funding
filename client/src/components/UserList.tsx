@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from 'react';
 
 import { HashLink } from 'react-router-hash-link';
-import Button from 'plaid-threads/Button';
-import Touchable from 'plaid-threads/Touchable';
+import { Button } from './ui/Button.tsx';
 import { useUsers } from '../services/index.js';
 import { UserType } from './types.ts';
 // This provides developers with a list of all users by username, and ability to delete a user.
@@ -27,18 +26,15 @@ const UserList: React.FC = () => {
         {users.map(user => (
           <div key={user.id}>
             <div className="user-list">
-              <Touchable
-                className="user-list__touchable"
-                component={HashLink}
+              <HashLink
+                className="user-list__touchable no-underline text-inherit"
                 to={`/user/${user.id}`}
               >
                 <div className="user-list__name">{user.username}</div>
-              </Touchable>
+              </HashLink>
               <div>
                 <Button
                   small
-                  inline
-                  centered
                   onClick={() => deleteUserById(user.id)}
                 >
                   delete
