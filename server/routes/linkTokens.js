@@ -38,11 +38,11 @@ router.post(
       }
       let webhookUrl = null;
       try {
-        const response = await fetch('http://ngrok:4040/api/tunnels');
+        const response = await fetch('http://localhost:4040/api/tunnels');
         const { tunnels } = await response.json();
-        const httpsTunnel = tunnels.find(t => t.proto === 'https');
-        if (httpsTunnel) {
-          webhookUrl = httpsTunnel.public_url + '/services/webhook';
+        const tunnel = tunnels.find(t => t.proto === 'https') || tunnels[0];
+        if (tunnel) {
+          webhookUrl = tunnel.public_url + '/services/webhook';
         }
       } catch (ngrokErr) {
         console.log('ngrok not available, webhook will not be configured');
