@@ -242,10 +242,9 @@ const Banner: React.FC<Props> = (props: Props) => {
   return (
     <div id="banner" style={{ marginBottom: '1rem' }}>
       {getApiKeyWarning()}
-      <div className="header">
+      <div className="flex justify-between mb-4">
         <h1
-          className="everpresent-content__heading"
-          style={{ marginTop: 0, marginBottom: '0.5rem' }}
+          className="mt-0 mb-2"
         >
           Account Funding
           {!props.initialSubheading && props.username && (

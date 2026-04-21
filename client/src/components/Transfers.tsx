@@ -153,7 +153,7 @@ const Transfers: React.FC<Props> = (props: Props) => {
   };
 
   return (
-    <div className="transfers">
+    <div className="mb-16">
       {showInput && (
         <>
           <TransferForm
@@ -161,7 +161,7 @@ const Transfers: React.FC<Props> = (props: Props) => {
             checkAmountAndInitiate={checkAmountAndInitiate}
             setShowInput={setShowInput}
           />
-          <Callout className="callout" info>
+          <Callout className="my-6" info>
             No actual money will be transferred. The balance shown will not
             decrease when you make transfers, as this is for demonstration
             purposes only.
@@ -170,7 +170,7 @@ const Transfers: React.FC<Props> = (props: Props) => {
       )}
       {isEvaluating && (
         <div style={{ textAlign: 'center', padding: '2rem' }}>
-          <h3 className="subheading">Evaluating Transfer Risk...</h3>
+          <h3 className="m-0">Evaluating Transfer Risk...</h3>
           <div
             style={{
               display: 'inline-block',
@@ -196,7 +196,7 @@ const Transfers: React.FC<Props> = (props: Props) => {
       {isTransferConfirmed && (
         <>
           <div>
-            <h3 className="subheading">Transfer Confirmed</h3>{' '}
+            <h3 className="m-0">Transfer Confirmed</h3>{' '}
           </div>
           <p>{`You have successfully transferred ${currencyFilter(
             transferAmount
@@ -233,9 +233,9 @@ const Transfers: React.FC<Props> = (props: Props) => {
       {showError && (
         <>
           <div>
-            <h3 className="subheading">Transfer Error</h3>
+            <h3 className="m-0">Transfer Error</h3>
           </div>
-          <Callout className="callout" warning>
+          <Callout className="my-6" warning>
             {errorMessage}
           </Callout>
           {signalEvaluation && (

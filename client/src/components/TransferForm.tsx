@@ -25,7 +25,7 @@ const TransferForm: React.FC<Props> = (props: Props) => {
   return (
     <>
       <div>
-        <h3 className="subheading">Transfer Funds</h3>
+        <h3 className="m-0">Transfer Funds</h3>
         <form onSubmit={handleSubmit}>
           <TextInput
             type="number"
@@ -36,7 +36,7 @@ const TransferForm: React.FC<Props> = (props: Props) => {
             placeholder="$0.00"
             label="Amount"
             onChange={e => setTransferAmount(e.currentTarget.value)}
-            className="transfer-funds__input"
+            className="my-4 w-80"
           />
           <Button
             small

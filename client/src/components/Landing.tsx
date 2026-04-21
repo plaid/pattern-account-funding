@@ -32,17 +32,17 @@ const Landing: React.FC = () => {
             If you don't have an account, please click "Create Account".
           </div>
 
-          <div className="btns-container">
+          <div className="flex my-4">
             <Login />
             <Button
-              className="btn-with-margin"
+              className="ml-4"
               onClick={toggleForm}
             >
               Create Account
             </Button>
             {userState.currentUser.username != null && (
               <Button
-                className="btn-with-margin"
+                className="ml-4"
                 onClick={returnToCurrentUser}
               >
                 Return to Current User

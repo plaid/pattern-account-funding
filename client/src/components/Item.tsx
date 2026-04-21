@@ -102,17 +102,17 @@ const Item: React.FC<Props> = (props: Props) => {
       <div>
         {numOfItems !== 0 && (
           <>
-            <h3 className="subheading">Linked Bank</h3>
-            <div className="item-info">
+            <h3 className="m-0">Linked Bank</h3>
+            <div className="grid grid-cols-[5fr_6fr_7fr_5fr]">
               <div>
                 <h3 className="heading">Bank</h3>
                 {institution != null && (
-                  <p className="value">{institution.name}</p>
+                  <p className="text-ellipsis overflow-x-hidden">{institution.name}</p>
                 )}
               </div>
               <div>
                 <h3 className="heading">Account</h3>
-                <p className="value">{props.accountName}</p>
+                <p className="text-ellipsis overflow-x-hidden">{props.accountName}</p>
                 {props.account && (
                   <div className="account-details-compact">
                     {props.account.ach_account && (
@@ -135,7 +135,7 @@ const Item: React.FC<Props> = (props: Props) => {
               </div>
               <div>
                 <h3 className="heading">Status</h3>
-                <div className="update-mode__note">
+                <div className="mt-2">
                   {isGoodState ? (
                     <span className="inline-flex items-center px-2 py-1 rounded text-xs font-medium bg-blue-400 text-blue-900">
                       Connected
@@ -149,12 +149,12 @@ const Item: React.FC<Props> = (props: Props) => {
               </div>
               <div>
                 <h3 className="heading">Actions</h3>
-                <div className="actions-container">
+                <div className="flex flex-col items-start">
                   {isSandbox && isGoodState && (
                     <Button
                       small
                       tertiary
-                      className="action__button"
+                      className="mt-2 pl-0"
                       onClick={handleSetBadState}
                     >
                       Test Item Login Required
@@ -172,7 +172,7 @@ const Item: React.FC<Props> = (props: Props) => {
                   <Button
                     small
                     tertiary
-                    className="action__button remove-bank"
+                    className="mt-0 pl-0"
                     onClick={handleDeleteItem}
                   >
                     Remove Bank
@@ -185,7 +185,7 @@ const Item: React.FC<Props> = (props: Props) => {
         {numOfItems === 0 && (
           <Button
             large
-            className="add-account__button"
+            className="text-base"
             onClick={initiateLink}
           >
             Add a bank account
@@ -193,7 +193,7 @@ const Item: React.FC<Props> = (props: Props) => {
         )}
         {(props.removeButton || (props.linkButton && numOfItems === 0)) && (
           // Plaid React Link cannot be rendered without a link token
-          <div className="item__button">
+          <div className="pl-6 flex-1">
             {token != null && props.linkButton && (
               <LinkButton
                 userId={props.userId}
@@ -206,7 +206,7 @@ const Item: React.FC<Props> = (props: Props) => {
           </div>
         )}
       </div>
-      <div className="item__callouts">
+      <div className="mb-6">
         {isSandbox && !isGoodState && (
           <Callout warning>
             Please update your login credentials at your bank

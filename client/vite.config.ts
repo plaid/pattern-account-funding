@@ -4,13 +4,6 @@ import tailwindcss from '@tailwindcss/vite';
 
 export default defineConfig({
   plugins: [react(), tailwindcss()],
-  css: {
-    preprocessorOptions: {
-      scss: {
-        silenceDeprecations: ['import'],
-      },
-    },
-  },
   envDir: '..',
   server: {
     port: 3002,

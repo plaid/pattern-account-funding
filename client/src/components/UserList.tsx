@@ -25,12 +25,12 @@ const UserList: React.FC = () => {
       <div>
         {users.map(user => (
           <div key={user.id}>
-            <div className="user-list">
+            <div className="box flex justify-between p-4 w-[25rem] hover:cursor-pointer">
               <HashLink
-                className="user-list__touchable no-underline text-inherit"
+                className="w-60 no-underline text-inherit"
                 to={`/user/${user.id}`}
               >
-                <div className="user-list__name">{user.username}</div>
+                <div>{user.username}</div>
               </HashLink>
               <div>
                 <Button

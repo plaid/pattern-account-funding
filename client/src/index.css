@@ -24,7 +24,55 @@
   --color-yellow-600: #f9ab00;
 }
 
+@utility heading {
+  font-weight: 700;
+  text-transform: uppercase;
+  font-size: 1rem;
+  margin-bottom: 0;
+  color: var(--color-black-800);
+  font-family: 'Inconsolata';
+}
+
+@utility box {
+  border: 1px solid var(--color-black-200);
+  border-radius: 0.125rem;
+  margin-bottom: 1.5rem;
+  box-shadow: 0 0.125rem 0.25rem 0 rgba(17, 17, 17, 0.08);
+}
+
 body {
   margin: 0;
   padding: 0;
+  background: var(--color-white);
+}
+
+h3 {
+  color: var(--color-black-1000);
+  letter-spacing: -0.28px;
+  font-weight: bold;
+}
+
+/* Toast overrides for react-toastify */
+.toast__background {
+  background: var(--color-white);
+}
+
+.toast__link {
+  color: var(--color-white);
+  text-decoration: underline;
+}
+
+.Toastify__toast--error.toast__background {
+  background: var(--color-red-800);
+}
+
+.toast__body {
+  color: var(--color-black-1000);
+  font-size: 1rem;
+  white-space: pre-line;
+  padding-left: 0.5rem;
+}
+
+.Toastify__toast--error > .toast__body {
+  color: var(--color-white);
 }

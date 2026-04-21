@@ -45,22 +45,22 @@ const ConfirmIdentityForm: React.FC<Props> = (props: Props) => {
   }, [getUsers]);
 
   return (
-    <div className="box addUserForm">
+    <div className="box">
       <form onSubmit={handleSubmit}>
-        <div className="card">
-          <div className="add-user__column-1">
-            <h3 className="heading add-user__heading">Confirm your identity</h3>
-            <p className="value add-user__value">
+        <div className="flex p-5 items-center justify-start">
+          <div className="w-1/4 pr-6">
+            <h3 className="heading m-4">Confirm your identity</h3>
+            <p className="text-ellipsis overflow-x-hidden text-sm">
               {messages[environment].message}
             </p>
           </div>
-          <div className="add-user__column-2">
+          <div className="w-2/5 flex flex-col p-4">
             <TextInput
               id="fullname"
               name="fullname"
               required
               autoComplete="off"
-              className="input_field"
+              className="mb-4"
               value={fullname}
               placeholder={messages[environment].namePlaceholder}
               label="Full Name"
@@ -71,16 +71,16 @@ const ConfirmIdentityForm: React.FC<Props> = (props: Props) => {
               name="email"
               required
               autoComplete="off"
-              className="input_field"
+              className="mb-4"
               value={email}
               placeholder={messages[environment].emailPlaceholder}
               label="Email"
               onChange={e => setEmail(e.currentTarget.value)}
             />
           </div>
-          <div className="add-user__column-3">
+          <div className="flex flex-row justify-center w-[35%]">
             <Button
-              className="add-user__button"
+              className="mx-4 min-w-20"
               small
               type="submit"
             >

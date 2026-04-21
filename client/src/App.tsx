@@ -1,7 +1,7 @@
 import React from 'react';
 import { Route, Switch, withRouter } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.min.css';
+import 'react-toastify/dist/ReactToastify.css';
 
 import Sockets from './components/Sockets.jsx';
 import OAuthLink from './components/OAuthLink.tsx';
@@ -16,11 +16,9 @@ import { UsersProvider } from './services/users.tsx';
 import { CurrentUserProvider } from './services/currentUser.tsx';
 import { ErrorsProvider } from './services/errors.tsx';
 
-import './App.scss';
-
 function App() {
   return (
-    <div className="App">
+    <div className="max-w-[65.5rem] mx-auto py-20 px-10">
       <ToastContainer
         autoClose={8000}
         draggable={false}

@@ -43,12 +43,12 @@ const AddUserForm: React.FC<Props> = (props: Props) => {
   }, [addNewUser, getUsers]);
 
   return (
-    <div className="box add-user__form">
+    <div className="box mt-6">
       <form onSubmit={handleSubmit}>
         <div>
-          <h3 className="heading add-user__heading">Create an account</h3>
-          <div className="card">
-            <div className="add-user__column-1">
+          <h3 className="heading m-4">Create an account</h3>
+          <div className="flex p-5 items-center justify-start">
+            <div className="w-1/4 pr-6">
               <Checkbox
                 value={shouldVerifyIdentity}
                 id="identityCheckBox"
@@ -58,13 +58,13 @@ const AddUserForm: React.FC<Props> = (props: Props) => {
                 Verify Bank Account Identity Data{' '}
               </Checkbox>
             </div>
-            <div className="add-user__column-2">
+            <div className="w-2/5 flex flex-col p-4">
               <TextInput
                 id="username"
                 name="username"
                 required
                 autoComplete="off"
-                className="input_field"
+                className="mb-4"
                 value={username}
                 placeholder="username"
                 label="Username"
@@ -77,7 +77,7 @@ const AddUserForm: React.FC<Props> = (props: Props) => {
                     name="full_name"
                     required
                     autoComplete="off"
-                    className="input_field"
+                    className="mb-4"
                     value={fullname}
                     placeholder="First and last name"
                     label="Full Name"
@@ -88,7 +88,7 @@ const AddUserForm: React.FC<Props> = (props: Props) => {
                     name="email"
                     required
                     autoComplete="off"
-                    className="input_field"
+                    className="mb-4"
                     value={email}
                     placeholder="email@example.com"
                     label="Email"
@@ -97,12 +97,12 @@ const AddUserForm: React.FC<Props> = (props: Props) => {
                 </>
               )}
             </div>
-            <div className="add-user__column-3">
-              <Button className="add-user__button" small type="submit">
+            <div className="flex flex-row justify-center w-[35%]">
+              <Button className="mx-4 min-w-20" small type="submit">
                 Add User
               </Button>
               <Button
-                className="add-user__button"
+                className="mx-4 min-w-20"
                 small
                 secondary
                 onClick={props.hideForm}

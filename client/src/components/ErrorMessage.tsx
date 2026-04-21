@@ -25,9 +25,9 @@ const ErrorMessage: React.FC = () => {
   return (
     <>
       {show && (
-        <Callout className="error-msg__callout">
+        <Callout className="relative mb-6">
           <IconButton
-            className="close-error__button"
+            className="absolute right-0 top-0"
             accessibilityLabel="close"
             onClick={() => {
               setShow(false);

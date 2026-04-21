@@ -18,14 +18,14 @@ const PatternAccount: React.FC<Props> = (props: Props) => {
     props.userTransfer();
   };
   return (
-    <div className="pattern-account">
-      <div className="pattern-account__header">
+    <div className="mb-16">
+      <div className="flex justify-between items-center">
         <div>
-          <h3 className="subheading">Your Balance</h3>
-          <p className="account-dollars">{currencyFilter(props.appFund.balance)}</p>
+          <h3 className="m-0">Your Balance</h3>
+          <p className="text-[2rem] font-semibold mt-1 mb-0 text-black-1000">{currencyFilter(props.appFund.balance)}</p>
         </div>
         {props.numOfItems > 0 && (
-          <div className="transfer-funds__button-container">
+          <div className="flex items-center">
             <Button onClick={handleClick} small>
               Transfer funds
             </Button>

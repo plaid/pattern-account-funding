@@ -33,7 +33,7 @@ const UpdateLink: React.FC<Props> = (props: Props) => {
         <Button
           small
           tertiary
-          className="action__button"
+          className="mt-2 pl-0"
           onClick={initiateLinkUpdate}
         >
           Update Login
