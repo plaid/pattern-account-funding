@@ -7,7 +7,7 @@
     "install:all": "npm install --prefix client && npm install --prefix server",
     "client": "npm start --prefix client",
     "server": "npm start --prefix server",
-    "db:create": "psql -U postgres -f database/init/create.sql",
-    "db:reset": "psql -U postgres -c \"DROP SCHEMA public CASCADE; CREATE SCHEMA public;\" && npm run db:create"
+    "db:create": "psql -U postgres -c \"CREATE DATABASE plaid_pattern_account_funding\" || true && psql -U postgres -d plaid_pattern_account_funding -f database/init/create.sql",
+    "db:reset": "psql -U postgres -c \"DROP DATABASE IF EXISTS plaid_pattern_account_funding\" && npm run db:create"
   }
 }
