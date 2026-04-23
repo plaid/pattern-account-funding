@@ -3,8 +3,8 @@
   "version": "1.0.7",
   "private": true,
   "dependencies": {
-    "@tailwindcss/vite": "^4.2.3",
-    "axios": "^1.15.1",
+    "@tailwindcss/vite": "^4.2.4",
+    "axios": "^1.15.2",
     "date-fns": "^4.1.0",
     "plaid": "^42.1.0",
     "prop-types": "^15.8.1",
@@ -16,7 +16,7 @@
     "react-toastify": "^11.1.0",
     "recharts": "^2.15.4",
     "socket.io-client": "^4.8.3",
-    "tailwindcss": "^4.2.3"
+    "tailwindcss": "^4.2.4"
   },
   "scripts": {
     "start": "vite",
