@@ -29,16 +29,17 @@ install: $(envfile)
 
 ## Initialize the database (create tables)
 db-create:
-	psql -U postgres -f database/init/create.sql
+	psql -U postgres -c "CREATE DATABASE plaid_pattern_account_funding" || true
+	psql -U postgres -d plaid_pattern_account_funding -f database/init/create.sql
 
 ## Drop and recreate the database
 db-reset:
-	psql -U postgres -c "DROP SCHEMA public CASCADE; CREATE SCHEMA public;"
+	psql -U postgres -c "DROP DATABASE IF EXISTS plaid_pattern_account_funding"
 	$(MAKE) db-create
 
 ## Start an interactive psql session
 sql:
-	psql -U postgres
+	psql -U postgres -d plaid_pattern_account_funding
 
 ## Start the server (port 5001)
 server: $(envfile)
