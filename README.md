@@ -139,7 +139,7 @@ As a modern full-stack application, Pattern consists of multiple services handli
 
 # Plaid Pattern - Client
 
-The Pattern web client is written in JavaScript using [React]. It presents a basic [Link][plaid-link] workflow to the user, including an implementation of [OAuth][plaid-oauth] as well as a demonstration of [Link update mode][plaid-link-update-mode]. The sample app allows you to choose to use identification mode, where an enduser must input the name and email associated with their financial institution. The app runs on port 3002 by default.
+The Pattern web client is written in JavaScript using [React]. It presents a basic [Link][plaid-link] workflow to the user, including an implementation of [OAuth][plaid-oauth] as well as a demonstration of [Link update mode][plaid-link-update-mode]. The sample app allows you to choose to use identification mode, where an end user must input the name and email associated with their financial institution. The app runs on port 3002 by default.
 
 ## Key concepts
 
@@ -153,9 +153,9 @@ This app uses the classic mode of rendering Link. If you are building a Pay-by-b
 
 ### Webhooks and Websockets
 
-The Pattern server is configured to send a message over a websocket whenever it receives a webhook from Plaid. On the client side have websocket listeners defined in `src/components/Sockets.jsx` that wait for these messages and update data in real time accordingly.
+The Pattern server is configured to send a message over a websocket whenever it receives a webhook from Plaid. On the client side, we have websocket listeners defined in `src/components/Sockets.jsx` that wait for these messages and update data in real time accordingly.
 
-The `PENDING_DISCONNECT`, `PENDING_EXPIRATION`, and `ITEM_LOGIN_REQUIRED` Item webhooks demonstrated in this sample app in the [items webhook handler][items-handler].
+The `PENDING_DISCONNECT`, `PENDING_EXPIRATION`, and `ITEM_LOGIN_REQUIRED` Item webhooks are demonstrated in this sample app in the [items webhook handler][items-handler].
 
 ### Admin
 
@@ -183,11 +183,11 @@ The `linkTokenCreate` call includes a `redirect_uri` parameter, which the server
 
 You will also need to add `http://localhost:3002/oauth-link` as an allowed redirect URI for your client ID in API section of the [Plaid developer dashboard](https://dashboard.plaid.com/team/api).
 
-To test the OAuth flow, choose 'Playtypus OAuth Bank' from the list of financial instutions in Plaid Link.
+To test the OAuth flow, choose 'Platypus OAuth Bank' from the list of financial institutions in Plaid Link.
 
 ### Working with Plaid Partners
 
-This sample app can also demonstrate the creation of a processor token for use with Plaid partners. While still initializing Link with the Auth product, instead of of using Plaid Auth endpoints, an example of the creation of a processor token and integration with a plaid partner is included in the [root items route][items-routes].
+This sample app can also demonstrate the creation of a processor token for use with Plaid partners. While still initializing Link with the Auth product, instead of using Plaid Auth endpoints, an example of the creation of a processor token and integration with a Plaid partner is included in the [root items route][items-routes].
 
 #### Using Dwolla sandbox as a test case
 
@@ -254,7 +254,7 @@ For more information, see the docs page on [storing Plaid API identifiers][plaid
 The `*.sql` scripts in the `init` directory are used to initialize the database (on first run via `npm run db:create`, or after resetting the db via `npm run db:reset`).
 
 See the [create.sql][create-script] initialization script to see some brief notes for and the schemas of the tables used in this application.
-While most of them are fairly self-explanitory, we've added some additional notes for some of the tables below.
+While most of them are fairly self-explanatory, we've added some additional notes for some of the tables below.
 
 ### link_events_table
 
