@@ -46,30 +46,25 @@ const DWOLLA_BASE_URL = 'https://api-sandbox.dwolla.com';
 
 // create Dwolla Customer and obtain customer url
 const createDwollaCustomer = async (firstName, lastName) => {
-  try {
-    const response = await axios.post(
-      `${DWOLLA_BASE_URL}/customers`,
-      {
-        firstName: firstName,
-        lastName: lastName,
-        email: `${Math.random() // because Dwolla does not allow identical emails, and sandbox data is always the same.
-          .toString(36)
-          .slice(2)}@sampleApp.com`,
-        ipAddress: '99.99.99.99', // dummy data: a unique identifier for Dwolla
+  const response = await axios.post(
+    `${DWOLLA_BASE_URL}/customers`,
+    {
+      firstName: firstName,
+      lastName: lastName,
+      email: `${Math.random() // because Dwolla does not allow identical emails, and sandbox data is always the same.
+        .toString(36)
+        .slice(2)}@sampleApp.com`,
+      ipAddress: '99.99.99.99', // dummy data: a unique identifier for Dwolla
+    },
+    {
+      headers: {
+        'content-type': 'application/json',
+        Authorization: `Bearer ${DWOLLA_ACCESS_TOKEN}`,
+        Accept: 'application/vnd.dwolla.v1.hal+json',
       },
-      {
-        headers: {
-          'content-type': 'application/json',
-          Authorization: `Bearer ${DWOLLA_ACCESS_TOKEN}`,
-          Accept: 'application/vnd.dwolla.v1.hal+json',
-        },
-      }
-    );
-    return response.headers.location;
-  } catch (error) {
-    console.log('error:', error);
-    res.status(500);
-  }
+    }
+  );
+  return response.headers.location;
 };
 
 // send processor token to Dwolla customer url to create customer Funding source and obtain customer funding source url
@@ -78,26 +73,21 @@ const createDwollaCustomerFundingSource = async (
   customerUrl,
   processorToken
 ) => {
-  try {
-    const response = await axios.post(
-      `${customerUrl}/funding-sources`,
-      {
-        plaidToken: processorToken,
-        name: account.subtype,
+  const response = await axios.post(
+    `${customerUrl}/funding-sources`,
+    {
+      plaidToken: processorToken,
+      name: account.subtype,
+    },
+    {
+      headers: {
+        'content-type': 'application/json',
+        Authorization: `Bearer ${DWOLLA_ACCESS_TOKEN}`,
+        Accept: 'application/vnd.dwolla.v1.hal+json',
       },
-      {
-        headers: {
-          'content-type': 'application/json',
-          Authorization: `Bearer ${DWOLLA_ACCESS_TOKEN}`,
-          Accept: 'application/vnd.dwolla.v1.hal+json',
-        },
-      }
-    );
-    return response.headers.location;
-  } catch (error) {
-    console.log('error:', error);
-    res.status(500);
-  }
+    }
+  );
+  return response.headers.location;
 };
 
 router.post(
@@ -190,7 +180,7 @@ router.post(
     let fundingSourceUrl = null;
 
     if (!isProcessor) {
-      authResponse = await plaid.authGet(authAndIdRequest);
+      const authResponse = await plaid.authGet(authAndIdRequest);
       authNumbers = authResponse.data.numbers.ach[0];
       balances = authResponse.data.accounts[0].balances;
     } else {
@@ -244,54 +234,43 @@ router.post(
   '/makeTransfer',
   asyncWrapper(async (req, res) => {
     const { fundingSourceUrl, amount, itemId } = req.body;
-    let transUrl = null;
-    let confirmedAmount = null;
-    try {
-      const response = await axios.post(
-        `${DWOLLA_BASE_URL}/transfers`,
-        {
-          _links: {
-            source: {
-              href: fundingSourceUrl,
-            },
-            destination: {
-              href: `${DWOLLA_BASE_URL}/funding-sources/${DWOLLA_MASTER_ACCOUNT_ID}`,
-            },
+
+    const transferResponse = await axios.post(
+      `${DWOLLA_BASE_URL}/transfers`,
+      {
+        _links: {
+          source: {
+            href: fundingSourceUrl,
           },
-          amount: {
-            currency: 'USD',
-            value: `${amount}`,
+          destination: {
+            href: `${DWOLLA_BASE_URL}/funding-sources/${DWOLLA_MASTER_ACCOUNT_ID}`,
           },
         },
-        {
-          headers: {
-            'content-type': 'application/json',
-            Authorization: `Bearer ${DWOLLA_ACCESS_TOKEN}`,
-            Accept: 'application/vnd.dwolla.v1.hal+json',
-          },
-        }
-      );
-      transUrl = response.headers.location;
-    } catch (error) {
-      console.log('error:', error);
-      res.status(500);
-    }
-
-    // get the confirmed amount from the transfer url
-    try {
-      const response = await axios.get(transUrl, {
+        amount: {
+          currency: 'USD',
+          value: `${amount}`,
+        },
+      },
+      {
         headers: {
           'content-type': 'application/json',
           Authorization: `Bearer ${DWOLLA_ACCESS_TOKEN}`,
           Accept: 'application/vnd.dwolla.v1.hal+json',
         },
-      });
+      }
+    );
+    const transUrl = transferResponse.headers.location;
 
-      confirmedAmount = response.data.amount.value;
-    } catch (error) {
-      console.log('error:', error);
-      res.status(500);
-    }
+    // get the confirmed amount from the transfer url
+    const confirmedTransfer = await axios.get(transUrl, {
+      headers: {
+        'content-type': 'application/json',
+        Authorization: `Bearer ${DWOLLA_ACCESS_TOKEN}`,
+        Accept: 'application/vnd.dwolla.v1.hal+json',
+      },
+    });
+    const confirmedAmount = confirmedTransfer.data.amount.value;
+
     const transfer = await createTransfer(itemId, confirmedAmount, transUrl);
     res.json({ transfer: transfer });
   })
@@ -457,18 +436,15 @@ router.delete(
   asyncWrapper(async (req, res) => {
     const { itemId } = req.params;
     const { plaid_access_token: accessToken } = await retrieveItemById(itemId);
-    /* eslint-disable camelcase */
     try {
-      const response = await plaid.itemRemove({
+      await plaid.itemRemove({
         access_token: accessToken,
       });
-      const removed = response.data.removed;
-      const status_code = response.data.status_code;
     } catch (error) {
-      if (!removed)
-        throw Boom.boomify(new Error('Item could not be removed in the Plaid API.'), {
-          statusCode: status_code,
-        });
+      throw Boom.boomify(
+        new Error('Item could not be removed in the Plaid API.'),
+        { statusCode: 500 }
+      );
     }
     await deleteItem(itemId);
 
