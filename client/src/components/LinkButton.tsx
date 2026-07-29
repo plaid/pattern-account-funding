@@ -35,7 +35,7 @@ const LinkButton: React.FC<Props> = (props: Props) => {
 
   // define onSuccess, onExit and onEvent functions as configs for Plaid Link creation
   const onSuccess = async (
-    publicToken: string,
+    publicToken: string | null,
     metadata: PlaidLinkOnSuccessMetadata
   ) => {
     // log and save metatdata
@@ -51,7 +51,7 @@ const LinkButton: React.FC<Props> = (props: Props) => {
       // call to Plaid api endpoint: /item/public_token/exchange in order to obtain access_token which is then stored with the created item
       try {
         const data = await exchangeToken(
-          publicToken,
+          publicToken!,
           metadata.institution,
           metadata.accounts,
           props.userId,
