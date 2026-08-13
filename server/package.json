@@ -20,7 +20,7 @@
     "morgan": "^1.10.1",
     "node-fetch": "^2.7.0",
     "pg": "^8.20.0",
-    "plaid": "^42.1.0",
+    "plaid": "^45.0.0",
     "socket.io": "^4.8.3"
   },
   "devDependencies": {
