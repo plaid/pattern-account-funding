@@ -20,8 +20,16 @@ const itemErrorHandler = async (plaidItemId, error) => {
   const { error_code: errorCode } = error;
   switch (errorCode) {
     case 'ITEM_LOGIN_REQUIRED': {
-      const { id: itemId } = await retrieveItemByPlaidItemId(plaidItemId);
-      await updateItemStatus(itemId, 'bad');
+      // Plaid can send webhooks for items this app no longer stores, so a
+      // missing row is expected rather than exceptional.
+      const item = await retrieveItemByPlaidItemId(plaidItemId);
+      if (item == null) {
+        console.log(
+          `WEBHOOK: ITEMS: Plaid item id ${plaidItemId}: no matching item, ignoring`
+        );
+        break;
+      }
+      await updateItemStatus(item.id, 'bad');
       break;
     }
     default:
@@ -57,22 +65,26 @@ const itemsHandler = async (requestBody, io) => {
       serverLogAndEmitSocket('is updated', plaidItemId, error);
       break;
     case 'ERROR': {
-      itemErrorHandler(plaidItemId, error);
-      const { id: itemId } = await retrieveItemByPlaidItemId(plaidItemId);
+      await itemErrorHandler(plaidItemId, error);
+      const item = await retrieveItemByPlaidItemId(plaidItemId);
       serverLogAndEmitSocket(
         `ERROR: ${error.error_code}: ${error.error_message}`,
-        itemId,
+        item == null ? null : item.id,
         error.error_code
       );
       break;
     }
     case 'PENDING_DISCONNECT':
     case 'PENDING_EXPIRATION': {
-      const { id: itemId } = await retrieveItemByPlaidItemId(plaidItemId);
-      await updateItemStatus(itemId, 'bad');
+      const item = await retrieveItemByPlaidItemId(plaidItemId);
+      if (item == null) {
+        serverLogAndEmitSocket('no matching item, ignoring', null, error);
+        break;
+      }
+      await updateItemStatus(item.id, 'bad');
       serverLogAndEmitSocket(
         `user needs to re-enter login credentials`,
-        itemId,
+        item.id,
         error
       );
       break;
