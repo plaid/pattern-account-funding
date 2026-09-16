@@ -2,7 +2,10 @@
  * @file The application root. Defines the Express server configuration.
  */
 
-require('dotenv').config({ path: require('path').resolve(__dirname, '../.env') });
+require('dotenv').config({
+  path: require('path').resolve(__dirname, '../.env'),
+  quiet: true,
+});
 
 const express = require('express');
 const socketIo = require('socket.io');

@@ -6,7 +6,6 @@ const { asyncWrapper } = require('../middleware');
 
 const express = require('express');
 const plaid = require('../plaid');
-const fetch = require('node-fetch');
 const { retrieveItemById } = require('../db/queries');
 const {
   PLAID_SANDBOX_REDIRECT_URI,
