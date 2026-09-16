@@ -13,28 +13,18 @@ const {
  * different operations are needed to update an item based on the the error_code
  * that is encountered.
  *
- * @param {string} plaidItemId the Plaid ID of an item.
+ * @param {Object} item the stored item the webhook refers to.
  * @param {Object} error the error received from the webhook.
  */
-const itemErrorHandler = async (plaidItemId, error) => {
+const itemErrorHandler = async (item, error) => {
   const { error_code: errorCode } = error;
   switch (errorCode) {
-    case 'ITEM_LOGIN_REQUIRED': {
-      // Plaid can send webhooks for items this app no longer stores, so a
-      // missing row is expected rather than exceptional.
-      const item = await retrieveItemByPlaidItemId(plaidItemId);
-      if (item == null) {
-        console.log(
-          `WEBHOOK: ITEMS: Plaid item id ${plaidItemId}: no matching item, ignoring`
-        );
-        break;
-      }
+    case 'ITEM_LOGIN_REQUIRED':
       await updateItemStatus(item.id, 'bad');
       break;
-    }
     default:
       console.log(
-        `WEBHOOK: ITEMS: Plaid item id ${plaidItemId}: unhandled ITEM error`
+        `WEBHOOK: ITEMS: Plaid item id ${item.plaid_item_id}: unhandled ITEM error`
       );
   }
 };
@@ -74,12 +64,12 @@ const itemsHandler = async (requestBody, io) => {
       serverLogAndEmitSocket('is updated', plaidItemId, error);
       break;
     case 'ERROR': {
-      await itemErrorHandler(plaidItemId, error);
       const item = await retrieveItemByPlaidItemId(plaidItemId);
       if (item == null) {
         logMissingItem();
         break;
       }
+      await itemErrorHandler(item, error);
       serverLogAndEmitSocket(
         `ERROR: ${error.error_code}: ${error.error_message}`,
         item.id,
