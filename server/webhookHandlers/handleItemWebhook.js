@@ -13,20 +13,18 @@ const {
  * different operations are needed to update an item based on the the error_code
  * that is encountered.
  *
- * @param {string} plaidItemId the Plaid ID of an item.
+ * @param {Object} item the stored item the webhook refers to.
  * @param {Object} error the error received from the webhook.
  */
-const itemErrorHandler = async (plaidItemId, error) => {
+const itemErrorHandler = async (item, error) => {
   const { error_code: errorCode } = error;
   switch (errorCode) {
-    case 'ITEM_LOGIN_REQUIRED': {
-      const { id: itemId } = await retrieveItemByPlaidItemId(plaidItemId);
-      await updateItemStatus(itemId, 'bad');
+    case 'ITEM_LOGIN_REQUIRED':
+      await updateItemStatus(item.id, 'bad');
       break;
-    }
     default:
       console.log(
-        `WEBHOOK: ITEMS: Plaid item id ${plaidItemId}: unhandled ITEM error`
+        `WEBHOOK: ITEMS: Plaid item id ${item.plaid_item_id}: unhandled ITEM error`
       );
   }
 };
@@ -52,27 +50,44 @@ const itemsHandler = async (requestBody, io) => {
     if (webhookCode) io.emit(webhookCode, { itemId, errorCode });
   };
 
+  // Deliberately logs without emitting: the client's listeners feed itemId
+  // straight into getItemById, so emitting a null id would make every
+  // connected client request /items/null and surface an error toast.
+  const logMissingItem = () => {
+    console.log(
+      `WEBHOOK: ITEMS: ${webhookCode}: Plaid item id ${plaidItemId}: no matching item, ignoring`
+    );
+  };
+
   switch (webhookCode) {
     case 'WEBHOOK_UPDATE_ACKNOWLEDGED':
       serverLogAndEmitSocket('is updated', plaidItemId, error);
       break;
     case 'ERROR': {
-      itemErrorHandler(plaidItemId, error);
-      const { id: itemId } = await retrieveItemByPlaidItemId(plaidItemId);
+      const item = await retrieveItemByPlaidItemId(plaidItemId);
+      if (item == null) {
+        logMissingItem();
+        break;
+      }
+      await itemErrorHandler(item, error);
       serverLogAndEmitSocket(
         `ERROR: ${error.error_code}: ${error.error_message}`,
-        itemId,
+        item.id,
         error.error_code
       );
       break;
     }
     case 'PENDING_DISCONNECT':
     case 'PENDING_EXPIRATION': {
-      const { id: itemId } = await retrieveItemByPlaidItemId(plaidItemId);
-      await updateItemStatus(itemId, 'bad');
+      const item = await retrieveItemByPlaidItemId(plaidItemId);
+      if (item == null) {
+        logMissingItem();
+        break;
+      }
+      await updateItemStatus(item.id, 'bad');
       serverLogAndEmitSocket(
         `user needs to re-enter login credentials`,
-        itemId,
+        item.id,
         error
       );
       break;

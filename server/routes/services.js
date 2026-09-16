@@ -48,7 +48,12 @@ router.post(
       item: handleItemWebhook,
     };
     const webhookHandler = webhookHandlerMap[type] || unhandledWebhook;
-    webhookHandler(req.body, io);
+    // Webhooks are acknowledged immediately and processed in the background,
+    // so a rejection here would escape Express and take down the process as
+    // an unhandled rejection. Log it instead.
+    Promise.resolve(webhookHandler(req.body, io)).catch(err => {
+      console.error(`WEBHOOK: ${type}: handler failed:`, err);
+    });
     res.json({ status: 'ok' });
   })
 );

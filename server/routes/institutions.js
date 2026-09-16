@@ -23,9 +23,10 @@ router.get(
     const radix = 10;
     count = parseInt(count, radix);
     offset = parseInt(offset, radix);
-    const requst = {
+    const request = {
       count: count,
       offset: offset,
+      country_codes: ['US'],
       options: {
         include_optional_metadata: true,
       },
