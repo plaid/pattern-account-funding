@@ -14,11 +14,10 @@ const Banner: React.FC<Props> = (props: Props) => {
   const [isDismissed, setIsDismissed] = useState<boolean>(() => {
     return localStorage.getItem('webhookBadgeDismissed') === 'true';
   });
-  const [isApiKeyWarningDismissed, setIsApiKeyWarningDismissed] = useState<
-    boolean
-  >(() => {
-    return localStorage.getItem('apiKeyWarningDismissed') === 'true';
-  });
+  const [isApiKeyWarningDismissed, setIsApiKeyWarningDismissed] =
+    useState<boolean>(() => {
+      return localStorage.getItem('apiKeyWarningDismissed') === 'true';
+    });
 
   const { linkTokens } = useLink();
 
@@ -31,7 +30,7 @@ const Banner: React.FC<Props> = (props: Props) => {
         } else {
           setWebhookStatus('unavailable');
         }
-      } catch (err) {
+      } catch {
         setWebhookStatus('unavailable');
       }
     };

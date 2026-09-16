@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import axios from 'axios';
 import { Callout } from './ui/Callout.tsx';
 import { Button } from './ui/Button.tsx';
 
@@ -130,8 +131,9 @@ const Transfers: React.FC<Props> = (props: Props) => {
         setShowError(true);
       } else {
         setErrorMessage(
-          `Risk evaluation outcome: ${outcome ||
-            'UNKNOWN'}. This transaction cannot be processed at this time. Please try a different payment method.`
+          `Risk evaluation outcome: ${
+            outcome || 'UNKNOWN'
+          }. This transaction cannot be processed at this time. Please try a different payment method.`
         );
         setShowError(true);
       }
@@ -142,7 +144,8 @@ const Transfers: React.FC<Props> = (props: Props) => {
       // Extract error message from server response
       // Boom errors are structured as: { statusCode, error, message }
       const serverErrorMessage =
-        error?.response?.data?.message || error?.message;
+        (axios.isAxiosError(error) && error.response?.data?.message) ||
+        (error instanceof Error && error.message);
 
       setErrorMessage(
         serverErrorMessage ||
@@ -222,10 +225,7 @@ const Transfers: React.FC<Props> = (props: Props) => {
               </details>
             </div>
           )}
-          <Button
-            small
-            onClick={() => props.setShowTransfer(false)}
-          >
+          <Button small onClick={() => props.setShowTransfer(false)}>
             Done
           </Button>
         </>
@@ -259,10 +259,7 @@ const Transfers: React.FC<Props> = (props: Props) => {
               </details>
             </div>
           )}
-          <Button
-            small
-            onClick={() => props.setShowTransfer(false)}
-          >
+          <Button small onClick={() => props.setShowTransfer(false)}>
             Back
           </Button>
         </>

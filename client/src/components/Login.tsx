@@ -19,9 +19,7 @@ const Login: React.FC = () => {
 
   return (
     <div>
-      <Button onClick={() => setShow(!show)}>
-        Login
-      </Button>
+      <Button onClick={() => setShow(!show)}>Login</Button>
       <Modal
         isOpen={show}
         onRequestClose={() => {
@@ -30,22 +28,22 @@ const Login: React.FC = () => {
         }}
       >
         <ModalBody
-            onClickCancel={() => {
-              setShow(false);
-              setValue('');
-            }}
-            header="User Login"
-            isLoading={false}
-            onClickConfirm={handleSubmit}
-            confirmText="Submit"
-          >
-            <TextInput
-              label=""
-              id="username"
-              placeholder="Enter User Name"
-              value={value}
-              onChange={e => setValue(e.currentTarget.value)}
-            />
+          onClickCancel={() => {
+            setShow(false);
+            setValue('');
+          }}
+          header="User Login"
+          isLoading={false}
+          onClickConfirm={handleSubmit}
+          confirmText="Submit"
+        >
+          <TextInput
+            label=""
+            id="username"
+            placeholder="Enter User Name"
+            value={value}
+            onChange={e => setValue(e.currentTarget.value)}
+          />
         </ModalBody>
       </Modal>
     </div>

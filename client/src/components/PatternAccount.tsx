@@ -22,7 +22,9 @@ const PatternAccount: React.FC<Props> = (props: Props) => {
       <div className="pattern-account__header">
         <div>
           <h3 className="subheading">Your Balance</h3>
-          <p className="account-dollars">{currencyFilter(props.appFund.balance)}</p>
+          <p className="account-dollars">
+            {currencyFilter(props.appFund.balance)}
+          </p>
         </div>
         {props.numOfItems > 0 && (
           <div className="transfer-funds__button-container">

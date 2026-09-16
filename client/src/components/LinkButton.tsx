@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react';
+import axios from 'axios';
 import {
   usePlaidLink,
   PlaidLinkOnSuccessMetadata,
@@ -50,7 +51,7 @@ const LinkButton: React.FC<Props> = (props: Props) => {
     } else {
       // call to Plaid api endpoint: /item/public_token/exchange in order to obtain access_token which is then stored with the created item
       try {
-        const data = await exchangeToken(
+        await exchangeToken(
           publicToken!,
           metadata.institution,
           metadata.accounts,
@@ -63,14 +64,15 @@ const LinkButton: React.FC<Props> = (props: Props) => {
         history.push(`/user/${props.userId}`);
       } catch (e) {
         console.error('Full error object:', e);
-        console.error('Error response:', e?.response);
-        console.error('Error response data:', e?.response?.data);
+        const response = axios.isAxiosError(e) ? e.response : undefined;
+        console.error('Error response:', response);
+        console.error('Error response data:', response?.data);
         // Extract error message from API response
         const errorMessage =
-          e?.response?.data?.message ||
-          e?.message ||
+          response?.data?.message ||
+          (e instanceof Error && e.message) ||
           'An error occurred while linking your account';
-        const errorCode = e?.response?.data?.error || 'API_ERROR';
+        const errorCode = response?.data?.error || 'API_ERROR';
         console.log(
           'Setting error with code:',
           errorCode,

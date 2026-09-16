@@ -9,6 +9,7 @@ import React, {
 } from 'react';
 import keyBy from 'lodash/keyBy';
 import omit from 'lodash/omit';
+import axios from 'axios';
 import { toast } from 'react-toastify';
 
 import { UserType } from '../components/types.ts';
@@ -48,7 +49,7 @@ export function UsersProvider(props: any) {
   const { deleteItemsByUserId } = useItems();
 
   const hasRequested = useRef<{
-    all: Boolean;
+    all: boolean;
     byId: { [id: number]: boolean };
   }>({
     all: false,
@@ -59,7 +60,12 @@ export function UsersProvider(props: any) {
    * @desc Creates a new user
    */
   const addNewUser = useCallback(
-    async (username, fullname, email, shouldVerifyIdentity) => {
+    async (
+      username: string,
+      fullname: string,
+      email: string,
+      shouldVerifyIdentity: boolean
+    ) => {
       try {
         const { data: payload } = await apiAddNewUser(
           username,
@@ -69,7 +75,7 @@ export function UsersProvider(props: any) {
         );
         dispatch({ type: 'SUCCESSFUL_GET', payload: payload });
       } catch (err) {
-        const { response } = err;
+        const response = axios.isAxiosError(err) ? err.response : undefined;
         if (response && response.status === 409) {
           toast.error(`Username ${username} already exists`);
         } else {
@@ -85,7 +91,7 @@ export function UsersProvider(props: any) {
    * The api request will be bypassed if the data has already been fetched.
    * A 'refresh' parameter can force a request for new data even if local state exists.
    */
-  const getUsers = useCallback(async refresh => {
+  const getUsers = useCallback(async (refresh: boolean) => {
     if (!hasRequested.current.all || refresh) {
       hasRequested.current.all = true;
       const { data: payload } = await apiGetUsers();
@@ -98,7 +104,7 @@ export function UsersProvider(props: any) {
    * The api request will be bypassed if the data has already been fetched.
    * A 'refresh' parameter can force a request for new data even if local state exists.
    */
-  const getUserById = useCallback(async (id, refresh) => {
+  const getUserById = useCallback(async (id: number, refresh: boolean) => {
     if (!hasRequested.current.byId[id] || refresh) {
       hasRequested.current.byId[id] = true;
       const { data: payload } = await apiGetUserById(id);
@@ -110,7 +116,7 @@ export function UsersProvider(props: any) {
    * @desc Will delete User by userId.
    */
   const deleteUserById = useCallback(
-    async id => {
+    async (id: number) => {
       await apiDeleteUserById(id); // this will delete all items associated with user
       deleteItemsByUserId(id);
       deleteAccountsByUserId(id);

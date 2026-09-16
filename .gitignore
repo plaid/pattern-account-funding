@@ -41,6 +41,9 @@ jspm_packages/
 typings/
 dist/
 
+# TypeScript incremental build info
+*.tsbuildinfo
+
 # Optional npm cache directory
 .npm
 
