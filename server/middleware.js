@@ -56,10 +56,15 @@ const errorHandler = (err, req, res, next) => {
     //
     // Only 4xx is honored. A 5xx is still our failure, and Boom masks the
     // response message on exactly 500 and no higher, so passing 501+ through
-    // would leak internal error text. Axios errors are excluded because
-    // their status describes an upstream response, not this request: a
-    // misconfigured credential that makes a vendor answer 401 is a fault on
-    // our side, not the caller's.
+    // would leak internal error text.
+    //
+    // The isAxiosError check is narrower than it looks: it only catches
+    // upstream responses with an empty body, because anything with a body
+    // is already claimed by the branch above, which re-emits the upstream
+    // status. Plaid errors want exactly that, so this cannot simply be
+    // hoisted — and isAxiosError cannot separate Plaid from Dwolla, since
+    // the Plaid SDK is itself axios. An upstream Dwolla failure therefore
+    // still reaches the caller with the vendor's own status.
     const status = error.status || error.statusCode;
     const isClientError =
       !error.isAxiosError &&
