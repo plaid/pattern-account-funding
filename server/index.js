@@ -90,7 +90,7 @@ app.use('/services', serviceRouter);
 app.use('/link-event', linkEventsRouter);
 app.use('/link-token', linkTokensRouter);
 app.use('/appFunds', appFundsRouter);
-app.use('*', unhandledRouter);
+app.use(unhandledRouter);
 
 // Error handling has to sit at the bottom of the stack.
 // https://github.com/expressjs/express/issues/2718
