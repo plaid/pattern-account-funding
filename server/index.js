@@ -60,6 +60,14 @@ const io = socketIo(server, {
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
+// body-parser 2 (bundled with Express 5) leaves req.body undefined when a
+// request has no body, where Express 4 set it to {}. Handlers destructure
+// req.body directly, so restore the old default to keep their validation
+// errors intact instead of turning them into TypeErrors.
+app.use((req, res, next) => {
+  if (req.body === undefined) req.body = {};
+  next();
+});
 app.use(cookieParser());
 
 // middleware to pass socket to each request object
