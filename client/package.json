@@ -6,6 +6,7 @@
     "@tailwindcss/vite": "^4.2.4",
     "axios": "^1.15.2",
     "date-fns": "^4.1.0",
+    "lodash": "^4.18.1",
     "plaid": "^47.0.0",
     "prop-types": "^15.8.1",
     "react": "^18.3.1",
@@ -14,7 +15,6 @@
     "react-router-dom": "^5.3.4",
     "react-router-hash-link": "^2.4.3",
     "react-toastify": "^11.1.0",
-    "recharts": "^2.15.4",
     "socket.io-client": "^4.8.3",
     "tailwindcss": "^4.2.4"
   },
@@ -31,7 +31,6 @@
     "@types/react-dom": "^18.3.7",
     "@types/react-router-dom": "^5.3.3",
     "@types/react-router-hash-link": "^2.4.9",
-    "@types/socket.io-client": "^3.0.0",
     "@typescript-eslint/eslint-plugin": "^8.70.0",
     "@typescript-eslint/parser": "^8.70.0",
     "@vitejs/plugin-react": "^6.0.1",

@@ -2,23 +2,25 @@
   "name": "server",
   "version": "1.0.7",
   "private": true,
+  "engines": {
+    "node": ">=18"
+  },
   "scripts": {
     "start": "node index.js",
     "debug": "nodemon --inspect=0.0.0.0:9229 index.js",
     "lint": "eslint **/*.js -c .eslintrc.json"
   },
   "dependencies": {
-    "@hapi/boom": "^9.1.4",
+    "@hapi/boom": "^10.0.1",
     "axios": "^1.15.2",
     "cookie-parser": "^1.4.7",
     "debug": "^4.4.3",
-    "dotenv": "^16.6.1",
+    "dotenv": "^17.4.2",
     "express": "^4.22.1",
     "express-promise-router": "^4.1.1",
     "lodash": "^4.18.1",
     "moment": "^2.30.1",
     "morgan": "^1.10.1",
-    "node-fetch": "^2.7.0",
     "pg": "^8.20.0",
     "plaid": "^47.0.0",
     "socket.io": "^4.8.3"
@@ -26,7 +28,7 @@
   "devDependencies": {
     "eslint": "^8.57.1",
     "eslint-config-airbnb-base": "^15.0.0",
-    "eslint-config-prettier": "^9.1.2",
+    "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-import": "^2.32.0",
     "eslint-plugin-prettier": "^5.5.5",
     "nodemon": "^3.1.14",
