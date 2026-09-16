@@ -29,22 +29,17 @@ const Landing: React.FC = () => {
         <>
           <div>
             {' '}
-            If you don't have an account, please click "Create Account".
+            If you don&apos;t have an account, please click &quot;Create
+            Account&quot;.
           </div>
 
           <div className="btns-container">
             <Login />
-            <Button
-              className="btn-with-margin"
-              onClick={toggleForm}
-            >
+            <Button className="btn-with-margin" onClick={toggleForm}>
               Create Account
             </Button>
             {userState.currentUser.username != null && (
-              <Button
-                className="btn-with-margin"
-                onClick={returnToCurrentUser}
-              >
+              <Button className="btn-with-margin" onClick={returnToCurrentUser}>
                 Return to Current User
               </Button>
             )}

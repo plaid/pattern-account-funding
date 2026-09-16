@@ -1,5 +1,4 @@
 import axios from 'axios';
-import React from 'react';
 import { toast } from 'react-toastify';
 import { PlaidLinkOnSuccessMetadata } from 'react-plaid-link';
 
@@ -63,7 +62,7 @@ export const setItemToBadState = (itemId: number) =>
 
 export const getLinkToken = (
   userId: number,
-  itemId: number,
+  itemId: number | null | undefined,
   isIdentity: boolean
 ) =>
   api.post(`/link-token`, {

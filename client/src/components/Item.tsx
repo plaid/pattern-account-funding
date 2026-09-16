@@ -183,11 +183,7 @@ const Item: React.FC<Props> = (props: Props) => {
           </>
         )}
         {numOfItems === 0 && (
-          <Button
-            large
-            className="add-account__button"
-            onClick={initiateLink}
-          >
+          <Button large className="add-account__button" onClick={initiateLink}>
             Add a bank account
           </Button>
         )}

@@ -40,7 +40,7 @@ export function InstitutionsProvider(props: any) {
   /**
    * @desc Requests details for a single Institution.
    */
-  const getInstitutionById = useCallback(async id => {
+  const getInstitutionById = useCallback(async (id: string) => {
     const { data: payload } = await apiGetInstitutionById(id);
     const institution = payload[0];
     dispatch({ type: 'SUCCESSFUL_GET', payload: institution });

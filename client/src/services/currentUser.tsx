@@ -50,7 +50,7 @@ export function CurrentUserProvider(props: any) {
    * @desc Requests details for a single User.
    */
   const login = useCallback(
-    async username => {
+    async (username: string) => {
       try {
         const { data: payload } = await apiGetLoginUser(username);
         if (payload != null) {
@@ -69,7 +69,7 @@ export function CurrentUserProvider(props: any) {
   );
 
   const setCurrentUser = useCallback(
-    async username => {
+    async (username: string) => {
       try {
         const { data: payload } = await apiGetLoginUser(username);
         if (payload != null) {
@@ -85,7 +85,7 @@ export function CurrentUserProvider(props: any) {
     [history]
   );
 
-  const setNewUser = useCallback(async username => {
+  const setNewUser = useCallback(async (username: string) => {
     dispatch({ type: 'ADD_USER', payload: username });
   }, []);
 

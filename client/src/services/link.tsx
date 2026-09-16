@@ -6,6 +6,7 @@ import React, {
   Dispatch,
   createContext,
 } from 'react';
+import axios from 'axios';
 
 import { getLinkToken } from './api.tsx';
 
@@ -60,48 +61,63 @@ export function LinkProvider(props: any) {
    * @desc Creates a new link token for a given User or Item.
    */
 
-  const generateLinkToken = useCallback(async (userId, itemId, isIdentity) => {
-    // if itemId is not null, update mode is triggered
-    try {
-      const linkTokenResponse = await getLinkToken(userId, itemId, isIdentity);
-      if (linkTokenResponse.data.link_token) {
-        const token = await linkTokenResponse.data.link_token;
-        console.log('success', linkTokenResponse.data);
+  const generateLinkToken = useCallback(
+    async (
+      userId: number,
+      itemId: number | null | undefined,
+      isIdentity: boolean
+    ) => {
+      // if itemId is not null, update mode is triggered
+      try {
+        const linkTokenResponse = await getLinkToken(
+          userId,
+          itemId,
+          isIdentity
+        );
+        if (linkTokenResponse.data.link_token) {
+          const token = await linkTokenResponse.data.link_token;
+          console.log('success', linkTokenResponse.data);
 
-        if (itemId != null) {
-          dispatch({
-            type: 'LINK_TOKEN_UPDATE_MODE_CREATED',
-            id: itemId,
-            token: token,
-          });
+          if (itemId != null) {
+            dispatch({
+              type: 'LINK_TOKEN_UPDATE_MODE_CREATED',
+              id: itemId,
+              token: token,
+            });
+          } else {
+            dispatch({ type: 'LINK_TOKEN_CREATED', id: userId, token: token });
+          }
         } else {
-          dispatch({ type: 'LINK_TOKEN_CREATED', id: userId, token: token });
+          dispatch({
+            type: 'LINK_TOKEN_ERROR',
+            error: linkTokenResponse.data,
+          });
+          console.log('error', linkTokenResponse.data);
         }
-      } else {
-        dispatch({ type: 'LINK_TOKEN_ERROR', error: linkTokenResponse.data });
-        console.log('error', linkTokenResponse.data);
+      } catch (err) {
+        const errorResponse =
+          (axios.isAxiosError(err) && err.response?.data) || {};
+        const errorMessage =
+          errorResponse.error_message ||
+          errorResponse.message ||
+          'Failed to create link token';
+
+        dispatch({
+          type: 'LINK_TOKEN_ERROR',
+          error: {
+            error_code: errorResponse.error_code || 'API_ERROR',
+            error_type: errorResponse.error_type || '',
+            error_message: errorMessage,
+            display_message: errorMessage,
+          },
+        });
+        console.error('Link token generation failed:', errorMessage);
       }
-    } catch (err) {
-      const errorResponse = err.response?.data || {};
-      const errorMessage =
-        errorResponse.error_message ||
-        errorResponse.message ||
-        'Failed to create link token';
+    },
+    []
+  );
 
-      dispatch({
-        type: 'LINK_TOKEN_ERROR',
-        error: {
-          error_code: errorResponse.error_code || 'API_ERROR',
-          error_type: errorResponse.error_type || '',
-          error_message: errorMessage,
-          display_message: errorMessage,
-        },
-      });
-      console.error('Link token generation failed:', errorMessage);
-    }
-  }, []);
-
-  const deleteLinkToken = useCallback(async userId => {
+  const deleteLinkToken = useCallback(async (userId: number) => {
     dispatch({
       type: 'DELETE_LINK_TOKEN',
       id: userId,

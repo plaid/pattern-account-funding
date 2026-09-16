@@ -38,11 +38,7 @@ const TransferForm: React.FC<Props> = (props: Props) => {
             onChange={e => setTransferAmount(e.currentTarget.value)}
             className="transfer-funds__input"
           />
-          <Button
-            small
-            secondary
-            onClick={() => props.setShowTransfer(false)}
-          >
+          <Button small secondary onClick={() => props.setShowTransfer(false)}>
             Back
           </Button>
           <Button small type="submit">

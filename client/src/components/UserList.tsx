@@ -33,10 +33,7 @@ const UserList: React.FC = () => {
                 <div className="user-list__name">{user.username}</div>
               </HashLink>
               <div>
-                <Button
-                  small
-                  onClick={() => deleteUserById(user.id)}
-                >
+                <Button small onClick={() => deleteUserById(user.id)}>
                   delete
                 </Button>
               </div>

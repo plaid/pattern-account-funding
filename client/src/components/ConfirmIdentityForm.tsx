@@ -79,11 +79,7 @@ const ConfirmIdentityForm: React.FC<Props> = (props: Props) => {
             />
           </div>
           <div className="add-user__column-3">
-            <Button
-              className="add-user__button"
-              small
-              type="submit"
-            >
+            <Button className="add-user__button" small type="submit">
               Confirm Identity
             </Button>
           </div>

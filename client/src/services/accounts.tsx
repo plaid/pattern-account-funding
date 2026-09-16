@@ -54,7 +54,7 @@ export const AccountsProvider: React.FC<{ children: ReactNode }> = (
   /**
    * @desc Requests all Accounts that belong to an individual Item.
    */
-  const getAccountsByItem = useCallback(async itemId => {
+  const getAccountsByItem = useCallback(async (itemId: number) => {
     const { data: payload } = await apiGetAccountsByItem(itemId);
     dispatch({ type: 'SUCCESSFUL_GET', payload: payload });
   }, []);
@@ -62,7 +62,7 @@ export const AccountsProvider: React.FC<{ children: ReactNode }> = (
   /**
    * @desc Requests all Accounts that belong to an individual User.
    */
-  const getAccountsByUser = useCallback(async userId => {
+  const getAccountsByUser = useCallback(async (userId: number) => {
     const { data: payload } = await apiGetAccountsByUser(userId);
     dispatch({ type: 'SUCCESSFUL_GET', payload: payload });
   }, []);
@@ -71,7 +71,7 @@ export const AccountsProvider: React.FC<{ children: ReactNode }> = (
    * @desc Will delete all accounts that belong to an individual Item.
    * There is no api request as apiDeleteItemById in items delete all related transactions
    */
-  const deleteAccountsByItemId = useCallback(itemId => {
+  const deleteAccountsByItemId = useCallback((itemId: number) => {
     dispatch({ type: 'DELETE_BY_ITEM', payload: itemId });
   }, []);
 
@@ -79,7 +79,7 @@ export const AccountsProvider: React.FC<{ children: ReactNode }> = (
    * @desc Will delete all accounts that belong to an individual User.
    * There is no api request as apiDeleteItemById in items delete all related transactions
    */
-  const deleteAccountsByUserId = useCallback(userId => {
+  const deleteAccountsByUserId = useCallback((userId: number) => {
     dispatch({ type: 'DELETE_BY_USER', payload: userId });
   }, []);
 

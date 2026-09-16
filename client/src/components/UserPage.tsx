@@ -1,4 +1,5 @@
 import React, { useEffect, useState, useCallback } from 'react';
+import axios from 'axios';
 import { Link, RouteComponentProps } from 'react-router-dom';
 import { Institution } from 'plaid/dist/api';
 import { toast } from 'react-toastify';
@@ -59,7 +60,7 @@ const UserPage = ({ match }: RouteComponentProps<RouteInfo>) => {
   const { institutionsById, getInstitutionById } = useInstitutions();
   const userId = Number(match.params.userId);
 
-  const getAppFund = useCallback(async userId => {
+  const getAppFund = useCallback(async (userId: number) => {
     const { data: appFunds } = await getAppFundsByUser(userId);
     setAppFund(appFunds);
   }, []);
@@ -73,9 +74,10 @@ const UserPage = ({ match }: RouteComponentProps<RouteInfo>) => {
         );
         setAccount(newAccount || {});
       } catch (error) {
+        const response = axios.isAxiosError(error) ? error.response : undefined;
         const errorMessage =
-          error?.response?.data?.error_message ||
-          error?.response?.data?.message ||
+          response?.data?.error_message ||
+          response?.data?.message ||
           'Unable to retrieve account balance. Please try updating your login credentials.';
         toast.error(errorMessage);
         console.error('Error fetching balance:', error);
@@ -222,7 +224,10 @@ const UserPage = ({ match }: RouteComponentProps<RouteInfo>) => {
           marginBottom: '0.5rem',
         }}
       >
-        <Link to="/" className="text-sm text-black-700 uppercase tracking-wider hover:text-black-1000 no-underline">
+        <Link
+          to="/"
+          className="text-sm text-black-700 uppercase tracking-wider hover:text-black-1000 no-underline"
+        >
           LOGOUT
         </Link>
         <a
@@ -274,24 +279,26 @@ const UserPage = ({ match }: RouteComponentProps<RouteInfo>) => {
         account={account}
       />
       <ErrorMessage />
-      {numOfItems > 0 && identityHasBeenChecked && user.should_verify_identity && (
-        <>
-          <IdentityVerificationResults
-            userFullname={user.fullname}
-            userEmail={user.email}
-            bankOwnerNames={account?.owner_names || []}
-            bankEmails={account?.emails || []}
-            nameMatch={nameMatch}
-            emailMatch={emailMatch}
-            overallPass={isIdentityChecked}
-            onRetry={() => setShowRetryForm(true)}
-            showRetryForm={showRetryForm}
-          />
-          {!isIdentityChecked && showRetryForm && (
-            <ConfirmIdentityForm userId={userId} setUser={setUser} />
-          )}
-        </>
-      )}
+      {numOfItems > 0 &&
+        identityHasBeenChecked &&
+        user.should_verify_identity && (
+          <>
+            <IdentityVerificationResults
+              userFullname={user.fullname}
+              userEmail={user.email}
+              bankOwnerNames={account?.owner_names || []}
+              bankEmails={account?.emails || []}
+              nameMatch={nameMatch}
+              emailMatch={emailMatch}
+              overallPass={isIdentityChecked}
+              onRetry={() => setShowRetryForm(true)}
+              showRetryForm={showRetryForm}
+            />
+            {!isIdentityChecked && showRetryForm && (
+              <ConfirmIdentityForm userId={userId} setUser={setUser} />
+            )}
+          </>
+        )}
     </div>
   );
 };

@@ -60,7 +60,7 @@ export function ItemsProvider(props: any) {
    * The api request will be bypassed if the data has already been fetched.
    * A 'refresh' parameter can force a request for new data even if local state exists.
    */
-  const getItemById = useCallback(async (id, refresh) => {
+  const getItemById = useCallback(async (id: number, refresh: boolean) => {
     if (!hasRequested.current.byId[id] || refresh) {
       hasRequested.current.byId[id] = true;
       const { data: payload } = await apiGetItemById(id);
@@ -71,7 +71,7 @@ export function ItemsProvider(props: any) {
   /**
    * @desc Requests all Items that belong to an individual User.
    */
-  const getItemsByUser = useCallback(async userId => {
+  const getItemsByUser = useCallback(async (userId: number) => {
     const { data: payload } = await apiGetItemsByUser(userId);
     dispatch({ type: 'SUCCESSFUL_REQUEST', payload: payload });
   }, []);
@@ -80,7 +80,7 @@ export function ItemsProvider(props: any) {
    * @desc Will deletes Item by itemId.
    */
   const deleteItemById = useCallback(
-    async (id, userId) => {
+    async (id: number, userId: number) => {
       await apiDeleteItemById(id);
       dispatch({ type: 'SUCCESSFUL_DELETE', payload: id });
       // Update items list after deletion.
@@ -95,7 +95,7 @@ export function ItemsProvider(props: any) {
    * @desc Will delete all items that belong to an individual User.
    * There is no api request as apiDeleteItemById in items delete all related transactions
    */
-  const deleteItemsByUserId = useCallback(userId => {
+  const deleteItemsByUserId = useCallback((userId: number) => {
     dispatch({ type: 'DELETE_BY_USER', payload: userId });
   }, []);
 
