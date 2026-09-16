@@ -60,6 +60,15 @@ const itemsHandler = async (requestBody, io) => {
     if (webhookCode) io.emit(webhookCode, { itemId, errorCode });
   };
 
+  // Deliberately logs without emitting: the client's listeners feed itemId
+  // straight into getItemById, so emitting a null id would make every
+  // connected client request /items/null and surface an error toast.
+  const logMissingItem = () => {
+    console.log(
+      `WEBHOOK: ITEMS: ${webhookCode}: Plaid item id ${plaidItemId}: no matching item, ignoring`
+    );
+  };
+
   switch (webhookCode) {
     case 'WEBHOOK_UPDATE_ACKNOWLEDGED':
       serverLogAndEmitSocket('is updated', plaidItemId, error);
@@ -67,9 +76,13 @@ const itemsHandler = async (requestBody, io) => {
     case 'ERROR': {
       await itemErrorHandler(plaidItemId, error);
       const item = await retrieveItemByPlaidItemId(plaidItemId);
+      if (item == null) {
+        logMissingItem();
+        break;
+      }
       serverLogAndEmitSocket(
         `ERROR: ${error.error_code}: ${error.error_message}`,
-        item == null ? null : item.id,
+        item.id,
         error.error_code
       );
       break;
@@ -78,7 +91,7 @@ const itemsHandler = async (requestBody, io) => {
     case 'PENDING_EXPIRATION': {
       const item = await retrieveItemByPlaidItemId(plaidItemId);
       if (item == null) {
-        serverLogAndEmitSocket('no matching item, ignoring', null, error);
+        logMissingItem();
         break;
       }
       await updateItemStatus(item.id, 'bad');
