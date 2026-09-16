@@ -67,6 +67,3 @@ dist/
 
 # vscode
 .vscode/
-
-# Playwright MCP local browser artifacts
-.playwright-mcp/
