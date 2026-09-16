@@ -52,12 +52,21 @@ const errorHandler = (err, req, res, next) => {
   // handle standard javascript errors.
   if (!error.isBoom) {
     // Errors raised by middleware such as body-parser carry their own HTTP
-    // status: a malformed JSON body is the caller's fault, not ours. Boom
-    // defaults to 500, so pass the status through when there is one.
+    // status: a malformed JSON body is the caller's fault, not ours.
+    //
+    // Only 4xx is honored. A 5xx is still our failure, and Boom masks the
+    // response message on exactly 500 and no higher, so passing 501+ through
+    // would leak internal error text. Axios errors are excluded because
+    // their status describes an upstream response, not this request: a
+    // misconfigured credential that makes a vendor answer 401 is a fault on
+    // our side, not the caller's.
     const status = error.status || error.statusCode;
-    const isClientOrServerStatus =
-      Number.isInteger(status) && status >= 400 && status <= 599;
-    error = isClientOrServerStatus
+    const isClientError =
+      !error.isAxiosError &&
+      Number.isInteger(status) &&
+      status >= 400 &&
+      status < 500;
+    error = isClientError
       ? Boom.boomify(error, { statusCode: status })
       : Boom.boomify(error);
   }
