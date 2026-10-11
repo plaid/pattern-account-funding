@@ -24,8 +24,8 @@ router.get(
     count = parseInt(count, radix);
     offset = parseInt(offset, radix);
     const request = {
-      count: count,
-      offset: offset,
+      count,
+      offset,
       country_codes: ['US'],
       options: {
         include_optional_metadata: true,
@@ -33,7 +33,7 @@ router.get(
     };
 
     const response = await plaid.institutionsGet(request);
-    const institutions = response.data.institutions;
+    const { institutions } = response.data;
     res.json(toArray(institutions));
   })
 );
@@ -55,35 +55,25 @@ router.get(
         include_optional_metadata: true,
       },
     };
-    try {
-      const response = await plaid.institutionsGetById(request);
-      const institution = response.data.institution;
-      const {
-        country_codes,
-        institution_id,
-        name,
-        oauth,
-        primary_color,
-        products,
-        routing_numbers,
-        url,
-      } = institution;
-
-      const responseData = {
-        data: {
-          country_codes,
-          institution_id,
-          name,
-          oauth,
-          primary_color,
-          products,
-          routing_numbers,
-          url,
-        },
-      };
-      prettyPrintResponse(responseData);
-      res.json(toArray(institution));
-    } catch (error) {}
+    const response = await plaid.institutionsGetById(request);
+    const { institution } = response.data;
+    const loggedFields = [
+      'country_codes',
+      'institution_id',
+      'name',
+      'oauth',
+      'primary_color',
+      'products',
+      'routing_numbers',
+      'url',
+    ];
+    const responseData = {
+      data: Object.fromEntries(
+        loggedFields.map(field => [field, institution[field]])
+      ),
+    };
+    prettyPrintResponse(responseData);
+    res.json(toArray(institution));
   })
 );
 

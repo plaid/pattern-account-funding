@@ -14,7 +14,6 @@ const {
   updateIdentityCheck,
   retrieveUserById,
   updateUserInfo,
-  updateAppFundsBalance,
   createAppFund,
 } = require('../db/queries');
 const { asyncWrapper } = require('../middleware');
@@ -52,7 +51,9 @@ router.post(
     const usernameExists = await retrieveUserByUsername(username);
     // prevent duplicates
     if (usernameExists)
-      throw Boom.boomify(new Error('Username already exists'), { statusCode: 409 });
+      throw Boom.boomify(new Error('Username already exists'), {
+        statusCode: 409,
+      });
     const newUser = await createUser(
       username,
       fullname,

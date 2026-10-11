@@ -7,7 +7,6 @@ const axios = require('axios');
 const Boom = require('@hapi/boom');
 const {
   retrieveItemById,
-  retrieveItemByPlaidInstitutionId,
   retrieveAccountsByItemId,
   createItem,
   deleteItem,
@@ -27,8 +26,8 @@ const {
 
 const router = express.Router();
 
-const DWOLLA_ACCESS_TOKEN = process.env.DWOLLA_ACCESS_TOKEN;
-const DWOLLA_MASTER_ACCOUNT_ID = process.env.DWOLLA_MASTER_ACCOUNT_ID;
+const { DWOLLA_ACCESS_TOKEN } = process.env;
+const { DWOLLA_MASTER_ACCOUNT_ID } = process.env;
 const DWOLLA_BASE_URL = 'https://api-sandbox.dwolla.com';
 
 /**
@@ -49,8 +48,8 @@ const createDwollaCustomer = async (firstName, lastName) => {
   const response = await axios.post(
     `${DWOLLA_BASE_URL}/customers`,
     {
-      firstName: firstName,
-      lastName: lastName,
+      firstName,
+      lastName,
       email: `${Math.random() // because Dwolla does not allow identical emails, and sandbox data is always the same.
         .toString(36)
         .slice(2)}@sampleApp.com`,
@@ -123,12 +122,14 @@ router.post(
     const savingsAccount = accounts.filter(
       account => account.subtype === 'savings'
     );
-    const account =
-      accounts.length === 1
-        ? accounts[0]
-        : checkingAccount.length > 0
-        ? checkingAccount[0]
-        : savingsAccount[0];
+    let account;
+    if (accounts.length === 1) {
+      [account] = accounts;
+    } else if (checkingAccount.length > 0) {
+      [account] = checkingAccount;
+    } else {
+      [account] = savingsAccount;
+    }
 
     // the request is the same for both auth and identity calls
     const authAndIdRequest = {
@@ -160,13 +161,13 @@ router.post(
     };
     if (isIdentity) {
       const identityResponse = await plaid.identityGet(authAndIdRequest);
-      emails = identityResponse.data.accounts[0].owners[0].emails.map(email => {
-        return email.data;
-      });
+      emails = identityResponse.data.accounts[0].owners[0].emails.map(
+        email => email.data
+      );
 
       ownerNames = identityResponse.data.accounts[0].owners[0].names;
       const fullName = ownerNames[0].split(' ');
-      firstName = fullName[0];
+      [firstName] = fullName;
       lastName = fullName[fullName.length - 1];
 
       if (isProcessor) {
@@ -181,7 +182,7 @@ router.post(
 
     if (!isProcessor) {
       const authResponse = await plaid.authGet(authAndIdRequest);
-      authNumbers = authResponse.data.numbers.ach[0];
+      [authNumbers] = authResponse.data.numbers.ach;
       balances = authResponse.data.accounts[0].balances;
     } else {
       const processorRequest = {
@@ -189,9 +190,8 @@ router.post(
         account_id: account.id,
         processor: 'dwolla',
       };
-      const processorTokenResponse = await plaid.processorTokenCreate(
-        processorRequest
-      );
+      const processorTokenResponse =
+        await plaid.processorTokenCreate(processorRequest);
       processorToken = processorTokenResponse.data.processor_token;
 
       // create Dwolla Customer and obtain customer url
@@ -272,7 +272,7 @@ router.post(
     const confirmedAmount = confirmedTransfer.data.amount.value;
 
     const transfer = await createTransfer(itemId, confirmedAmount, transUrl);
-    res.json({ transfer: transfer });
+    res.json({ transfer });
   })
 );
 /**
@@ -304,7 +304,9 @@ router.put(
 
     if (status) {
       if (!isValidItemStatus(status)) {
-        const error = new Error('Cannot set item status. Please use an accepted value.');
+        const error = new Error(
+          'Cannot set item status. Please use an accepted value.'
+        );
         error.acceptedValues = [validItemStatuses.values()];
         throw Boom.boomify(error, { statusCode: 400 });
       }
@@ -375,10 +377,12 @@ router.post(
     }
 
     const { plaid_access_token: accessToken } = await retrieveItemById(itemId);
-    const RULESET_KEY = process.env.RULESET_KEY;
+    const { RULESET_KEY } = process.env;
 
     if (!RULESET_KEY) {
-      const baseError = new Error('RULESET_KEY is not configured in environment variables. Please add it to your .env file.');
+      const baseError = new Error(
+        'RULESET_KEY is not configured in environment variables. Please add it to your .env file.'
+      );
       const error = Boom.boomify(baseError, {
         statusCode: 503, // Service Unavailable
       });
@@ -396,7 +400,7 @@ router.post(
     const signalRequest = {
       access_token: accessToken,
       account_id: accountId,
-      client_transaction_id: clientTransactionId,  // Unique ID to track this proposed transaction
+      client_transaction_id: clientTransactionId, // Unique ID to track this proposed transaction
       amount: parseFloat(amount),
       client_user_id: userId.toString(),
       ruleset_key: RULESET_KEY,
@@ -404,7 +408,7 @@ router.post(
 
     const signalResponse = await plaid.signalEvaluate(signalRequest);
 
-    const ruleset = signalResponse.data.ruleset;
+    const { ruleset } = signalResponse.data;
     const outcome = ruleset?.result;
     const isAccepted = outcome?.toUpperCase() === 'ACCEPT';
     const coreAttributes = signalResponse.data.core_attributes || {};
@@ -412,11 +416,11 @@ router.post(
     // Return the complete signal evaluation result
     res.json({
       is_accepted: isAccepted,
-      outcome: outcome,
+      outcome,
       ruleset_key: ruleset?.ruleset_key,
       client_transaction_id: clientTransactionId,
       core_attributes: coreAttributes,
-      ruleset: ruleset,
+      ruleset,
       scores: signalResponse.data.scores,
       warnings: signalResponse.data.warnings,
     });
@@ -481,9 +485,8 @@ router.post(
   asyncWrapper(async (req, res) => {
     try {
       const { itemId } = req.body;
-      const { plaid_access_token: accessToken } = await retrieveItemById(
-        itemId
-      );
+      const { plaid_access_token: accessToken } =
+        await retrieveItemById(itemId);
       const resetResponse = await plaid.sandboxItemResetLogin({
         access_token: accessToken,
       });

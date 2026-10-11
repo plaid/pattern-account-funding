@@ -54,7 +54,7 @@ router.put(
     const newAccount = await retrieveAccountByPlaidAccountId(accountId);
     const response = {
       newAccount,
-      newAppFunds: newAppFunds,
+      newAppFunds,
     };
     res.json(response);
   })

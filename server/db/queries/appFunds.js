@@ -2,7 +2,7 @@
  * @file Defines the queries for the app_funds table/views.
  */
 
-const db = require('../');
+const db = require('..');
 
 /**
  * Creates an app fund account.
@@ -13,8 +13,7 @@ const db = require('../');
 const createAppFund = async userId => {
   const query = {
     // RETURNING is a Postgres-specific clause that returns a list of the inserted appfunds.
-    text:
-      'INSERT INTO app_funds_table (user_id, balance) VALUES ($1, $2) RETURNING *;',
+    text: 'INSERT INTO app_funds_table (user_id, balance) VALUES ($1, $2) RETURNING *;',
     values: [userId, 0],
   };
   const { rows } = await db.query(query);

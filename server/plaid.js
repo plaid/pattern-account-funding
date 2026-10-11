@@ -20,11 +20,9 @@ const {
   PLAID_SECRET_SANDBOX,
 } = process.env;
 
-// The Plaid secret is unique per environment. 
+// The Plaid secret is unique per environment.
 const PLAID_SECRET =
   PLAID_ENV === 'production' ? PLAID_SECRET_PRODUCTION : PLAID_SECRET_SANDBOX;
-
-const OPTIONS = { clientApp: 'Plaid-Pattern' };
 
 // We want to log requests to / responses from the Plaid API (via the Plaid client), as this data
 // can be useful for troubleshooting.
@@ -39,9 +37,8 @@ const OPTIONS = { clientApp: 'Plaid-Pattern' };
  */
 const defaultLogger = async (clientMethod, clientMethodArgs, response) => {
   const accessToken = clientMethodArgs[0].access_token;
-  const { id: itemId, user_id: userId } = await retrieveItemByPlaidAccessToken(
-    accessToken
-  );
+  const { id: itemId, user_id: userId } =
+    await retrieveItemByPlaidAccessToken(accessToken);
   await createPlaidApiEvent(
     itemId,
     userId,
@@ -75,8 +72,8 @@ const noAccessTokenLogger = async (
   // institutionsGet response is way too big to console.log due to the logo field.
   // this endpoint is logged specifically inside the route in routes/institution.js
   if (
-    clientMethod != 'institutionsGet' &&
-    clientMethod != 'institutionsGetById'
+    clientMethod !== 'institutionsGet' &&
+    clientMethod !== 'institutionsGetById'
   ) {
     prettyPrintResponse(response);
   }
@@ -104,7 +101,9 @@ class PlaidClientWrapper {
     // Initialize the Plaid client.
 
     if (!PLAID_CLIENT_ID || !PLAID_SECRET) {
-      console.error('⚠️  Plaid API keys are not configured. PLAID_CLIENT_ID and PLAID_SECRET must be set.');
+      console.error(
+        '⚠️  Plaid API keys are not configured. PLAID_CLIENT_ID and PLAID_SECRET must be set.'
+      );
     }
 
     const configuration = new Configuration({

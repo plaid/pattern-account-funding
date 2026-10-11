@@ -11,9 +11,8 @@ const Boom = require('@hapi/boom');
  * @param {Function} fn an async callback.
  * @returns {Function} an Express callback that resolves the wrapped async fn.
  */
-const asyncWrapper = fn => (req, res, next) => {
-  return Promise.resolve(fn(req, res, next)).catch(next);
-};
+const asyncWrapper = fn => (req, res, next) =>
+  Promise.resolve(fn(req, res, next)).catch(next);
 
 /**
  * A catch-all error handler that sends a formatted JSON response.
@@ -26,6 +25,8 @@ const asyncWrapper = fn => (req, res, next) => {
  * @param {Object} res the Express response object.
  * @param {Function} next the Express next callback.
  */
+// Express identifies error handlers by their four-argument signature, so next must stay.
+// eslint-disable-next-line no-unused-vars
 const errorHandler = (err, req, res, next) => {
   let error = err;
 
@@ -35,13 +36,18 @@ const errorHandler = (err, req, res, next) => {
 
   // handle errors from the Plaid api (SDK v39+ uses response.data structure)
   if (error.response && error.response.data) {
-    const { error_type, error_code, error_message, display_message } = error.response.data;
+    const {
+      error_type: errorType,
+      error_code: errorCode,
+      error_message: errorMessage,
+      display_message: displayMessage,
+    } = error.response.data;
     const statusCode = error.response.status || 500;
-    const message = display_message || error_message || 'Plaid API error';
+    const message = displayMessage || errorMessage || 'Plaid API error';
     const baseError = new Error(message);
     error = Boom.boomify(baseError, {
       statusCode,
-      data: { error_type, error_code }
+      data: { error_type: errorType, error_code: errorCode },
     });
   } else if (error.name === 'PlaidError') {
     // Fallback for older SDK versions
@@ -80,9 +86,7 @@ const errorHandler = (err, req, res, next) => {
   const { statusCode, payload } = error.output;
 
   // Include custom data (error_type, error_code) from Boom if present
-  const response = error.data
-    ? { ...payload, data: error.data }
-    : payload;
+  const response = error.data ? { ...payload, data: error.data } : payload;
 
   res.status(statusCode).json(response);
 };

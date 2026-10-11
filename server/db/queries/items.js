@@ -2,7 +2,7 @@
  * @file Defines the queries for the items table/view.
  */
 
-const db = require('../');
+const db = require('..');
 
 /**
  * Creates a single item.
@@ -80,8 +80,7 @@ const retrieveItemByPlaidAccessToken = async accessToken => {
  */
 const retrieveItemByPlaidInstitutionId = async (plaidInstitutionId, userId) => {
   const query = {
-    text:
-      'SELECT * FROM items WHERE plaid_institution_id = $1 AND user_id = $2',
+    text: 'SELECT * FROM items WHERE plaid_institution_id = $1 AND user_id = $2',
     values: [plaidInstitutionId, userId],
   };
   const { rows: existingItems } = await db.query(query);

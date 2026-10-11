@@ -2,7 +2,7 @@
  * @file Defines the queries for the users table/views.
  */
 
-const db = require('../');
+const db = require('..');
 
 /**
  * Creates a single user.
@@ -14,8 +14,7 @@ const db = require('../');
 const createUser = async (username, fullname, email, shouldVerifyIdentity) => {
   const query = {
     // RETURNING is a Postgres-specific clause that returns a list of the inserted items.
-    text:
-      'INSERT INTO users_table (username, fullname, email, identity_check, should_verify_identity) VALUES ($1, $2, $3, $4, $5) RETURNING *;',
+    text: 'INSERT INTO users_table (username, fullname, email, identity_check, should_verify_identity) VALUES ($1, $2, $3, $4, $5) RETURNING *;',
     values: [username, fullname, email, false, shouldVerifyIdentity],
   };
   const { rows } = await db.query(query);

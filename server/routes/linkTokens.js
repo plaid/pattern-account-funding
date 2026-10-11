@@ -2,19 +2,17 @@
  * @file Defines the route for link token creation.
  */
 
+const express = require('express');
 const { asyncWrapper } = require('../middleware');
 
-const express = require('express');
 const plaid = require('../plaid');
 const { retrieveItemById } = require('../db/queries');
-const {
-  PLAID_SANDBOX_REDIRECT_URI,
-  PLAID_PRODUCTION_REDIRECT_URI,
-  PLAID_ENV,
-} = process.env;
 
-const redirect_uri =
-  PLAID_ENV == 'sandbox'
+const { PLAID_SANDBOX_REDIRECT_URI, PLAID_PRODUCTION_REDIRECT_URI, PLAID_ENV } =
+  process.env;
+
+const redirectUri =
+  PLAID_ENV === 'sandbox'
     ? PLAID_SANDBOX_REDIRECT_URI
     : PLAID_PRODUCTION_REDIRECT_URI;
 const router = express.Router();
@@ -41,7 +39,7 @@ router.post(
         const { tunnels } = await response.json();
         const tunnel = tunnels.find(t => t.proto === 'https') || tunnels[0];
         if (tunnel) {
-          webhookUrl = tunnel.public_url + '/services/webhook';
+          webhookUrl = `${tunnel.public_url}/services/webhook`;
         }
       } catch (ngrokErr) {
         console.log('ngrok not available, webhook will not be configured');
@@ -50,7 +48,7 @@ router.post(
       const linkTokenParams = {
         user: {
           // This should correspond to a unique id for the current user.
-          client_user_id: 'uniqueId' + userId,
+          client_user_id: `uniqueId${userId}`,
         },
         client_name: 'Pattern',
         products,
@@ -64,25 +62,34 @@ router.post(
       }
 
       // If user has entered a redirect uri in the .env file
-      if (redirect_uri.indexOf('http') === 0) {
-        linkTokenParams.redirect_uri = redirect_uri;
+      if (redirectUri.indexOf('http') === 0) {
+        linkTokenParams.redirect_uri = redirectUri;
       }
       const createResponse = await plaid.linkTokenCreate(linkTokenParams);
       res.json(createResponse.data);
     } catch (err) {
-      console.log('error while fetching client token', err.response?.data || err.message || err);
+      console.log(
+        'error while fetching client token',
+        err.response?.data || err.message || err
+      );
 
-      let errorMessage = err.message || 'An error occurred while creating link token';
+      let errorMessage =
+        err.message || 'An error occurred while creating link token';
 
-      if (err.message && (err.message.includes('PLAID-CLIENT-ID') || err.message.includes('PLAID-SECRET'))) {
-        errorMessage = 'Plaid API keys are not configured. Please add PLAID_CLIENT_ID and PLAID_SECRET_SANDBOX to your .env file.';
+      if (
+        err.message &&
+        (err.message.includes('PLAID-CLIENT-ID') ||
+          err.message.includes('PLAID-SECRET'))
+      ) {
+        errorMessage =
+          'Plaid API keys are not configured. Please add PLAID_CLIENT_ID and PLAID_SECRET_SANDBOX to your .env file.';
       }
 
       const errorResponse = err.response?.data || {
         error: 'Internal Server Error',
-        message: errorMessage
+        message: errorMessage,
       };
-      return res.status(500).json(errorResponse);
+      res.status(500).json(errorResponse);
     }
   })
 );
