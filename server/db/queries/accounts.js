@@ -3,7 +3,7 @@
  */
 
 const { retrieveItemByPlaidItemId } = require('./items');
-const db = require('../');
+const db = require('..');
 
 /**
  * Creates multiple accounts related to a single item.
@@ -149,8 +149,7 @@ const retrieveAccountsByItemId = async itemId => {
  */
 const updateBalances = async (accountId, currentBalance, availableBalance) => {
   const query = {
-    text:
-      'UPDATE accounts SET current_balance = $1, available_balance = $2  WHERE plaid_account_id = $3 RETURNING *',
+    text: 'UPDATE accounts SET current_balance = $1, available_balance = $2  WHERE plaid_account_id = $3 RETURNING *',
     values: [currentBalance, availableBalance, accountId],
   };
   const { rows: accounts } = await db.query(query);
@@ -165,8 +164,7 @@ const updateBalances = async (accountId, currentBalance, availableBalance) => {
  */
 const updateTransfers = async (accountId, numberOfTransfers) => {
   const query = {
-    text:
-      'UPDATE accounts SET number_of_transfers = $1  WHERE plaid_account_id = $2',
+    text: 'UPDATE accounts SET number_of_transfers = $1  WHERE plaid_account_id = $2',
     values: [numberOfTransfers, accountId],
   };
   const { rows: accounts } = await db.query(query);

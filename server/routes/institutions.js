@@ -24,8 +24,8 @@ router.get(
     count = parseInt(count, radix);
     offset = parseInt(offset, radix);
     const request = {
-      count: count,
-      offset: offset,
+      count,
+      offset,
       country_codes: ['US'],
       options: {
         include_optional_metadata: true,
@@ -33,7 +33,7 @@ router.get(
     };
 
     const response = await plaid.institutionsGet(request);
-    const institutions = response.data.institutions;
+    const { institutions } = response.data;
     res.json(toArray(institutions));
   })
 );
@@ -57,7 +57,7 @@ router.get(
     };
     try {
       const response = await plaid.institutionsGetById(request);
-      const institution = response.data.institution;
+      const { institution } = response.data;
       const {
         country_codes,
         institution_id,
