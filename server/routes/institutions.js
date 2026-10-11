@@ -55,27 +55,25 @@ router.get(
         include_optional_metadata: true,
       },
     };
-    try {
-      const response = await plaid.institutionsGetById(request);
-      const { institution } = response.data;
-      const loggedFields = [
-        'country_codes',
-        'institution_id',
-        'name',
-        'oauth',
-        'primary_color',
-        'products',
-        'routing_numbers',
-        'url',
-      ];
-      const responseData = {
-        data: Object.fromEntries(
-          loggedFields.map(field => [field, institution[field]])
-        ),
-      };
-      prettyPrintResponse(responseData);
-      res.json(toArray(institution));
-    } catch (error) {}
+    const response = await plaid.institutionsGetById(request);
+    const { institution } = response.data;
+    const loggedFields = [
+      'country_codes',
+      'institution_id',
+      'name',
+      'oauth',
+      'primary_color',
+      'products',
+      'routing_numbers',
+      'url',
+    ];
+    const responseData = {
+      data: Object.fromEntries(
+        loggedFields.map(field => [field, institution[field]])
+      ),
+    };
+    prettyPrintResponse(responseData);
+    res.json(toArray(institution));
   })
 );
 
