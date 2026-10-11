@@ -7,7 +7,6 @@ const axios = require('axios');
 const Boom = require('@hapi/boom');
 const {
   retrieveItemById,
-  retrieveItemByPlaidInstitutionId,
   retrieveAccountsByItemId,
   createItem,
   deleteItem,
@@ -123,12 +122,14 @@ router.post(
     const savingsAccount = accounts.filter(
       account => account.subtype === 'savings'
     );
-    const account =
-      accounts.length === 1
-        ? accounts[0]
-        : checkingAccount.length > 0
-          ? checkingAccount[0]
-          : savingsAccount[0];
+    let account;
+    if (accounts.length === 1) {
+      [account] = accounts;
+    } else if (checkingAccount.length > 0) {
+      [account] = checkingAccount;
+    } else {
+      [account] = savingsAccount;
+    }
 
     // the request is the same for both auth and identity calls
     const authAndIdRequest = {
@@ -166,7 +167,7 @@ router.post(
 
       ownerNames = identityResponse.data.accounts[0].owners[0].names;
       const fullName = ownerNames[0].split(' ');
-      firstName = fullName[0];
+      [firstName] = fullName;
       lastName = fullName[fullName.length - 1];
 
       if (isProcessor) {
@@ -181,7 +182,7 @@ router.post(
 
     if (!isProcessor) {
       const authResponse = await plaid.authGet(authAndIdRequest);
-      authNumbers = authResponse.data.numbers.ach[0];
+      [authNumbers] = authResponse.data.numbers.ach;
       balances = authResponse.data.accounts[0].balances;
     } else {
       const processorRequest = {

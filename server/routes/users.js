@@ -14,7 +14,6 @@ const {
   updateIdentityCheck,
   retrieveUserById,
   updateUserInfo,
-  updateAppFundsBalance,
   createAppFund,
 } = require('../db/queries');
 const { asyncWrapper } = require('../middleware');

@@ -24,8 +24,6 @@ const {
 const PLAID_SECRET =
   PLAID_ENV === 'production' ? PLAID_SECRET_PRODUCTION : PLAID_SECRET_SANDBOX;
 
-const OPTIONS = { clientApp: 'Plaid-Pattern' };
-
 // We want to log requests to / responses from the Plaid API (via the Plaid client), as this data
 // can be useful for troubleshooting.
 
@@ -74,8 +72,8 @@ const noAccessTokenLogger = async (
   // institutionsGet response is way too big to console.log due to the logo field.
   // this endpoint is logged specifically inside the route in routes/institution.js
   if (
-    clientMethod != 'institutionsGet' &&
-    clientMethod != 'institutionsGetById'
+    clientMethod !== 'institutionsGet' &&
+    clientMethod !== 'institutionsGetById'
   ) {
     prettyPrintResponse(response);
   }
