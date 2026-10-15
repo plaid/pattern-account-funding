@@ -18,7 +18,7 @@ Plaid sample apps are provided for illustrative purposes and are not meant to be
 
 ## Requirements
 
--   [Node.js](https://nodejs.org/) v20 or higher
+-   [Node.js](https://nodejs.org/) v20.19+ or v22.12+
 -   [PostgreSQL](https://www.postgresql.org/) v16 or higher
 -   [Plaid API keys][plaid-keys] - [sign up][plaid-signup] for a free Sandbox account if you don't already have one
 -   [ngrok](https://ngrok.com/) for webhook testing - [sign up for free](https://dashboard.ngrok.com/signup) if you don't already have an account
@@ -27,7 +27,8 @@ Plaid sample apps are provided for illustrative purposes and are not meant to be
 
 **macOS (Homebrew):**
 ```shell
-brew install node@20 postgresql@16 ngrok
+brew install node postgresql@16 ngrok
+brew link --force postgresql@16
 brew services start postgresql@16
 ```
 
@@ -70,8 +71,9 @@ sudo systemctl start postgresql
     npm run install:all
     ```
 
-1. Set up the database.
+1. Set up the database. Create a `postgres` superuser if one doesn't exist, then create and initialize the database.
     ```shell
+    createuser -s postgres  # skip if the postgres role already exists
     npm run db:create
     ```
 
@@ -145,7 +147,7 @@ The Pattern web client is written in JavaScript using [React]. It presents a bas
 
 ### Communicating with the server
 
-Aside from websocket listeners (see below), all HTTP calls to the Pattern server are defined in `src/services/api.js`.
+Aside from websocket listeners (see below), all HTTP calls to the Pattern server are defined in `client/src/services/api.tsx`.
 
 ### Rendering Link
 
@@ -199,7 +201,7 @@ This sample app uses Dwolla sandbox to demonstrate the transferring of funds wit
 
 3. After logging in, create a temporary access token by clicking on the "Create Token" button on Dwolla's dashboard [Applications Page](https://dashboard-sandbox.dwolla.com/applications-legacy). Copy this token and add it to the .env file as `DWOLLA_ACCESS_TOKEN`. This is a temporary access token issued by Dwolla which is good for one hour.
 4. Go to your Dwolla [Master Account Funding Source](https://dashboard-sandbox.dwolla.com/account/funding-sources) on the dashboard and obtain your id from your Superhero Savings Bank. This is the very last number in the smaller white box on the bottom left corner of the page. Enter this id in the .env file as the `DWOLLA_MASTER_ACCOUNT_ID`.
-5. Finally, make sure that `IS_PROCESSOR` is set to `true` in the .env file.
+5. Finally, set `VITE_IS_PROCESSOR` to `true` in the .env file and restart the client.
 
 ### Verifying and transferring funds
 
@@ -290,8 +292,6 @@ Browse to [localhost:4040](http://localhost:4040/inspect/http) to see the ngrok 
 
 Don't want to use ngrok? As long as you serve the app with an endpoint that is publicly exposed, all the Plaid webhooks will work.
 
-ngrok's free account has a session limit of 8 hours.
-
 ## Troubleshooting
 
 If you're experiencing oddities in the app, here are some common problems and their possible solutions.
@@ -300,7 +300,7 @@ If you're experiencing oddities in the app, here are some common problems and th
 
 ### My 'reset login' button does not work
 
-For webhooks to work, the server must be publicly accessible on the internet. For development purposes, this application uses [ngrok](https://ngrok.com/) to accomplish that. Therefore, if the server is re-started, any items created in this sample app previous to the current session will have a different webhook address attached to it. As a result, webhooks are only valid during the session in which an item is created; for previously created items, no webhook will be received from the call to sandboxItemResetLogin. In addition, ngrok webhook addresses are only valid for 2 hours. If you are not receiving webhooks in this sample application, restart your server to reset the ngrok webhook address.
+For webhooks to work, the server must be publicly accessible on the internet. For development purposes, this application uses [ngrok](https://ngrok.com/) to accomplish that. Therefore, if the server is re-started, any items created in this sample app previous to the current session will have a different webhook address attached to it. As a result, webhooks are only valid during the session in which an item is created; for previously created items, no webhook will be received from the call to sandboxItemResetLogin.
 
 ### Changes to `.env` file not taking effect
 
