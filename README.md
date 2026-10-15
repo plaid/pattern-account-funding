@@ -38,8 +38,8 @@ We recommend using [WSL](https://learn.microsoft.com/en-us/windows/wsl/install) 
 
 **Linux (Ubuntu/Debian):**
 ```shell
-# Node.js v20
-curl -fsSL https://deb.nodesource.com/setup_20.x | sudo -E bash -
+# Node.js v22
+curl -fsSL https://deb.nodesource.com/setup_22.x | sudo -E bash -
 sudo apt-get install -y nodejs
 
 # PostgreSQL
@@ -76,6 +76,11 @@ sudo systemctl start postgresql
     createuser -s postgres  # skip if the postgres role already exists
     npm run db:create
     ```
+    On Linux/WSL, the `postgres` role already exists but only accepts local connections from the `postgres` OS user. Instead of the commands above, set a password for it (matching `POSTGRES_PASSWORD` in `.env`) and create the database over TCP:
+    ```shell
+    sudo -u postgres psql -c "ALTER USER postgres PASSWORD 'password';"
+    PGHOST=localhost PGPASSWORD=password npm run db:create
+    ```
 
 1. Configure ngrok for webhooks.
     ```shell
@@ -83,7 +88,7 @@ sudo systemctl start postgresql
     ```
     Get your authtoken at https://dashboard.ngrok.com/get-started/your-authtoken.
 
-1. (Optional, only required if using an OAuth redirect URI) You will also need to configure an allowed redirect URI for your client ID through the [Plaid developer dashboard](https://dashboard.plaid.com/team/api).
+1. (Optional, only required if using an OAuth redirect URI) You will also need to configure an allowed redirect URI for your client ID through the [Plaid developer dashboard](https://dashboard.plaid.com/developers/api).
 
 1. Start the application. You'll need three separate terminal windows:
 
@@ -141,7 +146,7 @@ As a modern full-stack application, Pattern consists of multiple services handli
 
 # Plaid Pattern - Client
 
-The Pattern web client is written in JavaScript using [React]. It presents a basic [Link][plaid-link] workflow to the user, including an implementation of [OAuth][plaid-oauth] as well as a demonstration of [Link update mode][plaid-link-update-mode]. The sample app allows you to choose to use identification mode, where an end user must input the name and email associated with their financial institution. The app runs on port 3002 by default.
+The Pattern web client is written in TypeScript using [React]. It presents a basic [Link][plaid-link] workflow to the user, including an implementation of [OAuth][plaid-oauth] as well as a demonstration of [Link update mode][plaid-link-update-mode]. The sample app allows you to choose to use identification mode, where an end user must input the name and email associated with their financial institution. The app runs on port 3002 by default.
 
 ## Key concepts
 
@@ -177,13 +182,13 @@ Plaid does not have a user data object for tying multiple items together, so it 
 
 Plaid uses [webhooks][error-webhooks] to notify you whenever an item enters an error state. If a user needs to update their login information at their financial institution, an item will display an ITEM_LOGIN_REQUIRED error. This sample app demonstrates the use of the sandboxItemResetLogin endpoint to test this webhook. For an example of this, see the [items webhook handler][items-handler].
 
-For webhooks to work, the server must be publicly accessible on the internet. For development purposes, this application uses [ngrok](https://ngrok.com/) to accomplish that. Therefore, if the server is re-started, any items created in this sample app previous to the current session will have a different webhook address attached to it. As a result, webhooks are only valid during the session in which an item is created; for previously created items no webhook will be received from the call to sandboxItemResetLogin.
+For webhooks to work, the server must be publicly accessible on the internet. For development purposes, this application uses [ngrok](https://ngrok.com/) to accomplish that. Each item is registered with the ngrok URL that was active when it was created. ngrok's free plan assigns your account one stable dev domain, so restarting ngrok or the server keeps the same URL. If the URL changes (for example, you switch ngrok accounts), items created before the change will receive no webhook from the call to sandboxItemResetLogin.
 
 ### Testing OAuth
 
 The `linkTokenCreate` call includes a `redirect_uri` parameter, which the server applications reads from the `PLAID_SANDBOX_REDIRECT_URI` entry in the .env file (This value should be `http://localhost:3002/oauth-link`). This is the page that the user will be redirected to upon completion of the OAuth flow at their OAuth institution. When running in Production, you will need to use an `https://` redirect URI, but a `http://` URI will work for Sandbox.
 
-You will also need to add `http://localhost:3002/oauth-link` as an allowed redirect URI for your client ID in API section of the [Plaid developer dashboard](https://dashboard.plaid.com/team/api).
+You will also need to add `http://localhost:3002/oauth-link` as an allowed redirect URI for your client ID in API section of the [Plaid developer dashboard](https://dashboard.plaid.com/developers/api).
 
 To test the OAuth flow, choose 'Platypus OAuth Bank' from the list of financial institutions in Plaid Link.
 
@@ -195,7 +200,7 @@ This sample app can also demonstrate the creation of a processor token for use w
 
 This sample app uses Dwolla sandbox to demonstrate the transferring of funds with a Plaid partner. Dwolla is just one of the many [payment providers](https://plaid.com/docs/auth/partnerships/) who have partnered with Plaid. To test out the Dwolla sandbox flow, follow these steps:
 
-1. Go to your [Plaid developer dashboard Integrations page](https://dashboard.plaid.com/team/integrations). Scroll down to Dwolla and click on the "enable" button.
+1. Go to your [Plaid developer dashboard Integrations page](https://dashboard.plaid.com/developers/integrations). Scroll down to Dwolla and click on the "enable" button.
 
 2. Head to the [Dwolla site](https://developers.dwolla.com/docs/testing) and create a sandbox account by clicking the `Get API Keys` button and following the sign up instructions.
 
@@ -300,7 +305,7 @@ If you're experiencing oddities in the app, here are some common problems and th
 
 ### My 'reset login' button does not work
 
-For webhooks to work, the server must be publicly accessible on the internet. For development purposes, this application uses [ngrok](https://ngrok.com/) to accomplish that. Therefore, if the server is re-started, any items created in this sample app previous to the current session will have a different webhook address attached to it. As a result, webhooks are only valid during the session in which an item is created; for previously created items, no webhook will be received from the call to sandboxItemResetLogin.
+For webhooks to work, the server must be publicly accessible on the internet. For development purposes, this application uses [ngrok](https://ngrok.com/) to accomplish that. Each item is registered with the ngrok URL that was active when it was created. ngrok's free plan assigns your account one stable dev domain, so restarting ngrok or the server keeps the same URL. If the URL changes (for example, you switch ngrok accounts), items created before the change will receive no webhook from the call to sandboxItemResetLogin.
 
 ### Changes to `.env` file not taking effect
 
@@ -324,11 +329,11 @@ Please head to the [Help Center][plaid-help] or [get in touch][plaid-support-tic
 Plaid Pattern is a demo app that is intended to be used only for the purpose of demonstrating how you can integrate with Plaid. You are solely responsible for ensuring the correctness, legality, security, privacy, and compliance of your own app and Plaid integration. The Pattern code is licensed under the [MIT License](LICENSE) and is provided as-is and without warranty of any kind. Plaid Pattern is provided for demonstration purposes only and is not intended for use in production environments.
 
 [create-script]: database/init/create.sql
-[plaid-docs-api-identifiers]: https://plaid.com/docs/#storing-plaid-api-identifiers
+[plaid-docs-api-identifiers]: https://plaid.com/docs/launch-checklist/
 [plaid-new-support-ticket]: https://dashboard.plaid.com/support/new
 [postgres]: https://www.postgresql.org/
 [postgres-docs]: https://www.postgresql.org/docs/
-[plaid-link]: https://plaid.com/docs/#integrating-with-link
+[plaid-link]: https://plaid.com/docs/link/
 [plaid-oauth]: https://plaid.com/docs/link/oauth/#introduction-to-oauth
 [plaid-link-update-mode]: https://plaid.com/docs/link/update-mode/
 [react]: https://reactjs.org/
@@ -339,13 +344,13 @@ Plaid Pattern is a demo app that is intended to be used only for the purpose of 
 [nodejs]: https://nodejs.org/en/
 [plaid-node]: https://github.com/plaid/plaid-node
 [items-handler]: /server/webhookHandlers/handleItemWebhook.js
-[error-webhooks]: https://plaid.com/docs/api/webhooks/#item-error
+[error-webhooks]: https://plaid.com/docs/api/items/#error
 [users-routes]: /server/routes/users.js
 [vscode-debugging]: https://code.visualstudio.com/docs/editor/debugging
 [client-img]: docs/account_funding_screenshot.jpg
 [express]: https://expressjs.com/
 [plaid]: https://plaid.com
-[plaid-dashboard]: https://dashboard.plaid.com/team/api
+[plaid-dashboard]: https://dashboard.plaid.com/developers/api
 [plaid-docs]: https://plaid.com/docs/
 [plaid-help]: https://support.plaid.com/hc/en-us
 [plaid-keys]: https://dashboard.plaid.com/developers/keys
