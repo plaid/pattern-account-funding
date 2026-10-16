@@ -175,7 +175,7 @@ router.post(
         balances = identityResponse.data.accounts[0].balances;
       }
     }
-    // processorToken is only set if IS_PROCESSOR is true in .env file
+    // processorToken is only set if VITE_IS_PROCESSOR is true in .env file
     let processorToken = null;
     let customerUrl = null;
     let fundingSourceUrl = null;
